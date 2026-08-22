@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Matrícula</title>
+</head>
+
+<body>
+    <h3>Cadastrar Matrícula</h3>
+    <form th:action="@{/cadastrarMatriculas}" method="POST">
+        <div class="campo">
+            <label for="idAluno">Aluno</label>
+            <select name="idAluno" id="idAluno">
+                <option value="">Selecione um aluno</option>
+                <option th:each="aluno : ${alunos}" th:value="${aluno.id}" th:text="${aluno.nome}">
+                </option>
+            </select>
+        </div>
+        <div class="campo">
+            <label for="idCurso">Curso</label>
+            <select name="idCurso" id="idCurso">
+                <option value="">Selecione um curso</option>
+                <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nome}">
+                </option>
+            </select>
+        </div>
+
+
+        <div class="campo">
+            <label for="idOfertaDisciplina">Oferta da Disciplina</label>
+            <select name="idOfertaDisciplina" id="idOfertaDisciplina">
+                <option value="">Selecione uma oferta</option>
+                <option th:each="oferta : ${ofertas}" th:value="${oferta.id}"
+                    th:text="${oferta.disciplina.nome + ' - ' + oferta.professor.nome}">
+                </option>
+            </select>
+        </div>
+        <div class="campo">
+            <label for="dataM">Data da matrícula</label>
+            <input type="date" name="dataM" id="dataM">
+        </div>
+        <button type="submit">Cadastrar</button>
+    </form>
+    <form th:action="@{/listaMatricula}" method="GET">
+        <button type="submit">Ir para lista de matrículas</button>
+    </form>
+</body>
+
+</html>

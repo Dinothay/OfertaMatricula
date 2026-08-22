@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Disciplinas</title>
+</head>
+
+<body>
+    <h1>Lista de Disciplinas</h1>
+    <ul>
+        <li th:each="disciplina: ${listaDisciplinas}">
+            <p>ID: [[${disciplina.id}]]</p>
+            <p>Nome: [[${disciplina.nome}]]</p>
+            <p>Semestre: [[${disciplina.semestre}]]</p>
+            <p>Numero de aulas: [[${disciplina.nAulas}]]</p>
+            <p>Carga Horária: [[${disciplina.cHoraria}]]</p>
+
+            <form th:action="@{/editarDisciplina/{id}(id=${disciplina.id})}" method="GET">
+                <button type="submit">Editar</button>
+            </form>
+
+            <form th:action="@{/excluirDisciplina/{id}(id=${disciplina.id})}" method="GET">
+                <button type="submit">Excluir</button>
+            </form>
+
+            <hr>
+        </li>
+    </ul>
+    <form th:action="@{/disciplina}" method="GET">
+        <button type="submit">Cadastrar Disciplinas</button>
+    </form>
+</body>
+
+</html>

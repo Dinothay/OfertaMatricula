@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Disciplinas</title>
+</head>
+
+<body>
+    <form th:action="@{/cadastrarDisciplinas}" method="POST">
+        <h3>Criar Disciplinas</h3>
+        <div class="campo">
+            <label for="nome">Nome</label>
+            <input type="text" name="nome" id="nome">
+        </div>
+        <div class="campo">
+            <label for="semestre">Semestre</label>
+            <input type="number" name="semestre" id="semestre">
+        </div>
+        <div class="campo">
+            <label for="nAulas">Numero de aulas</label>
+            <input type="number" name="nAulas" id="nAulas">
+        </div>
+        <div class="campo">
+            <label for="cHoraria">Carga Horária</label>
+            <input type="number" name="cHoraria" id="cHoraria" step="0.01">
+        </div>
+        <button type="submit">Criar</button>
+    </form>
+    <form th:action="@{/listaDisciplinas}" method="GET">
+        <button type="submit">Ir para lista de Disciplinas</button>
+    </form>
+</body>
+
+</html>

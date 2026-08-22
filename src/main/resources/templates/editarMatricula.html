@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Matrícula</title>
+</head>
+
+<body>
+    <h3>Editar Matrícula</h3>
+    <form th:action="@{/atualizarMatricula}" method="POST">
+        <input type="hidden" name="id" th:value="${matricula.id}">
+        <div class="campo">
+            <label for="idAluno">Aluno</label>
+            <select name="idAluno" id="idAluno">
+                <option th:each="aluno : ${alunos}" th:value="${aluno.id}" th:text="${aluno.nome}"
+                    th:selected="${aluno.id == matricula.aluno.id}">
+                </option>
+            </select>
+        </div>
+        <div class="campo">
+            <label for="idCurso">Curso</label>
+            <select name="idCurso" id="idCurso">
+                <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nome}"
+                    th:selected="${curso.id == matricula.curso.id}">
+                </option>
+            </select>
+        </div>
+        <div class="campo">
+            <label for="idOfertaDisciplina">Oferta da Disciplina</label>
+            <select name="idOfertaDisciplina" id="idOfertaDisciplina">
+                <option th:each="oferta : ${ofertas}" th:value="${oferta.id}"
+                    th:text="${oferta.disciplina.nome + ' - ' + oferta.professor.nome}"
+                    th:selected="${oferta.id == matricula.ofertaDisciplina.id}">
+                </option>
+            </select>
+        </div>
+        <div class="campo">
+            <label for="dataM">Data da matrícula</label>
+            <input type="date" name="dataM" id="dataM" th:value="${matricula.dataM}">
+        </div>
+        <button type="submit">Atualizar</button>
+    </form>
+    <form th:action="@{/listaMatricula}" method="GET">
+        <button type="submit">Ir para lista de matrículas</button>
+    </form>
+</body>
+
+</html>

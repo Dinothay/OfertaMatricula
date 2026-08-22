@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Professor</title>
+</head>
+
+<body>
+
+    <h3>Editar Professor</h3>
+
+    <form th:action="@{/atualizarProfessor}" method="POST">
+
+        <input type="hidden" name="id" th:value="${professor.id}">
+
+        <div class="campo">
+            <label for="nome">Nome</label>
+            <input type="text" name="nome" id="nome" th:value="${professor.nome}">
+        </div>
+
+        <div class="campo">
+            <label for="cpf">CPF</label>
+            <input type="text" name="cpf" id="cpf" th:value="${professor.cpf}">
+        </div>
+
+        <div class="campo">
+            <label for="area">Área</label>
+            <input type="text" name="area" id="area" th:value="${professor.area}">
+        </div>
+
+        <div class="campo">
+            <label for="formacao">Formação</label>
+            <input type="text" name="formacao" id="formacao" th:value="${professor.formacao}">
+        </div>
+
+        <div class="campo">
+            <label for="endereco">Endereço</label>
+            <input type="text" name="endereco" id="endereco" th:value="${professor.endereco}">
+        </div>
+
+        <div class="campo">
+            <label for="salario">Salário</label>
+            <input type="number" step="0.01" name="salario" id="salario" th:value="${professor.salario}">
+        </div>
+
+        <button type="submit">Atualizar</button>
+
+    </form>
+    <form th:action="@{/listaProfessores}" method="GET">
+        <button type="submit">Ir para lista de professores</button>
+    </form>
+
+</body>
+
+</html>

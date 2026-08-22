@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar ALuno</title>
+</head>
+
+<body>
+    <form th:action="@{/cadastrarAlunos}" th:method="POST">
+        <h3>Cadastrar Aluno</h3>
+        <div class="campo">
+            <label for="nome">Nome</label>
+            <input type="text" name="nome" id="nome">
+        </div>
+        <div class="campo">
+            <label for="cpf">CPF</label>
+            <input type="text" name="cpf" id="cpf">
+        </div>
+        <div class="campo">
+            <label for="prontuario">Prontuario</label>
+            <input type="number" name="prontuario" id="prontuario">
+        </div>
+        <div class="campo">
+            <label for="endereco">Endereco</label>
+            <input type="text" name="endereco" id="endereco">
+        </div>
+        <div class="campo">
+            <label for="dataInicio">Data de início</label>
+            <input type="date" name="dataInicio" id="dataInicio">
+        </div>
+        <button type="submit">Cadastrar</button>
+    </form>
+    <form th:action="@{/listaAlunos}" method="GET">
+        <button type="submit">Ir para lista de alunos</button>
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Curso</title>
+</head>
+
+<body>
+    <h3>Editar Curso</h3>
+    <form th:action="@{/atualizarCurso}" th:method="POST">
+        <input type="hidden" name="id" th:value="${curso.id}">
+        <div class="campo">
+            <label for="nome">Nome</label>
+            <input type="text" name="nome" id="nome" th:value="${curso.nome}">
+        </div>
+        <div class="campo">
+            <label for="semestres">Semestres</label>
+            <input type="number" name="semestres" id="semestres" th:value="${curso.semestres}">
+        </div>
+        <div class="campo">
+            <label for="nDisciplinas">Numero de disciplinas</label>
+            <input type="number" name="nDisciplinas" id="nDisciplinas" th:value="${curso.nDisciplinas}">
+        </div>
+        <button type="submit">Atualizar</button>
+    </form>
+    <form th:action="@{/listaCursos}" method="GET">
+        <button type="submit">Ir para lista de cursos</button>
+    </form>
+</body>
+
+</html>

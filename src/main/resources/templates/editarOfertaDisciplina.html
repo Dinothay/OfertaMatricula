@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Oferta de Disciplina</title>
+</head>
+
+<body>
+    <h3>Editar Oferta de Disciplina</h3>
+    <form th:action="@{/atualizarOfertaDisciplina}" method="POST">
+        <input type="hidden" name="id" th:value="${OfertaDisciplina.id}">
+        <div class="campo">
+            <label for="idDisciplina">Disciplina</label>
+            <select name="idDisciplina" id="idDisciplina">
+                <option th:each="disciplina : ${disciplinas}" th:value="${disciplina.id}" th:text="${disciplina.nome}"
+                    th:selected="${disciplina.id == OfertaDisciplina.disciplina.id}">
+                </option>
+            </select>
+        </div>
+        <div class="campo">
+            <label for="idProfessor">Professor</label>
+            <select name="idProfessor" id="idProfessor">
+                <option th:each="professor : ${professores}" th:value="${professor.id}" th:text="${professor.nome}"
+                    th:selected="${professor.id == OfertaDisciplina.professor.id}">
+                </option>
+            </select>
+        </div>
+        <div class="campo">
+            <label for="diaAula">Dia da aula</label>
+            <select name="diaAula" id="diaAula">
+                <option value="Segunda-feira" th:selected="${OfertaDisciplina.diaAula == 'Segunda-feira'}">
+                    Segunda-feira
+                </option>
+                <option value="Terça-feira" th:selected="${OfertaDisciplina.diaAula == 'Terça-feira'}">
+                    Terça-feira
+                </option>
+                <option value="Quarta-feira" th:selected="${OfertaDisciplina.diaAula == 'Quarta-feira'}">
+                    Quarta-feira
+                </option>
+                <option value="Quinta-feira" th:selected="${OfertaDisciplina.diaAula == 'Quinta-feira'}">
+                    Quinta-feira
+                </option>
+                <option value="Sexta-feira" th:selected="${OfertaDisciplina.diaAula == 'Sexta-feira'}">
+                    Sexta-feira
+                </option>
+                <option value="Sábado" th:selected="${OfertaDisciplina.diaAula == 'Sábado'}">
+                    Sábado
+                </option>
+            </select>
+        </div>
+        <div class="campo">
+            <label for="nAulaSemana">
+                Número de aulas por semana
+            </label>
+            <input type="number" name="nAulaSemana" id="nAulaSemana" min="1" th:value="${OfertaDisciplina.nAulaSemana}">
+        </div>
+        <button type="submit">Atualizar</button>
+    </form>
+    <form th:action="@{/listaOfertaDisciplinas}" method="GET">
+        <button type="submit">Ir para lista de ofertas</button>
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Ofertas de Disciplinas</title>
+</head>
+
+<body>
+    <h1>Lista de Ofertas de Disciplinas</h1>
+    <ul>
+        <li th:each="oferta : ${listaOfertaDisciplinas}">
+            <p>ID: [[${oferta.id}]]</p>
+            <p>Disciplina: [[${oferta.disciplina.nome}]]</p>
+            <p>Professor: [[${oferta.professor.nome}]]</p>
+            <p>Dia da aula: [[${oferta.diaAula}]]</p>
+            <p>Número de aulas por semana: [[${oferta.nAulaSemana}]]</p>
+            <form th:action="@{/editarOfertaDisciplina/{id}(id=${oferta.id})}" method="GET">
+                <button type="submit">Editar</button>
+            </form>
+            <form th:action="@{/excluirOfertaDisciplina}" method="GET">
+                <input type="hidden" name="id" th:value="${oferta.id}">
+                <button type="submit">Excluir</button>
+            </form>
+            <hr>
+        </li>
+    </ul>
+    <form th:action="@{/ofertaDisciplina}" method="GET">
+        <button type="submit">Cadastrar oferta</button>
+    </form>
+</body>
+
+</html>

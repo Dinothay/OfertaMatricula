@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Alunos</title>
+</head>
+
+<body>
+    <h1>Lista de Alunos</h1>
+    <ul>
+        <li th:each="aluno: ${listaAlunos}">
+            <p>ID: [[${aluno.id}]]</p>
+            <p>Nome: [[${aluno.nome}]]</p>
+            <p>CPF: [[${aluno.cpf}]]</p>
+            <p>Prontuário: [[${aluno.prontuario}]]</p>
+            <p>Endereço: [[${aluno.endereco}]]</p>
+            <p>Data de início: [[${aluno.dataInicio}]]</p>
+
+            <form th:action="@{/editarAluno/{id}(id=${aluno.id})}" method="GET">
+                <button type="submit">Editar</button>
+            </form>
+
+            <form th:action="@{/excluirAluno/{id}(id=${aluno.id})}" method="GET">
+                <button type="submit">Excluir</button>
+            </form>
+
+            <hr>
+        </li>
+    </ul>
+    <form action="/aluno" method="GET">
+        <button type="submit">Cadastrar alunos</button>
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Matrículas</title>
+</head>
+
+<body>
+
+    <h1>Lista de Matrículas</h1>
+
+    <ul>
+
+        <li th:each="matricula : ${listaMatricula}">
+            <p>ID: [[${matricula.id}]]</p>
+            <p>Aluno: [[${matricula.aluno.nome}]]</p>
+            <p>Curso: [[${matricula.curso.nome}]]</p>
+            <p>Disciplina: [[${matricula.ofertaDisciplina.disciplina.nome}]]</p>
+            <p>Professor: [[${matricula.ofertaDisciplina.professor.nome}]]</p>
+            <p>Dia da aula: [[${matricula.ofertaDisciplina.diaAula}]]</p>
+            <p>Aulas por semana: [[${matricula.ofertaDisciplina.nAulaSemana}]]</p>
+            <p>Data da matrícula: [[${matricula.dataM}]]</p>
+            <form th:action="@{/editarMatricula/{id}(id=${matricula.id})}" method="GET">
+                <button type="submit">Editar</button>
+            </form>
+            <form th:action="@{/excluirMatricula/{id}(id=${matricula.id})}" method="GET">
+                <button type="submit">Excluir</button>
+            </form>
+            <hr>
+        </li>
+    </ul>
+    <form th:action="@{/matricula}" method="GET">
+        <button type="submit">Cadastrar matrícula</button>
+    </form>
+
+</body>
+
+</html>

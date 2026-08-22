@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Disciplinas</title>
+</head>
+
+<body>
+    <form th:action="@{/atualizarDisciplina}" method="POST">
+        <h3>Editar Disciplinas</h3>
+        <input type="hidden" name="id" th:value="${disciplina.id}">
+        <div class="campo">
+            <label for="nome">Nome</label>
+            <input type="text" name="nome" id="nome" th:value="${disciplina.nome}">
+        </div>
+        <div class="campo">
+            <label for="semestre">Semestre</label>
+            <input type="number" name="semestre" id="semestre" th:value="${disciplina.semestre}">
+        </div>
+        <div class="campo">
+            <label for="nAulas">Numero de aulas</label>
+            <input type="number" name="nAulas" id="nAulas" th:value="${disciplina.nAulas}">
+        </div>
+        <div class="campo">
+            <label for="cHoraria">Carga Horária</label>
+            <input type="number" name="cHoraria" id="cHoraria" step="0.01" th:value="${disciplina.cHoraria}">
+        </div>
+        <button type="submit">Atualizar</button>
+    </form>
+    <form th:action="@{/listaDisciplinas}" method="GET">
+        <button type="submit">Ir para lista de Disciplinas</button>
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Professores</title>
+</head>
+
+<body>
+    <h1>Lista de Professores</h1>
+    <ul>
+        <li th:each="professor : ${listaProfessores}">
+            <p>ID: [[${professor.id}]]</p>
+            <p>Nome: [[${professor.nome}]]</p>
+            <p>CPF: [[${professor.cpf}]]</p>
+            <p>Área: [[${professor.area}]]</p>
+            <p>Formação: [[${professor.formacao}]]</p>
+            <p>Endereço: [[${professor.endereco}]]</p>
+            <p>Salário: [[${professor.salario}]]</p>
+            <form th:action="@{/editarProfessor/{id}(id=${professor.id})}" method="GET">
+                <button type="submit">Editar</button>
+            </form>
+            <form th:action="@{/excluirProfessor/{id}(id=${professor.id})}" method="GET">
+                <button type="submit">Excluir</button>
+            </form>
+            <hr>
+        </li>
+    </ul>
+    <form th:action="@{/professor}" method="GET">
+        <button type="submit">Cadastrar professor</button>
+    </form>
+
+</body>
+
+</html>

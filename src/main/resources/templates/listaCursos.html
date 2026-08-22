@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Cursos</title>
+</head>
+
+<body>
+    <h1>Lista de Cursos</h1>
+    <ul>
+        <li th:each="curso: ${listaCursos}">
+            <p>ID: [[${curso.id}]]</p>
+            <p>Nome: [[${curso.nome}]]</p>
+            <p>Semestres: [[${curso.semestres}]]</p>
+            <p>Número de disciplinas: [[${curso.nDisciplinas}]]</p>
+
+            <form th:action="@{/editarCurso/{id}(id=${curso.id})}" method="GET">
+                <button type="submit">Editar</button>
+            </form>
+
+            <form th:action="@{/excluirCurso/{id}(id=${curso.id})}" method="GET">
+                <button type="submit">Excluir</button>
+            </form>
+
+            <hr>
+        </li>
+    </ul>
+    <form action="curso" method="GET">
+        <button type="submit">Cadastrar cursos</button>
+    </form>
+</body>
+
+</html>
