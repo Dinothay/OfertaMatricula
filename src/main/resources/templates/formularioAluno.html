@@ -52,18 +52,6 @@
             </div>
         </div>
     </div>
-    <script>
-        (function(){
-            const form = document.querySelector('form');
-            if(!form) return;
-            form.addEventListener('submit', function(e){
-                if(!form.checkValidity()){
-                    e.preventDefault();
-                    alert('Por favor, preencha todos os campos obrigatórios.');
-                }
-            });
-        })();
-    </script>
 </body>
 
 </html>
