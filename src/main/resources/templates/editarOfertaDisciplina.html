@@ -22,7 +22,7 @@
                     <div class="form-grid">
                         <div class="field">
                             <label for="idDisciplina">Disciplina</label>
-                            <select name="idDisciplina" id="idDisciplina" required>
+                            <select name="idDisciplina" id="idDisciplina">
                                 <option th:each="disciplina : ${disciplinas}" th:value="${disciplina.id}" th:text="${disciplina.nome}"
                                     th:selected="${disciplina.id == OfertaDisciplina.disciplina.id}">
                                 </option>
@@ -31,7 +31,7 @@
 
                         <div class="field">
                             <label for="idProfessor">Professor</label>
-                            <select name="idProfessor" id="idProfessor" required>
+                            <select name="idProfessor" id="idProfessor">
                                 <option th:each="professor : ${professores}" th:value="${professor.id}" th:text="${professor.nome}"
                                     th:selected="${professor.id == OfertaDisciplina.professor.id}">
                                 </option>
@@ -52,7 +52,7 @@
 
                         <div class="field">
                             <label for="nAulaSemana">Número de aulas por semana</label>
-                            <input type="number" name="nAulaSemana" id="nAulaSemana" min="1" th:value="${OfertaDisciplina.nAulaSemana}" required>
+                            <input type="number" name="nAulaSemana" id="nAulaSemana" min="1" th:value="${OfertaDisciplina.nAulaSemana}">
                         </div>
                     </div>
 
@@ -64,18 +64,6 @@
             </div>
         </div>
     </div>
-            <script>
-                (function(){
-                    const form = document.querySelector('form');
-                    if(!form) return;
-                    form.addEventListener('submit', function(e){
-                        if(!form.checkValidity()){
-                            e.preventDefault();
-                            alert('Por favor, preencha todos os campos obrigatórios.');
-                        }
-                    });
-                })();
-            </script>
         </body>
 
         </html>

@@ -22,27 +22,27 @@
                     <div class="form-grid">
                         <div class="field full">
                             <label for="nome">Nome</label>
-                            <input type="text" name="nome" id="nome" th:value="${aluno.nome}" required>
+                            <input type="text" name="nome" id="nome" th:value="${aluno.nome}">
                         </div>
 
                         <div class="field">
                             <label for="cpf">CPF</label>
-                            <input type="text" name="cpf" id="cpf" th:value="${aluno.cpf}" required>
+                            <input type="text" name="cpf" id="cpf" th:value="${aluno.cpf}">
                         </div>
 
                         <div class="field">
                             <label for="prontuario">Prontuário</label>
-                            <input type="number" name="prontuario" id="prontuario" th:value="${aluno.prontuario}" required>
+                            <input type="number" name="prontuario" id="prontuario" th:value="${aluno.prontuario}">
                         </div>
 
                         <div class="field full">
                             <label for="endereco">Endereço</label>
-                            <input type="text" name="endereco" id="endereco" th:value="${aluno.endereco}" required>
+                            <input type="text" name="endereco" id="endereco" th:value="${aluno.endereco}">
                         </div>
 
                         <div class="field">
                             <label for="dataInicio">Data de início</label>
-                            <input type="date" name="dataInicio" id="dataInicio" th:value="${aluno.dataInicio}" required>
+                            <input type="date" name="dataInicio" id="dataInicio" th:value="${aluno.dataInicio}">
                         </div>
                     </div>
 
@@ -54,18 +54,6 @@
             </div>
         </div>
     </div>
-    <script>
-        (function(){
-            const form = document.querySelector('form');
-            if(!form) return;
-            form.addEventListener('submit', function(e){
-                if(!form.checkValidity()){
-                    e.preventDefault();
-                    alert('Por favor, preencha todos os campos obrigatórios.');
-                }
-            });
-        })();
-    </script>
 </body>
 
 </html>

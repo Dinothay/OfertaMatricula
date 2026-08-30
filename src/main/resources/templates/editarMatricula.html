@@ -22,7 +22,7 @@
                     <div class="form-grid">
                         <div class="field">
                             <label for="idAluno">Aluno</label>
-                            <select name="idAluno" id="idAluno" required>
+                            <select name="idAluno" id="idAluno">
                                 <option th:each="aluno : ${alunos}" th:value="${aluno.id}" th:text="${aluno.nome}"
                                     th:selected="${aluno.id == matricula.aluno.id}">
                                 </option>
@@ -31,7 +31,7 @@
 
                         <div class="field">
                             <label for="idCurso">Curso</label>
-                            <select name="idCurso" id="idCurso" required>
+                            <select name="idCurso" id="idCurso">
                                 <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nome}"
                                     th:selected="${curso.id == matricula.curso.id}">
                                 </option>
@@ -40,7 +40,7 @@
 
                         <div class="field full">
                             <label for="idOfertaDisciplina">Oferta da disciplina</label>
-                            <select name="idOfertaDisciplina" id="idOfertaDisciplina" required>
+                            <select name="idOfertaDisciplina" id="idOfertaDisciplina">
                                 <option th:each="oferta : ${ofertas}" th:value="${oferta.id}"
                                     th:text="${oferta.disciplina.nome + ' - ' + oferta.professor.nome}"
                                     th:selected="${oferta.id == matricula.ofertaDisciplina.id}">
@@ -50,7 +50,7 @@
 
                         <div class="field">
                             <label for="dataM">Data da matrícula</label>
-                            <input type="date" name="dataM" id="dataM" th:value="${matricula.dataM}" required>
+                            <input type="date" name="dataM" id="dataM" th:value="${matricula.dataM}">
                         </div>
                     </div>
 
@@ -62,18 +62,6 @@
             </div>
         </div>
     </div>
-    <script>
-        (function(){
-            const form = document.querySelector('form');
-            if(!form) return;
-            form.addEventListener('submit', function(e){
-                if(!form.checkValidity()){
-                    e.preventDefault();
-                    alert('Por favor, preencha todos os campos obrigatórios.');
-                }
-            });
-        })();
-    </script>
 </body>
 
 </html>

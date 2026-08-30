@@ -22,22 +22,22 @@
                     <div class="form-grid">
                         <div class="field full">
                             <label for="nome">Nome</label>
-                            <input type="text" name="nome" id="nome" th:value="${disciplina.nome}" required>
+                            <input type="text" name="nome" id="nome" th:value="${disciplina.nome}">
                         </div>
 
                         <div class="field">
                             <label for="semestre">Semestre</label>
-                            <input type="number" name="semestre" id="semestre" th:value="${disciplina.semestre}" required>
+                            <input type="number" name="semestre" id="semestre" th:value="${disciplina.semestre}">
                         </div>
 
                         <div class="field">
                             <label for="nAulas">Número de aulas</label>
-                            <input type="number" name="nAulas" id="nAulas" th:value="${disciplina.nAulas}" required>
+                            <input type="number" name="nAulas" id="nAulas" th:value="${disciplina.nAulas}">
                         </div>
 
                         <div class="field full">
                             <label for="cHoraria">Carga horária</label>
-                            <input type="number" name="cHoraria" id="cHoraria" step="0.01" th:value="${disciplina.cHoraria}" required>
+                            <input type="number" name="cHoraria" id="cHoraria" step="0.01" th:value="${disciplina.cHoraria}">
                         </div>
                     </div>
 
@@ -49,18 +49,6 @@
             </div>
         </div>
     </div>
-    <script>
-        (function(){
-            const form = document.querySelector('form');
-            if(!form) return;
-            form.addEventListener('submit', function(e){
-                if(!form.checkValidity()){
-                    e.preventDefault();
-                    alert('Por favor, preencha todos os campos obrigatórios.');
-                }
-            });
-        })();
-    </script>
 </body>
 
 </html>
