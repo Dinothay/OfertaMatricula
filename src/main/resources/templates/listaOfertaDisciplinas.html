@@ -1,34 +1,67 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Ofertas de Disciplinas</title>
+    <title>Lista de Ofertas</title>
+    <link rel="stylesheet" th:href="@{/css/lista.css}">
 </head>
 
 <body>
-    <h1>Lista de Ofertas de Disciplinas</h1>
-    <ul>
-        <li th:each="oferta : ${listaOfertaDisciplinas}">
-            <p>ID: [[${oferta.id}]]</p>
-            <p>Disciplina: [[${oferta.disciplina.nome}]]</p>
-            <p>Professor: [[${oferta.professor.nome}]]</p>
-            <p>Dia da aula: [[${oferta.diaAula}]]</p>
-            <p>Número de aulas por semana: [[${oferta.nAulaSemana}]]</p>
-            <form th:action="@{/editarOfertaDisciplina/{id}(id=${oferta.id})}" method="GET">
-                <button type="submit">Editar</button>
-            </form>
-            <form th:action="@{/excluirOfertaDisciplina}" method="GET">
-                <input type="hidden" name="id" th:value="${oferta.id}">
-                <button type="submit">Excluir</button>
-            </form>
-            <hr>
-        </li>
-    </ul>
-    <form th:action="@{/ofertaDisciplina}" method="GET">
-        <button type="submit">Cadastrar oferta</button>
-    </form>
+    <div class="page">
+        <header class="topbar">
+            <div class="brand">Ofertas de Disciplinas</div>
+            <div class="nav-actions">
+                <a th:href="@{/index}" class="btn btn-secondary">Voltar ao início</a>
+                <a th:href="@{/ofertaDisciplina}" class="btn btn-primary">+ Cadastrar oferta</a>
+            </div>
+        </header>
+
+        <div th:if="${mensagem}" class="alert">
+            <p th:text="${mensagem}"></p>
+        </div>
+
+        <div th:if="${#lists.isEmpty(listaOfertaDisciplinas)}" class="empty-state">
+            <h2>Nenhuma oferta cadastrada</h2>
+            <p>Cadastre a primeira oferta para organizar as aulas.</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(listaOfertaDisciplinas)}" class="table-wrap">
+            <table class="records-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Disciplina</th>
+                        <th>Professor</th>
+                        <th>Dia da aula</th>
+                        <th>Aulas por semana</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="oferta : ${listaOfertaDisciplinas}">
+                        <td th:text="${oferta.id}"></td>
+                        <td th:text="${oferta.disciplina.nome}"></td>
+                        <td th:text="${oferta.professor.nome}"></td>
+                        <td th:text="${oferta.diaAula}"></td>
+                        <td th:text="${oferta.nAulaSemana}"></td>
+                        <td>
+                            <div class="actions-inline">
+                                <form th:action="@{/editarOfertaDisciplina/{id}(id=${oferta.id})}" method="GET">
+                                    <button type="submit" class="btn btn-secondary">Editar</button>
+                                </form>
+                                <form th:action="@{/excluirOfertaDisciplina}" method="GET">
+                                    <input type="hidden" name="id" th:value="${oferta.id}">
+                                    <button type="submit" class="btn btn-danger">Excluir</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 
 </html>

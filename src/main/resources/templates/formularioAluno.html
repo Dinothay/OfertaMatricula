@@ -1,40 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar ALuno</title>
+    <title>Cadastrar Aluno</title>
+    <link rel="stylesheet" th:href="@{/css/formulario.css}">
 </head>
 
 <body>
-    <form th:action="@{/cadastrarAlunos}" th:method="POST">
-        <h3>Cadastrar Aluno</h3>
-        <div class="campo">
-            <label for="nome">Nome</label>
-            <input type="text" name="nome" id="nome">
+    <div class="page">
+        <div class="form-shell">
+            <div class="form-header">
+                <h2>Cadastrar Aluno</h2>
+            </div>
+
+            <div class="form-body">
+                <form th:action="@{/cadastrarAlunos}" th:method="POST">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="nome">Nome</label>
+                            <input type="text" name="nome" id="nome" placeholder="Digite o nome completo" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="cpf">CPF</label>
+                            <input type="text" name="cpf" id="cpf" placeholder="Digite o CPF" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="prontuario">Prontuário</label>
+                            <input type="number" name="prontuario" id="prontuario" placeholder="Número do prontuário" required>
+                        </div>
+
+                        <div class="field full">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" name="endereco" id="endereco" placeholder="Digite o endereço" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="dataInicio">Data de início</label>
+                            <input type="date" name="dataInicio" id="dataInicio" required>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        <a th:href="@{/listaAlunos}" class="btn btn-secondary">Ir para lista</a>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="campo">
-            <label for="cpf">CPF</label>
-            <input type="text" name="cpf" id="cpf">
-        </div>
-        <div class="campo">
-            <label for="prontuario">Prontuario</label>
-            <input type="number" name="prontuario" id="prontuario">
-        </div>
-        <div class="campo">
-            <label for="endereco">Endereco</label>
-            <input type="text" name="endereco" id="endereco">
-        </div>
-        <div class="campo">
-            <label for="dataInicio">Data de início</label>
-            <input type="date" name="dataInicio" id="dataInicio">
-        </div>
-        <button type="submit">Cadastrar</button>
-    </form>
-    <form th:action="@{/listaAlunos}" method="GET">
-        <button type="submit">Ir para lista de alunos</button>
-    </form>
+    </div>
+    <script>
+        (function(){
+            const form = document.querySelector('form');
+            if(!form) return;
+            form.addEventListener('submit', function(e){
+                if(!form.checkValidity()){
+                    e.preventDefault();
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                }
+            });
+        })();
+    </script>
 </body>
 
 </html>

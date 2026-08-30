@@ -1,51 +1,73 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar Matrícula</title>
+    <link rel="stylesheet" th:href="@{/css/formulario.css}">
 </head>
 
 <body>
-    <h3>Cadastrar Matrícula</h3>
-    <form th:action="@{/cadastrarMatriculas}" method="POST">
-        <div class="campo">
-            <label for="idAluno">Aluno</label>
-            <select name="idAluno" id="idAluno">
-                <option value="">Selecione um aluno</option>
-                <option th:each="aluno : ${alunos}" th:value="${aluno.id}" th:text="${aluno.nome}">
-                </option>
-            </select>
-        </div>
-        <div class="campo">
-            <label for="idCurso">Curso</label>
-            <select name="idCurso" id="idCurso">
-                <option value="">Selecione um curso</option>
-                <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nome}">
-                </option>
-            </select>
-        </div>
+    <div class="page">
+        <div class="form-shell">
+            <div class="form-header">
+                <h2>Cadastrar Matrícula</h2>
+            </div>
 
+            <div class="form-body">
+                <form th:action="@{/cadastrarMatriculas}" method="POST">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="idAluno">Aluno</label>
+                            <select name="idAluno" id="idAluno" required>
+                                <option value="">Selecione um aluno</option>
+                                <option th:each="aluno : ${alunos}" th:value="${aluno.id}" th:text="${aluno.nome}"></option>
+                            </select>
+                        </div>
 
-        <div class="campo">
-            <label for="idOfertaDisciplina">Oferta da Disciplina</label>
-            <select name="idOfertaDisciplina" id="idOfertaDisciplina">
-                <option value="">Selecione uma oferta</option>
-                <option th:each="oferta : ${ofertas}" th:value="${oferta.id}"
-                    th:text="${oferta.disciplina.nome + ' - ' + oferta.professor.nome}">
-                </option>
-            </select>
+                        <div class="field">
+                            <label for="idCurso">Curso</label>
+                            <select name="idCurso" id="idCurso" required>
+                                <option value="">Selecione um curso</option>
+                                <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nome}"></option>
+                            </select>
+                        </div>
+
+                        <div class="field full">
+                            <label for="idOfertaDisciplina">Oferta da disciplina</label>
+                            <select name="idOfertaDisciplina" id="idOfertaDisciplina" required>
+                                <option value="">Selecione uma oferta</option>
+                                <option th:each="oferta : ${ofertas}" th:value="${oferta.id}" th:text="${oferta.disciplina.nome + ' - ' + oferta.professor.nome}"></option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="dataM">Data da matrícula</label>
+                            <input type="date" name="dataM" id="dataM" required>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        <a th:href="@{/listaMatricula}" class="btn btn-secondary">Ir para lista</a>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="campo">
-            <label for="dataM">Data da matrícula</label>
-            <input type="date" name="dataM" id="dataM">
-        </div>
-        <button type="submit">Cadastrar</button>
-    </form>
-    <form th:action="@{/listaMatricula}" method="GET">
-        <button type="submit">Ir para lista de matrículas</button>
-    </form>
+    </div>
+    <script>
+        (function(){
+            const form = document.querySelector('form');
+            if(!form) return;
+            form.addEventListener('submit', function(e){
+                if(!form.checkValidity()){
+                    e.preventDefault();
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                }
+            });
+        })();
+    </script>
 </body>
 
 </html>

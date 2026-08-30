@@ -1,33 +1,59 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Cursos</title>
+    <title>Cadastrar Curso</title>
+    <link rel="stylesheet" th:href="@{/css/formulario.css}">
 </head>
 
 <body>
+    <div class="page">
+        <div class="form-shell">
+            <div class="form-header">
+                <h2>Cadastrar Curso</h2>
+            </div>
 
-    <form th:action="@{/cadastrarCurso}" method="POST">
-        <h3>Criar Cursos</h3>
-        <div class="campo">
-            <label for="nome">Nome</label>
-            <input type="text" name="nome" id="nome">
+            <div class="form-body">
+                <form th:action="@{/cadastrarCurso}" method="POST">
+                    <div class="form-grid">
+                        <div class="field full">
+                            <label for="nome">Nome</label>
+                            <input type="text" name="nome" id="nome" placeholder="Digite o nome do curso" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="semestres">Semestres</label>
+                            <input type="number" name="semestres" id="semestres" placeholder="Quantidade de semestres" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="nDisciplinas">Número de disciplinas</label>
+                            <input type="number" name="nDisciplinas" id="nDisciplinas" placeholder="Total de disciplinas" required>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit" class="btn btn-primary">Criar</button>
+                        <a th:href="@{/listaCursos}" class="btn btn-secondary">Ir para lista</a>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="campo">
-            <label for="semestres">Semestres</label>
-            <input type="number" name="semestres" id="semestres">
-        </div>
-        <div class="campo">                                                                                    
-            <label for="nDisciplinas">Numero de disciplinas</label>
-            <input type="number" name="nDisciplinas" id="nDisciplinas">
-        </div>
-        <button type="submit">Criar</button>
-    </form>
-    <form th:action="@{/listaCursos}" method="GET">
-        <button type="submit">Ir para lista de cursos</button>
-    </form>
+    </div>
+    <script>
+        (function(){
+            const form = document.querySelector('form');
+            if(!form) return;
+            form.addEventListener('submit', function(e){
+                if(!form.checkValidity()){
+                    e.preventDefault();
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                }
+            });
+        })();
+    </script>
 </body>
 
 </html>

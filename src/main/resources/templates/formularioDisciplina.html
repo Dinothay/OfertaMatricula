@@ -1,36 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Disciplinas</title>
+    <title>Cadastrar Disciplina</title>
+    <link rel="stylesheet" th:href="@{/css/formulario.css}">
 </head>
 
 <body>
-    <form th:action="@{/cadastrarDisciplinas}" method="POST">
-        <h3>Criar Disciplinas</h3>
-        <div class="campo">
-            <label for="nome">Nome</label>
-            <input type="text" name="nome" id="nome">
+    <div class="page">
+        <div class="form-shell">
+            <div class="form-header">
+                <h2>Cadastrar Disciplina</h2>
+            </div>
+
+            <div class="form-body">
+                <form th:action="@{/cadastrarDisciplinas}" method="POST">
+                    <div class="form-grid">
+                        <div class="field full">
+                            <label for="nome">Nome</label>
+                            <input type="text" name="nome" id="nome" placeholder="Digite o nome da disciplina" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="semestre">Semestre</label>
+                            <input type="number" name="semestre" id="semestre" placeholder="Semestre da disciplina" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="nAulas">Número de aulas</label>
+                            <input type="number" name="nAulas" id="nAulas" placeholder="Total de aulas" required>
+                        </div>
+
+                        <div class="field full">
+                            <label for="cHoraria">Carga horária</label>
+                            <input type="number" name="cHoraria" id="cHoraria" step="0.01" placeholder="Ex: 60.00" required>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit" class="btn btn-primary">Criar</button>
+                        <a th:href="@{/listaDisciplinas}" class="btn btn-secondary">Ir para lista</a>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="campo">
-            <label for="semestre">Semestre</label>
-            <input type="number" name="semestre" id="semestre">
-        </div>
-        <div class="campo">
-            <label for="nAulas">Numero de aulas</label>
-            <input type="number" name="nAulas" id="nAulas">
-        </div>
-        <div class="campo">
-            <label for="cHoraria">Carga Horária</label>
-            <input type="number" name="cHoraria" id="cHoraria" step="0.01">
-        </div>
-        <button type="submit">Criar</button>
-    </form>
-    <form th:action="@{/listaDisciplinas}" method="GET">
-        <button type="submit">Ir para lista de Disciplinas</button>
-    </form>
+    </div>
+    <script>
+        (function(){
+            const form = document.querySelector('form');
+            if(!form) return;
+            form.addEventListener('submit', function(e){
+                if(!form.checkValidity()){
+                    e.preventDefault();
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                }
+            });
+        })();
+    </script>
 </body>
 
 </html>

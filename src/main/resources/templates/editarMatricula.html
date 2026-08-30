@@ -1,50 +1,79 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Matrícula</title>
+    <link rel="stylesheet" th:href="@{/css/formulario.css}">
 </head>
 
 <body>
-    <h3>Editar Matrícula</h3>
-    <form th:action="@{/atualizarMatricula}" method="POST">
-        <input type="hidden" name="id" th:value="${matricula.id}">
-        <div class="campo">
-            <label for="idAluno">Aluno</label>
-            <select name="idAluno" id="idAluno">
-                <option th:each="aluno : ${alunos}" th:value="${aluno.id}" th:text="${aluno.nome}"
-                    th:selected="${aluno.id == matricula.aluno.id}">
-                </option>
-            </select>
+    <div class="page">
+        <div class="form-shell">
+            <div class="form-header">
+                <h2>Editar Matrícula</h2>
+            </div>
+
+            <div class="form-body">
+                <form th:action="@{/atualizarMatricula}" method="POST">
+                    <input type="hidden" name="id" th:value="${matricula.id}">
+
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="idAluno">Aluno</label>
+                            <select name="idAluno" id="idAluno" required>
+                                <option th:each="aluno : ${alunos}" th:value="${aluno.id}" th:text="${aluno.nome}"
+                                    th:selected="${aluno.id == matricula.aluno.id}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="idCurso">Curso</label>
+                            <select name="idCurso" id="idCurso" required>
+                                <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nome}"
+                                    th:selected="${curso.id == matricula.curso.id}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="field full">
+                            <label for="idOfertaDisciplina">Oferta da disciplina</label>
+                            <select name="idOfertaDisciplina" id="idOfertaDisciplina" required>
+                                <option th:each="oferta : ${ofertas}" th:value="${oferta.id}"
+                                    th:text="${oferta.disciplina.nome + ' - ' + oferta.professor.nome}"
+                                    th:selected="${oferta.id == matricula.ofertaDisciplina.id}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="dataM">Data da matrícula</label>
+                            <input type="date" name="dataM" id="dataM" th:value="${matricula.dataM}" required>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit" class="btn btn-primary">Atualizar</button>
+                        <a th:href="@{/listaMatricula}" class="btn btn-secondary">Ir para lista</a>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="campo">
-            <label for="idCurso">Curso</label>
-            <select name="idCurso" id="idCurso">
-                <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nome}"
-                    th:selected="${curso.id == matricula.curso.id}">
-                </option>
-            </select>
-        </div>
-        <div class="campo">
-            <label for="idOfertaDisciplina">Oferta da Disciplina</label>
-            <select name="idOfertaDisciplina" id="idOfertaDisciplina">
-                <option th:each="oferta : ${ofertas}" th:value="${oferta.id}"
-                    th:text="${oferta.disciplina.nome + ' - ' + oferta.professor.nome}"
-                    th:selected="${oferta.id == matricula.ofertaDisciplina.id}">
-                </option>
-            </select>
-        </div>
-        <div class="campo">
-            <label for="dataM">Data da matrícula</label>
-            <input type="date" name="dataM" id="dataM" th:value="${matricula.dataM}">
-        </div>
-        <button type="submit">Atualizar</button>
-    </form>
-    <form th:action="@{/listaMatricula}" method="GET">
-        <button type="submit">Ir para lista de matrículas</button>
-    </form>
+    </div>
+    <script>
+        (function(){
+            const form = document.querySelector('form');
+            if(!form) return;
+            form.addEventListener('submit', function(e){
+                if(!form.checkValidity()){
+                    e.preventDefault();
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                }
+            });
+        })();
+    </script>
 </body>
 
 </html>

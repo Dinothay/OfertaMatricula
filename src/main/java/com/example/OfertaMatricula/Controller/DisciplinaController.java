@@ -15,6 +15,8 @@ import com.example.OfertaMatricula.Repository.DisciplinaRepository;
 public class DisciplinaController {
     @Autowired
     private DisciplinaRepository disciplinaRepository;
+    @Autowired
+    private com.example.OfertaMatricula.Repository.OfertaDisciplinaRepository ofertaDisciplinaRepository;
 
     @GetMapping("/disciplina")
     public String cadastroDisciplinas(){
@@ -53,7 +55,11 @@ public class DisciplinaController {
     }
 
     @GetMapping("excluirDisciplina/{id}")
-    public String excluirDisciplina(@PathVariable long id){
+    public String excluirDisciplina(@PathVariable long id, org.springframework.web.servlet.mvc.support.RedirectAttributes ra){
+        if(ofertaDisciplinaRepository.existsByDisciplinaId(id)){
+            ra.addFlashAttribute("mensagem", "Não é possível excluir: disciplina está associada a uma oferta de disciplina.");
+            return "redirect:/listaDisciplinas";
+        }
         disciplinaRepository.deleteById(id);
         return "redirect:/listaDisciplinas";
     }

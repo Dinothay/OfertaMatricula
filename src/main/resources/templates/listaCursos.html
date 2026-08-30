@@ -1,35 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Cursos</title>
+    <link rel="stylesheet" th:href="@{/css/lista.css}">
 </head>
 
 <body>
-    <h1>Lista de Cursos</h1>
-    <ul>
-        <li th:each="curso: ${listaCursos}">
-            <p>ID: [[${curso.id}]]</p>
-            <p>Nome: [[${curso.nome}]]</p>
-            <p>Semestres: [[${curso.semestres}]]</p>
-            <p>Número de disciplinas: [[${curso.nDisciplinas}]]</p>
+    <div class="page">
+        <header class="topbar">
+            <div class="brand">Lista de Cursos</div>
+            <div class="nav-actions">
+                <a th:href="@{/index}" class="btn btn-secondary">Voltar ao início</a>
+                <a th:href="@{/curso}" class="btn btn-primary">+ Cadastrar curso</a>
+            </div>
+        </header>
 
-            <form th:action="@{/editarCurso/{id}(id=${curso.id})}" method="GET">
-                <button type="submit">Editar</button>
-            </form>
+        <div th:if="${mensagem}" class="alert">
+            <p th:text="${mensagem}"></p>
+        </div>
 
-            <form th:action="@{/excluirCurso/{id}(id=${curso.id})}" method="GET">
-                <button type="submit">Excluir</button>
-            </form>
+        <div th:if="${#lists.isEmpty(listaCursos)}" class="empty-state">
+            <h2>Nenhum curso cadastrado</h2>
+            <p>Cadastre o primeiro curso para continuar.</p>
+        </div>
 
-            <hr>
-        </li>
-    </ul>
-    <form action="curso" method="GET">
-        <button type="submit">Cadastrar cursos</button>
-    </form>
+        <div th:unless="${#lists.isEmpty(listaCursos)}" class="table-wrap">
+            <table class="records-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Semestres</th>
+                        <th>Número de disciplinas</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="curso : ${listaCursos}">
+                        <td th:text="${curso.id}"></td>
+                        <td th:text="${curso.nome}"></td>
+                        <td th:text="${curso.semestres}"></td>
+                        <td th:text="${curso.nDisciplinas}"></td>
+                        <td>
+                            <div class="actions-inline">
+                                <form th:action="@{/editarCurso/{id}(id=${curso.id})}" method="GET">
+                                    <button type="submit" class="btn btn-secondary">Editar</button>
+                                </form>
+                                <form th:action="@{/excluirCurso/{id}(id=${curso.id})}" method="GET">
+                                    <button type="submit" class="btn btn-danger">Excluir</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -1,40 +1,72 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Matrículas</title>
+    <link rel="stylesheet" th:href="@{/css/lista.css}">
 </head>
 
 <body>
+    <div class="page">
+        <header class="topbar">
+            <div class="brand">Lista de Matrículas</div>
+            <div class="nav-actions">
+                <a th:href="@{/index}" class="btn btn-secondary">Voltar ao início</a>
+                <a th:href="@{/matricula}" class="btn btn-primary">+ Cadastrar matrícula</a>
+            </div>
+        </header>
 
-    <h1>Lista de Matrículas</h1>
+        <div th:if="${mensagem}" class="alert">
+            <p th:text="${mensagem}"></p>
+        </div>
 
-    <ul>
+        <div th:if="${#lists.isEmpty(listaMatricula)}" class="empty-state">
+            <h2>Nenhuma matrícula cadastrada</h2>
+            <p>Realize a primeira matrícula para acompanhar os registros.</p>
+        </div>
 
-        <li th:each="matricula : ${listaMatricula}">
-            <p>ID: [[${matricula.id}]]</p>
-            <p>Aluno: [[${matricula.aluno.nome}]]</p>
-            <p>Curso: [[${matricula.curso.nome}]]</p>
-            <p>Disciplina: [[${matricula.ofertaDisciplina.disciplina.nome}]]</p>
-            <p>Professor: [[${matricula.ofertaDisciplina.professor.nome}]]</p>
-            <p>Dia da aula: [[${matricula.ofertaDisciplina.diaAula}]]</p>
-            <p>Aulas por semana: [[${matricula.ofertaDisciplina.nAulaSemana}]]</p>
-            <p>Data da matrícula: [[${matricula.dataM}]]</p>
-            <form th:action="@{/editarMatricula/{id}(id=${matricula.id})}" method="GET">
-                <button type="submit">Editar</button>
-            </form>
-            <form th:action="@{/excluirMatricula/{id}(id=${matricula.id})}" method="GET">
-                <button type="submit">Excluir</button>
-            </form>
-            <hr>
-        </li>
-    </ul>
-    <form th:action="@{/matricula}" method="GET">
-        <button type="submit">Cadastrar matrícula</button>
-    </form>
-
+        <div th:unless="${#lists.isEmpty(listaMatricula)}" class="table-wrap">
+            <table class="records-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Aluno</th>
+                        <th>Curso</th>
+                        <th>Disciplina</th>
+                        <th>Professor</th>
+                        <th>Dia da aula</th>
+                        <th>Aulas por semana</th>
+                        <th>Data da matrícula</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="matricula : ${listaMatricula}">
+                        <td th:text="${matricula.id}"></td>
+                        <td th:text="${matricula.aluno.nome}"></td>
+                        <td th:text="${matricula.curso.nome}"></td>
+                        <td th:text="${matricula.ofertaDisciplina.disciplina.nome}"></td>
+                        <td th:text="${matricula.ofertaDisciplina.professor.nome}"></td>
+                        <td th:text="${matricula.ofertaDisciplina.diaAula}"></td>
+                        <td th:text="${matricula.ofertaDisciplina.nAulaSemana}"></td>
+                        <td th:text="${matricula.dataM}"></td>
+                        <td>
+                            <div class="actions-inline">
+                                <form th:action="@{/editarMatricula/{id}(id=${matricula.id})}" method="GET">
+                                    <button type="submit" class="btn btn-secondary">Editar</button>
+                                </form>
+                                <form th:action="@{/excluirMatricula/{id}(id=${matricula.id})}" method="GET">
+                                    <button type="submit" class="btn btn-danger">Excluir</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 
 </html>

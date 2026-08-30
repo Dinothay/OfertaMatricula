@@ -1,36 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Disciplinas</title>
+    <link rel="stylesheet" th:href="@{/css/lista.css}">
 </head>
 
 <body>
-    <h1>Lista de Disciplinas</h1>
-    <ul>
-        <li th:each="disciplina: ${listaDisciplinas}">
-            <p>ID: [[${disciplina.id}]]</p>
-            <p>Nome: [[${disciplina.nome}]]</p>
-            <p>Semestre: [[${disciplina.semestre}]]</p>
-            <p>Numero de aulas: [[${disciplina.nAulas}]]</p>
-            <p>Carga Horária: [[${disciplina.cHoraria}]]</p>
+    <div class="page">
+        <header class="topbar">
+            <div class="brand">Lista de Disciplinas</div>
+            <div class="nav-actions">
+                <a th:href="@{/index}" class="btn btn-secondary">Voltar ao início</a>
+                <a th:href="@{/disciplina}" class="btn btn-primary">+ Cadastrar disciplina</a>
+            </div>
+        </header>
 
-            <form th:action="@{/editarDisciplina/{id}(id=${disciplina.id})}" method="GET">
-                <button type="submit">Editar</button>
-            </form>
+        <div th:if="${mensagem}" class="alert">
+            <p th:text="${mensagem}"></p>
+        </div>
 
-            <form th:action="@{/excluirDisciplina/{id}(id=${disciplina.id})}" method="GET">
-                <button type="submit">Excluir</button>
-            </form>
+        <div th:if="${#lists.isEmpty(listaDisciplinas)}" class="empty-state">
+            <h2>Nenhuma disciplina cadastrada</h2>
+            <p>Cadastre a primeira disciplina para visualizar o catálogo.</p>
+        </div>
 
-            <hr>
-        </li>
-    </ul>
-    <form th:action="@{/disciplina}" method="GET">
-        <button type="submit">Cadastrar Disciplinas</button>
-    </form>
+        <div th:unless="${#lists.isEmpty(listaDisciplinas)}" class="table-wrap">
+            <table class="records-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Semestre</th>
+                        <th>Número de aulas</th>
+                        <th>Carga horária</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="disciplina : ${listaDisciplinas}">
+                        <td th:text="${disciplina.id}"></td>
+                        <td th:text="${disciplina.nome}"></td>
+                        <td th:text="${disciplina.semestre}"></td>
+                        <td th:text="${disciplina.nAulas}"></td>
+                        <td th:text="${disciplina.cHoraria}"></td>
+                        <td>
+                            <div class="actions-inline">
+                                <form th:action="@{/editarDisciplina/{id}(id=${disciplina.id})}" method="GET">
+                                    <button type="submit" class="btn btn-secondary">Editar</button>
+                                </form>
+                                <form th:action="@{/excluirDisciplina/{id}(id=${disciplina.id})}" method="GET">
+                                    <button type="submit" class="btn btn-danger">Excluir</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 
 </html>

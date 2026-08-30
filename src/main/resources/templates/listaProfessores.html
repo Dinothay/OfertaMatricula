@@ -1,36 +1,70 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Professores</title>
+    <link rel="stylesheet" th:href="@{/css/lista.css}">
 </head>
 
 <body>
-    <h1>Lista de Professores</h1>
-    <ul>
-        <li th:each="professor : ${listaProfessores}">
-            <p>ID: [[${professor.id}]]</p>
-            <p>Nome: [[${professor.nome}]]</p>
-            <p>CPF: [[${professor.cpf}]]</p>
-            <p>Área: [[${professor.area}]]</p>
-            <p>Formação: [[${professor.formacao}]]</p>
-            <p>Endereço: [[${professor.endereco}]]</p>
-            <p>Salário: [[${professor.salario}]]</p>
-            <form th:action="@{/editarProfessor/{id}(id=${professor.id})}" method="GET">
-                <button type="submit">Editar</button>
-            </form>
-            <form th:action="@{/excluirProfessor/{id}(id=${professor.id})}" method="GET">
-                <button type="submit">Excluir</button>
-            </form>
-            <hr>
-        </li>
-    </ul>
-    <form th:action="@{/professor}" method="GET">
-        <button type="submit">Cadastrar professor</button>
-    </form>
+    <div class="page">
+        <header class="topbar">
+            <div class="brand">Lista de Professores</div>
+            <div class="nav-actions">
+                <a th:href="@{/index}" class="btn btn-secondary">Voltar ao início</a>
+                <a th:href="@{/professor}" class="btn btn-primary">+ Cadastrar professor</a>
+            </div>
+        </header>
 
+        <div th:if="${mensagem}" class="alert">
+            <p th:text="${mensagem}"></p>
+        </div>
+
+        <div th:if="${#lists.isEmpty(listaProfessores)}" class="empty-state">
+            <h2>Nenhum professor cadastrado</h2>
+            <p>Cadastre o primeiro professor para começar.</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(listaProfessores)}" class="table-wrap">
+            <table class="records-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Área</th>
+                        <th>Formação</th>
+                        <th>Endereço</th>
+                        <th>Salário</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="professor : ${listaProfessores}">
+                        <td th:text="${professor.id}"></td>
+                        <td th:text="${professor.nome}"></td>
+                        <td th:text="${professor.cpf}"></td>
+                        <td th:text="${professor.area}"></td>
+                        <td th:text="${professor.formacao}"></td>
+                        <td th:text="${professor.endereco}"></td>
+                        <td th:text="${professor.salario}"></td>
+                        <td>
+                            <div class="actions-inline">
+                                <form th:action="@{/editarProfessor/{id}(id=${professor.id})}" method="GET">
+                                    <button type="submit" class="btn btn-secondary">Editar</button>
+                                </form>
+                                <form th:action="@{/excluirProfessor/{id}(id=${professor.id})}" method="GET">
+                                    <button type="submit" class="btn btn-danger">Excluir</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 
 </html>

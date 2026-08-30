@@ -17,6 +17,8 @@ import com.example.OfertaMatricula.Repository.AlunoRepository;
 public class AlunoController {
     @Autowired
     private AlunoRepository alunoRepository;
+    @Autowired
+    private com.example.OfertaMatricula.Repository.MatriculaRepository matriculaRepository;
 
     @GetMapping("/aluno")
     public String cadastroAlunos(){
@@ -56,7 +58,11 @@ public class AlunoController {
     }
 
     @GetMapping("/excluirAluno/{id}")
-    public String excluirAluno(@PathVariable long id){
+    public String excluirAluno(@PathVariable long id, org.springframework.web.servlet.mvc.support.RedirectAttributes ra){
+        if(matriculaRepository.existsByAlunoId(id)){
+            ra.addFlashAttribute("mensagem", "Não é possível excluir: aluno está associado a uma matrícula.");
+            return "redirect:/listaAlunos";
+        }
         alunoRepository.deleteById(id);
         return "redirect:/listaAlunos";
     }

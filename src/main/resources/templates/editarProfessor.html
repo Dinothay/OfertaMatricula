@@ -1,57 +1,76 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Professor</title>
+    <link rel="stylesheet" th:href="@{/css/formulario.css}">
 </head>
 
 <body>
+    <div class="page">
+        <div class="form-shell">
+            <div class="form-header">
+                <h2>Editar Professor</h2>
+            </div>
 
-    <h3>Editar Professor</h3>
+            <div class="form-body">
+                <form th:action="@{/atualizarProfessor}" method="POST">
+                    <input type="hidden" name="id" th:value="${professor.id}">
 
-    <form th:action="@{/atualizarProfessor}" method="POST">
+                    <div class="form-grid">
+                        <div class="field full">
+                            <label for="nome">Nome</label>
+                            <input type="text" name="nome" id="nome" th:value="${professor.nome}" required>
+                        </div>
 
-        <input type="hidden" name="id" th:value="${professor.id}">
+                        <div class="field">
+                            <label for="cpf">CPF</label>
+                            <input type="text" name="cpf" id="cpf" th:value="${professor.cpf}" required>
+                        </div>
 
-        <div class="campo">
-            <label for="nome">Nome</label>
-            <input type="text" name="nome" id="nome" th:value="${professor.nome}">
+                        <div class="field">
+                            <label for="area">Área</label>
+                            <input type="text" name="area" id="area" th:value="${professor.area}" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="formacao">Formação</label>
+                            <input type="text" name="formacao" id="formacao" th:value="${professor.formacao}" required>
+                        </div>
+
+                        <div class="field full">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" name="endereco" id="endereco" th:value="${professor.endereco}" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="salario">Salário</label>
+                            <input type="number" step="0.01" name="salario" id="salario" th:value="${professor.salario}" required>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit" class="btn btn-primary">Atualizar</button>
+                        <a th:href="@{/listaProfessores}" class="btn btn-secondary">Ir para lista</a>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <div class="campo">
-            <label for="cpf">CPF</label>
-            <input type="text" name="cpf" id="cpf" th:value="${professor.cpf}">
-        </div>
-
-        <div class="campo">
-            <label for="area">Área</label>
-            <input type="text" name="area" id="area" th:value="${professor.area}">
-        </div>
-
-        <div class="campo">
-            <label for="formacao">Formação</label>
-            <input type="text" name="formacao" id="formacao" th:value="${professor.formacao}">
-        </div>
-
-        <div class="campo">
-            <label for="endereco">Endereço</label>
-            <input type="text" name="endereco" id="endereco" th:value="${professor.endereco}">
-        </div>
-
-        <div class="campo">
-            <label for="salario">Salário</label>
-            <input type="number" step="0.01" name="salario" id="salario" th:value="${professor.salario}">
-        </div>
-
-        <button type="submit">Atualizar</button>
-
-    </form>
-    <form th:action="@{/listaProfessores}" method="GET">
-        <button type="submit">Ir para lista de professores</button>
-    </form>
-
+    </div>
+    <script>
+        (function(){
+            const form = document.querySelector('form');
+            if(!form) return;
+            form.addEventListener('submit', function(e){
+                if(!form.checkValidity()){
+                    e.preventDefault();
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                }
+            });
+        })();
+    </script>
 </body>
 
 </html>

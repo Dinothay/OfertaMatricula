@@ -23,6 +23,9 @@ public class OfertaDisciplinaController {
     private OfertaDisciplinaRepository ofertaDisciplinaRepository;
 
     @Autowired
+    private com.example.OfertaMatricula.Repository.MatriculaRepository matriculaRepository;
+
+    @Autowired
     private ProfessorRepository professorRepository;
 
     @Autowired
@@ -58,7 +61,7 @@ public class OfertaDisciplinaController {
         OfertaDisciplina ofertaDisciplina = ofertaDisciplinaRepository.findById(id).orElse(null);
         List<Disciplina> disciplinas = disciplinaRepository.findAll();
         List<Professor> professores = professorRepository.findAll();
-        model.addAttribute("OfertaDisciplina", ofertaDisciplina);
+        model.addAttribute("ofertaDisciplina", ofertaDisciplina);
         model.addAttribute("disciplinas", disciplinas);
         model.addAttribute("professores", professores);
         return "editarOfertaDisciplina.html";
@@ -80,7 +83,11 @@ public class OfertaDisciplinaController {
     }
 
     @GetMapping("/excluirOfertaDisciplina/{id}")
-    public String excluirDisciplina(@PathVariable long id) {
+    public String excluirDisciplina(@PathVariable long id, org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
+        if(matriculaRepository.existsByOfertaDisciplinaId(id)){
+            ra.addFlashAttribute("mensagem", "Não é possível excluir: oferta de disciplina está associada a uma matrícula.");
+            return "redirect:/listaOfertaDisciplinas";
+        }
         ofertaDisciplinaRepository.deleteById(id);
         return "redirect:/listaOfertaDisciplinas";
     }

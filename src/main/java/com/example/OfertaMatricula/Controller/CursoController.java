@@ -17,6 +17,8 @@ import com.example.OfertaMatricula.Repository.CursoRepository;
 public class CursoController {
     @Autowired
     private CursoRepository cursoRepository;
+    @Autowired
+    private com.example.OfertaMatricula.Repository.MatriculaRepository matriculaRepository;
 
     @GetMapping("curso")
     public String cadastroCursos(){
@@ -54,7 +56,11 @@ public class CursoController {
     }
 
     @GetMapping("excluirCurso/{id}")
-    public String excluirCurso(@PathVariable long id){
+    public String excluirCurso(@PathVariable long id, org.springframework.web.servlet.mvc.support.RedirectAttributes ra){
+        if(matriculaRepository.existsByCursoId(id)){
+            ra.addFlashAttribute("mensagem", "Não é possível excluir: curso está associado a uma matrícula.");
+            return "redirect:/listaCursos";
+        }
         cursoRepository.deleteById(id);
         return "redirect:/listaCursos";
     }
