@@ -16,18 +16,31 @@
             </div>
 
             <div class="form-body">
+                <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
+                    <p th:text="${mensagem}"></p>
+                </div>
                 <form th:action="@{/atualizarProfessor}" method="POST">
                     <input type="hidden" name="id" th:value="${professor.id}">
 
                     <div class="form-grid">
                         <div class="field full">
                             <label for="nome">Nome</label>
-                            <input type="text" name="nome" id="nome" th:value="${professor.nome}" required>
+                            <input type="text" name="nome" id="nome" th:value="${nome != null ? nome : professor.nome}" required>
                         </div>
 
                         <div class="field">
                             <label for="cpf">CPF</label>
-                            <input type="text" name="cpf" id="cpf" th:value="${professor.cpf}" required>
+                            <input type="text" name="cpf" id="cpf" th:value="${cpf != null ? cpf : professor.cpf}" title="Informe o CPF no formato 123.456.789-09" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="email">E-mail</label>
+                            <input type="email" name="email" id="email" th:value="${email != null ? email : professor.email}" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="telefone">Telefone</label>
+                            <input type="tel" name="telefone" id="telefone" th:value="${telefone != null ? telefone : professor.telefone}" title="Informe o telefone com DDD e 10 ou 11 dígitos" required>
                         </div>
 
                         <div class="field">

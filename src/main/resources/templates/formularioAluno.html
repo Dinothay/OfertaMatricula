@@ -15,32 +15,46 @@
                 <h2>Cadastrar Aluno</h2>
             </div>
 
+            
             <div class="form-body">
+                <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
+                    <p th:text="${mensagem}"></p>
+                </div>
                 <form th:action="@{/cadastrarAlunos}" th:method="POST">
                     <div class="form-grid">
                         <div class="field">
                             <label for="nome">Nome</label>
-                            <input type="text" name="nome" id="nome" placeholder="Digite o nome completo" required>
+                            <input type="text" name="nome" id="nome" th:value="${nome}" placeholder="Digite o nome completo" required>
                         </div>
 
                         <div class="field">
                             <label for="cpf">CPF</label>
-                            <input type="text" name="cpf" id="cpf" placeholder="Digite o CPF" required>
+                            <input type="text" name="cpf" id="cpf" th:value="${cpf}" placeholder="Digite o CPF" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="email">E-mail</label>
+                            <input type="email" name="email" id="email" th:value="${email}" placeholder="Digite o e-mail" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="telefone">Telefone</label>
+                            <input type="tel" name="telefone" id="telefone" th:value="${telefone}" placeholder="(99) 99999-9999" required>
                         </div>
 
                         <div class="field">
                             <label for="prontuario">Prontuário</label>
-                            <input type="number" name="prontuario" id="prontuario" placeholder="Número do prontuário" required>
+                            <input type="number" name="prontuario" id="prontuario" th:value="${prontuario}" placeholder="Número do prontuário" required>
                         </div>
 
                         <div class="field full">
                             <label for="endereco">Endereço</label>
-                            <input type="text" name="endereco" id="endereco" placeholder="Digite o endereço" required>
+                            <input type="text" name="endereco" id="endereco" th:value="${endereco}" placeholder="Digite o endereço" required>
                         </div>
 
                         <div class="field">
                             <label for="dataInicio">Data de início</label>
-                            <input type="date" name="dataInicio" id="dataInicio" required>
+                            <input type="date" name="dataInicio" id="dataInicio" th:value="${dataInicio}" required>
                         </div>
                     </div>
 

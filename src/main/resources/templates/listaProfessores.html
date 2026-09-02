@@ -14,11 +14,11 @@
             <div class="brand">Lista de Professores</div>
             <div class="nav-actions">
                 <a th:href="@{/index}" class="btn btn-secondary">Voltar ao início</a>
-                <a th:href="@{/professor}" class="btn btn-primary">+ Cadastrar professor</a>
+                <a th:href="@{/professor}" class="btn btn-primary">Cadastrar professor</a>
             </div>
         </header>
 
-        <div th:if="${mensagem}" class="alert">
+        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
             <p th:text="${mensagem}"></p>
         </div>
 
@@ -34,6 +34,8 @@
                         <th>ID</th>
                         <th>Nome</th>
                         <th>CPF</th>
+                        <th>E-mail</th>
+                        <th>Telefone</th>
                         <th>Área</th>
                         <th>Formação</th>
                         <th>Endereço</th>
@@ -46,6 +48,8 @@
                         <td th:text="${professor.id}"></td>
                         <td th:text="${professor.nome}"></td>
                         <td th:text="${professor.cpf}"></td>
+                        <td th:text="${professor.email}"></td>
+                        <td th:text="${professor.telefone}"></td>
                         <td th:text="${professor.area}"></td>
                         <td th:text="${professor.formacao}"></td>
                         <td th:text="${professor.endereco}"></td>

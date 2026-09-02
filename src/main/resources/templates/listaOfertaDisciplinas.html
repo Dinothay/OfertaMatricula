@@ -14,11 +14,11 @@
             <div class="brand">Ofertas de Disciplinas</div>
             <div class="nav-actions">
                 <a th:href="@{/index}" class="btn btn-secondary">Voltar ao início</a>
-                <a th:href="@{/ofertaDisciplina}" class="btn btn-primary">+ Cadastrar oferta</a>
+                <a th:href="@{/ofertaDisciplina}" class="btn btn-primary">Cadastrar oferta</a>
             </div>
         </header>
 
-        <div th:if="${mensagem}" class="alert">
+        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
             <p th:text="${mensagem}"></p>
         </div>
 
@@ -51,7 +51,7 @@
                                 <form th:action="@{/editarOfertaDisciplina/{id}(id=${oferta.id})}" method="GET">
                                     <button type="submit" class="btn btn-secondary">Editar</button>
                                 </form>
-                                <form th:action="@{/excluirOfertaDisciplina}" method="GET">
+                                <form th:action="@{/excluirOfertaDisciplina/{id}(id=${oferta.id})}" method="GET">
                                     <input type="hidden" name="id" th:value="${oferta.id}">
                                     <button type="submit" class="btn btn-danger">Excluir</button>
                                 </form>

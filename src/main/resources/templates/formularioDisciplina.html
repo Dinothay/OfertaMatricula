@@ -20,22 +20,30 @@
                     <div class="form-grid">
                         <div class="field full">
                             <label for="nome">Nome</label>
-                            <input type="text" name="nome" id="nome" placeholder="Digite o nome da disciplina" required>
+                            <input type="text" name="nome" id="nome" placeholder="Digite o nome da disciplina" th:value="${nome}" required>
                         </div>
 
                         <div class="field">
                             <label for="semestre">Semestre</label>
-                            <input type="number" name="semestre" id="semestre" placeholder="Semestre da disciplina" required>
+                            <input type="number" name="semestre" id="semestre" placeholder="Semestre da disciplina" th:value="${semestre}" required>
                         </div>
 
                         <div class="field">
                             <label for="nAulas">Número de aulas</label>
-                            <input type="number" name="nAulas" id="nAulas" placeholder="Total de aulas" required>
+                            <input type="number" name="nAulas" id="nAulas" placeholder="Total de aulas" th:value="${nAulas}" required>
                         </div>
 
                         <div class="field full">
                             <label for="cHoraria">Carga horária</label>
-                            <input type="number" name="cHoraria" id="cHoraria" step="0.01" placeholder="Ex: 60.00" required>
+                            <input type="number" name="cHoraria" id="cHoraria" step="0.01" placeholder="Ex: 60.00" th:value="${cHoraria}" required>
+                        </div>
+                        <div class="field full">
+                            <label for="cursoId">Curso</label>
+                            <select name="cursoId" id="cursoId" required>
+                                <option value="" disabled th:if="${cursoId == null}">-- selecione um curso --</option>
+                                <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nome}"
+                                        th:selected="${cursoId != null} ? ${curso.id} == ${cursoId} : false"></option>
+                            </select>
                         </div>
                     </div>
 

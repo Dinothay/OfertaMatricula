@@ -16,17 +16,44 @@ public class DisciplinaController {
     @Autowired
     private DisciplinaRepository disciplinaRepository;
     @Autowired
+    private com.example.OfertaMatricula.Repository.CursoRepository cursoRepository;
+    @Autowired
     private com.example.OfertaMatricula.Repository.OfertaDisciplinaRepository ofertaDisciplinaRepository;
 
     @GetMapping("/disciplina")
-    public String cadastroDisciplinas(){
+    public String cadastroDisciplinas(Model model){
+        model.addAttribute("cursos", cursoRepository.findAll());
         return "formularioDisciplina.html";
     }
     
     @PostMapping("/cadastrarDisciplinas")
-    public String saveDisciplinas(@RequestParam String nome, @RequestParam int semestre,@RequestParam int nAulas, @RequestParam Double cHoraria){
-        disciplinaRepository.save(new Disciplina(nome, nAulas, semestre,cHoraria));
-        return "redirect:/disciplina";
+    public String saveDisciplinas(@RequestParam String nome, @RequestParam int semestre,@RequestParam int nAulas, @RequestParam Double cHoraria, @RequestParam(required = false) Long cursoId, org.springframework.web.servlet.mvc.support.RedirectAttributes ra){
+        com.example.OfertaMatricula.Model.Curso curso = null;
+        if(cursoId == null){
+            ra.addFlashAttribute("mensagem", "Selecione um curso válido!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            ra.addFlashAttribute("nome", nome);
+            ra.addFlashAttribute("semestre", semestre);
+            ra.addFlashAttribute("nAulas", nAulas);
+            ra.addFlashAttribute("cHoraria", cHoraria);
+            ra.addFlashAttribute("cursoId", "");
+            return "redirect:/disciplina";
+        }
+        curso = cursoRepository.findById(cursoId).orElse(null);
+        if(curso == null){
+            ra.addFlashAttribute("mensagem", "Curso não encontrado!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            ra.addFlashAttribute("nome", nome);
+            ra.addFlashAttribute("semestre", semestre);
+            ra.addFlashAttribute("nAulas", nAulas);
+            ra.addFlashAttribute("cHoraria", cHoraria);
+            ra.addFlashAttribute("cursoId", "");
+            return "redirect:/disciplina";
+        }
+        disciplinaRepository.save(new Disciplina(nome, semestre, nAulas, cHoraria, curso));
+        ra.addFlashAttribute("mensagem", "Disciplina cadastrada com sucesso.");
+        ra.addFlashAttribute("mensagemTipo", "sucesso");
+        return "redirect:/listaDisciplinas";
     }
 
     @GetMapping("/listaDisciplinas")
@@ -40,17 +67,42 @@ public class DisciplinaController {
     public String editarDisciplina(@PathVariable long id, Model model){
         Disciplina disciplina = disciplinaRepository.findById(id).orElse(null);
         model.addAttribute("disciplina", disciplina);
+        model.addAttribute("cursos", cursoRepository.findAll());
         return "editarDisciplina.html";
     }
 
     @PostMapping("atualizarDisciplina")
-    public String atualizarDisciplina(@RequestParam long id,@RequestParam String nome,@RequestParam int semestre, @RequestParam int nAulas,@RequestParam Double cHoraria){
+    public String atualizarDisciplina(@RequestParam long id,@RequestParam String nome,@RequestParam int semestre, @RequestParam int nAulas,@RequestParam Double cHoraria, @RequestParam(required = false) Long cursoId, org.springframework.web.servlet.mvc.support.RedirectAttributes ra){
+        if(cursoId == null){
+            ra.addFlashAttribute("mensagem", "Selecione um curso válido!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            ra.addFlashAttribute("nome", nome);
+            ra.addFlashAttribute("semestre", semestre);
+            ra.addFlashAttribute("nAulas", nAulas);
+            ra.addFlashAttribute("cHoraria", cHoraria);
+            ra.addFlashAttribute("cursoId", "");
+            return "redirect:/editarDisciplina/" + id;
+        }
+        com.example.OfertaMatricula.Model.Curso curso = cursoRepository.findById(cursoId).orElse(null);
+        if(curso == null){
+            ra.addFlashAttribute("mensagem", "Curso não encontrado!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            ra.addFlashAttribute("nome", nome);
+            ra.addFlashAttribute("semestre", semestre);
+            ra.addFlashAttribute("nAulas", nAulas);
+            ra.addFlashAttribute("cHoraria", cHoraria);
+            ra.addFlashAttribute("cursoId", "");
+            return "redirect:/editarDisciplina/" + id;
+        }
         Disciplina disciplina = disciplinaRepository.findById(id).orElse(null);
         disciplina.setNome(nome);
         disciplina.setSemestre(semestre);
         disciplina.setnAulas(nAulas);
         disciplina.setcHoraria(cHoraria);
+        disciplina.setCurso(curso);
         disciplinaRepository.save(disciplina);
+        ra.addFlashAttribute("mensagem", "Disciplina atualizada com sucesso.");
+        ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaDisciplinas";
     }
 

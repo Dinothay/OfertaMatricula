@@ -14,11 +14,11 @@
             <div class="brand">Lista de Disciplinas</div>
             <div class="nav-actions">
                 <a th:href="@{/index}" class="btn btn-secondary">Voltar ao início</a>
-                <a th:href="@{/disciplina}" class="btn btn-primary">+ Cadastrar disciplina</a>
+                <a th:href="@{/disciplina}" class="btn btn-primary">Cadastrar disciplina</a>
             </div>
         </header>
 
-        <div th:if="${mensagem}" class="alert">
+        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
             <p th:text="${mensagem}"></p>
         </div>
 
@@ -36,6 +36,7 @@
                         <th>Semestre</th>
                         <th>Número de aulas</th>
                         <th>Carga horária</th>
+                        <th>Curso</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -46,6 +47,7 @@
                         <td th:text="${disciplina.semestre}"></td>
                         <td th:text="${disciplina.nAulas}"></td>
                         <td th:text="${disciplina.cHoraria}"></td>
+                        <td th:text="${disciplina.curso != null} ? ${disciplina.curso.nome} : '—'"></td>
                         <td>
                             <div class="actions-inline">
                                 <form th:action="@{/editarDisciplina/{id}(id=${disciplina.id})}" method="GET">

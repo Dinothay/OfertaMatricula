@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.OfertaMatricula.Model.Curso;
 import com.example.OfertaMatricula.Repository.CursoRepository;
+import com.example.OfertaMatricula.Repository.DisciplinaRepository;
 
 @Controller
 public class CursoController {
@@ -19,6 +20,8 @@ public class CursoController {
     private CursoRepository cursoRepository;
     @Autowired
     private com.example.OfertaMatricula.Repository.MatriculaRepository matriculaRepository;
+    @Autowired
+    private DisciplinaRepository disciplinaRepository;
 
     @GetMapping("curso")
     public String cadastroCursos(){
@@ -26,9 +29,11 @@ public class CursoController {
     }
     
     @PostMapping("/cadastrarCurso")
-    public String saveCursos(@RequestParam String nome, @RequestParam int semestres,@RequestParam int nDisciplinas){
+    public String saveCursos(@RequestParam String nome, @RequestParam int semestres,@RequestParam int nDisciplinas, org.springframework.web.servlet.mvc.support.RedirectAttributes ra){
         cursoRepository.save(new Curso(nome, semestres, nDisciplinas));
-        return "redirect:/curso";
+        ra.addFlashAttribute("mensagem", "Curso cadastrado com sucesso.");
+        ra.addFlashAttribute("mensagemTipo", "sucesso");
+        return "redirect:/listaCursos";
     }
 
     @GetMapping("/listaCursos")
@@ -46,19 +51,27 @@ public class CursoController {
     }
 
     @PostMapping("atualizarCurso")
-    public String atualizarCurso(@RequestParam long id,@RequestParam String nome,@RequestParam int semestres, @RequestParam int nDisciplinas){
+    public String atualizarCurso(@RequestParam long id,@RequestParam String nome,@RequestParam int semestres, @RequestParam int nDisciplinas, org.springframework.web.servlet.mvc.support.RedirectAttributes ra){
         Curso curso = cursoRepository.findById(id).get();
         curso.setNome(nome);
         curso.setSemestres(semestres);
         curso.setnDisciplinas(nDisciplinas);
         cursoRepository.save(curso);
+        ra.addFlashAttribute("mensagem", "Curso atualizado com sucesso.");
+        ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaCursos";
     }
 
     @GetMapping("excluirCurso/{id}")
     public String excluirCurso(@PathVariable long id, org.springframework.web.servlet.mvc.support.RedirectAttributes ra){
+        if(disciplinaRepository.existsByCursoId(id)){
+            ra.addFlashAttribute("mensagem", "Não é possível excluir: curso está associado a uma disciplina.");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaCursos";
+        }
         if(matriculaRepository.existsByCursoId(id)){
             ra.addFlashAttribute("mensagem", "Não é possível excluir: curso está associado a uma matrícula.");
+            ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/listaCursos";
         }
         cursoRepository.deleteById(id);

@@ -16,33 +16,46 @@
             </div>
 
             <div class="form-body">
+                <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
+                    <p th:text="${mensagem}"></p>
+                </div>
                 <form th:action="@{/atualizarAluno}" th:method="POST">
                     <input type="hidden" name="id" th:value="${aluno.id}">
 
                     <div class="form-grid">
                         <div class="field full">
                             <label for="nome">Nome</label>
-                            <input type="text" name="nome" id="nome" th:value="${aluno.nome}" required>
+                            <input type="text" name="nome" id="nome" th:value="${nome != null ? nome : aluno.nome}" required>
                         </div>
 
                         <div class="field">
                             <label for="cpf">CPF</label>
-                            <input type="text" name="cpf" id="cpf" th:value="${aluno.cpf}" required>
+                            <input type="text" name="cpf" id="cpf" th:value="${cpf != null ? cpf : aluno.cpf}" title="Informe o CPF no formato 123.456.789-09" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="email">E-mail</label>
+                            <input type="email" name="email" id="email" th:value="${email != null ? email : aluno.email}" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="telefone">Telefone</label>
+                            <input type="tel" name="telefone" id="telefone" th:value="${telefone != null ? telefone : aluno.telefone}" required>
                         </div>
 
                         <div class="field">
                             <label for="prontuario">Prontuário</label>
-                            <input type="number" name="prontuario" id="prontuario" th:value="${aluno.prontuario}" required>
+                            <input type="number" name="prontuario" id="prontuario" th:value="${prontuario != null ? prontuario : aluno.prontuario}" required>
                         </div>
 
                         <div class="field full">
                             <label for="endereco">Endereço</label>
-                            <input type="text" name="endereco" id="endereco" th:value="${aluno.endereco}" required>
+                            <input type="text" name="endereco" id="endereco" th:value="${endereco != null ? endereco : aluno.endereco}" required>
                         </div>
 
                         <div class="field">
                             <label for="dataInicio">Data de início</label>
-                            <input type="date" name="dataInicio" id="dataInicio" th:value="${aluno.dataInicio}" required>
+                            <input type="date" name="dataInicio" id="dataInicio" th:value="${dataInicio != null ? dataInicio : aluno.dataInicio}" required>
                         </div>
                     </div>
 

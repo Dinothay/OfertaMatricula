@@ -20,10 +20,10 @@ public class Professor extends Pessoa {
     public Professor() {
     }
 
-    public Professor(String nome, String cpf, String area,
+    public Professor(String nome, String cpf, String email, String telefone, String area,
                      String formacao, String endereco, Double salario) {
 
-        super(nome, cpf, "", "", endereco, "", 0, 0);
+        super(nome, cpf, "", "", endereco, email, telefone);
 
         this.area = area;
         this.formacao = formacao;

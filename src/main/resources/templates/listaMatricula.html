@@ -14,11 +14,11 @@
             <div class="brand">Lista de Matrículas</div>
             <div class="nav-actions">
                 <a th:href="@{/index}" class="btn btn-secondary">Voltar ao início</a>
-                <a th:href="@{/matricula}" class="btn btn-primary">+ Cadastrar matrícula</a>
+                <a th:href="@{/matricula}" class="btn btn-primary">Cadastrar matrícula</a>
             </div>
         </header>
 
-        <div th:if="${mensagem}" class="alert">
+        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
             <p th:text="${mensagem}"></p>
         </div>
 

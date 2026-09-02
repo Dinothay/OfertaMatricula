@@ -14,11 +14,11 @@
             <div class="brand">Lista de Alunos</div>
             <div class="nav-actions">
                 <a th:href="@{/index}" class="btn btn-secondary">Voltar ao início</a>
-                <a th:href="@{/aluno}" class="btn btn-primary">+ Cadastrar aluno</a>
+                <a th:href="@{/aluno}" class="btn btn-primary">Cadastrar aluno</a>
             </div>
         </header>
 
-        <div th:if="${mensagem}" class="alert">
+        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
             <p th:text="${mensagem}"></p>
         </div>
 
@@ -34,6 +34,8 @@
                         <th>ID</th>
                         <th>Nome</th>
                         <th>CPF</th>
+                        <th>E-mail</th>
+                        <th>Telefone</th>
                         <th>Prontuário</th>
                         <th>Endereço</th>
                         <th>Data de início</th>
@@ -45,6 +47,8 @@
                         <td th:text="${aluno.id}"></td>
                         <td th:text="${aluno.nome}"></td>
                         <td th:text="${aluno.cpf}"></td>
+                        <td th:text="${aluno.email}"></td>
+                        <td th:text="${aluno.telefone}"></td>
                         <td th:text="${aluno.prontuario}"></td>
                         <td th:text="${aluno.endereco}"></td>
                         <td th:text="${aluno.dataInicio}"></td>

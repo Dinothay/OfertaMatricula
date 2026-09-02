@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,6 +17,14 @@ public class Disciplina {
         this.semestre = semestre;
         this.nAulas = nAulas;
         this.cHoraria = cHoraria;
+    }
+
+    public Disciplina(String nome, int semestre, int nAulas, Double cHoraria, Curso curso) {
+        this.nome = nome;
+        this.semestre = semestre;
+        this.nAulas = nAulas;
+        this.cHoraria = cHoraria;
+        this.curso = curso;
     }
 
     public Disciplina() {
@@ -36,6 +46,10 @@ public class Disciplina {
 
     @Column(name = "cHoraria")
     private Double cHoraria;
+
+    @ManyToOne
+    @JoinColumn(name = "curso_id", nullable = false)
+    private Curso curso;
 
     public long getId() {
         return id;
@@ -75,5 +89,13 @@ public class Disciplina {
 
     public void setcHoraria(Double cHoraria) {
         this.cHoraria = cHoraria;
+    }
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
     }
 }

@@ -47,12 +47,14 @@ public class MatriculaController {
 
     @PostMapping("/cadastrarMatriculas")
     public String saveMatricula(@RequestParam Long idOfertaDisciplina, @RequestParam Long idAluno,
-            @RequestParam Long idCurso, @RequestParam LocalDate dataM) {
+            @RequestParam Long idCurso, @RequestParam LocalDate dataM, org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
         Aluno aluno = alunoRepository.findById(idAluno).orElseThrow();
         Curso curso = cursoRepository.findById(idCurso).orElseThrow();
         OfertaDisciplina ofertaDisciplina = ofertaDisciplinaRepository.findById(idOfertaDisciplina).orElseThrow();
         matriculaRepository.save(new Matricula(ofertaDisciplina, curso, aluno, dataM));
-        return "redirect:/matricula";
+        ra.addFlashAttribute("mensagem", "Matrícula cadastrada com sucesso.");
+        ra.addFlashAttribute("mensagemTipo", "sucesso");
+        return "redirect:/listaMatricula";
     }
 
     @GetMapping("/listaMatricula")
@@ -77,7 +79,7 @@ public class MatriculaController {
 
     @PostMapping("atualizarMatricula")
     public String atualizarMatricula(@RequestParam long id, @RequestParam Long idOfertaDisciplina,
-            @RequestParam Long idAluno, @RequestParam Long idCurso, @RequestParam LocalDate dataM) {
+            @RequestParam Long idAluno, @RequestParam Long idCurso, @RequestParam LocalDate dataM, org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
         Matricula matricula = matriculaRepository.findById(id).orElse(null);
         Aluno aluno = alunoRepository.findById(idAluno).orElseThrow();
         Curso curso = cursoRepository.findById(idCurso).orElseThrow();
@@ -87,6 +89,8 @@ public class MatriculaController {
         matricula.setCurso(curso);
         matricula.setDataM(dataM);
         matriculaRepository.save(matricula);
+        ra.addFlashAttribute("mensagem", "Matrícula atualizada com sucesso.");
+        ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaMatricula";
     }
 

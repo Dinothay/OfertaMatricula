@@ -42,11 +42,13 @@ public class OfertaDisciplinaController {
 
     @PostMapping("/cadastrarOfertaDisciplinas")
     public String saveOfertaDisciplinas(@RequestParam Long idDisciplina, @RequestParam String diaAula,
-            @RequestParam int nAulaSemana, @RequestParam Long idProfessor) {
+            @RequestParam int nAulaSemana, @RequestParam Long idProfessor, org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
         Professor professor = professorRepository.findById(idProfessor).orElseThrow();
         Disciplina disciplina = disciplinaRepository.findById(idDisciplina).orElseThrow();
         ofertaDisciplinaRepository.save(new OfertaDisciplina(disciplina, diaAula, professor, nAulaSemana));
-        return "redirect:/ofertaDisciplina";
+        ra.addFlashAttribute("mensagem", "Oferta de disciplina cadastrada com sucesso.");
+        ra.addFlashAttribute("mensagemTipo", "sucesso");
+        return "redirect:/listaOfertaDisciplinas";
     }
 
     @GetMapping("/listaOfertaDisciplinas")
@@ -69,7 +71,7 @@ public class OfertaDisciplinaController {
 
     @PostMapping("/atualizarOfertaDisciplina")
     public String atualizarDisciplina(@RequestParam long id, @RequestParam Long idDisciplina,
-            @RequestParam String diaAula, @RequestParam int nAulaSemana, @RequestParam Long idProfessor) {
+            @RequestParam String diaAula, @RequestParam int nAulaSemana, @RequestParam Long idProfessor, org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
         OfertaDisciplina ofertaDisciplina = ofertaDisciplinaRepository.findById(id).orElse(null);
         Professor professor = professorRepository.findById(idProfessor).orElseThrow();
         Disciplina disciplina = disciplinaRepository.findById(idDisciplina).orElseThrow();
@@ -78,6 +80,8 @@ public class OfertaDisciplinaController {
         ofertaDisciplina.setnAulaSemana(nAulaSemana);
         ofertaDisciplina.setProfessor(professor);
         ofertaDisciplinaRepository.save(ofertaDisciplina);
+        ra.addFlashAttribute("mensagem", "Oferta de disciplina atualizada com sucesso.");
+        ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaOfertaDisciplinas";
 
     }
