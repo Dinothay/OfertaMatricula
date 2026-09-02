@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.OfertaMatricula.Model.Disciplina;
 import com.example.OfertaMatricula.Model.OfertaDisciplina;
 import com.example.OfertaMatricula.Model.Professor;
@@ -42,7 +42,7 @@ public class OfertaDisciplinaController {
 
     @PostMapping("/cadastrarOfertaDisciplinas")
     public String saveOfertaDisciplinas(@RequestParam Long idDisciplina, @RequestParam String diaAula,
-            @RequestParam int nAulaSemana, @RequestParam Long idProfessor, org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
+            @RequestParam int nAulaSemana, @RequestParam Long idProfessor, RedirectAttributes ra) {
         Professor professor = professorRepository.findById(idProfessor).orElseThrow();
         Disciplina disciplina = disciplinaRepository.findById(idDisciplina).orElseThrow();
         ofertaDisciplinaRepository.save(new OfertaDisciplina(disciplina, diaAula, professor, nAulaSemana));
@@ -71,7 +71,7 @@ public class OfertaDisciplinaController {
 
     @PostMapping("/atualizarOfertaDisciplina")
     public String atualizarDisciplina(@RequestParam long id, @RequestParam Long idDisciplina,
-            @RequestParam String diaAula, @RequestParam int nAulaSemana, @RequestParam Long idProfessor, org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
+            @RequestParam String diaAula, @RequestParam int nAulaSemana, @RequestParam Long idProfessor, RedirectAttributes ra) {
         OfertaDisciplina ofertaDisciplina = ofertaDisciplinaRepository.findById(id).orElse(null);
         Professor professor = professorRepository.findById(idProfessor).orElseThrow();
         Disciplina disciplina = disciplinaRepository.findById(idDisciplina).orElseThrow();
@@ -87,7 +87,7 @@ public class OfertaDisciplinaController {
     }
 
     @GetMapping("/excluirOfertaDisciplina/{id}")
-    public String excluirDisciplina(@PathVariable long id, org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
+    public String excluirDisciplina(@PathVariable long id, RedirectAttributes ra) {
         if(matriculaRepository.existsByOfertaDisciplinaId(id)){
             ra.addFlashAttribute("mensagem", "Não é possível excluir: oferta de disciplina está associada a uma matrícula.");
             return "redirect:/listaOfertaDisciplinas";

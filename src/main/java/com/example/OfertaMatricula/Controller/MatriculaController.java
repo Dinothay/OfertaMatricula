@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.OfertaMatricula.Model.Aluno;
 import com.example.OfertaMatricula.Model.Curso;
 import com.example.OfertaMatricula.Model.Matricula;
@@ -47,7 +47,7 @@ public class MatriculaController {
 
     @PostMapping("/cadastrarMatriculas")
     public String saveMatricula(@RequestParam Long idOfertaDisciplina, @RequestParam Long idAluno,
-            @RequestParam Long idCurso, @RequestParam LocalDate dataM, org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
+            @RequestParam Long idCurso, @RequestParam LocalDate dataM, RedirectAttributes ra) {
         Aluno aluno = alunoRepository.findById(idAluno).orElseThrow();
         Curso curso = cursoRepository.findById(idCurso).orElseThrow();
         OfertaDisciplina ofertaDisciplina = ofertaDisciplinaRepository.findById(idOfertaDisciplina).orElseThrow();
@@ -79,7 +79,7 @@ public class MatriculaController {
 
     @PostMapping("atualizarMatricula")
     public String atualizarMatricula(@RequestParam long id, @RequestParam Long idOfertaDisciplina,
-            @RequestParam Long idAluno, @RequestParam Long idCurso, @RequestParam LocalDate dataM, org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
+            @RequestParam Long idAluno, @RequestParam Long idCurso, @RequestParam LocalDate dataM, RedirectAttributes ra) {
         Matricula matricula = matriculaRepository.findById(id).orElse(null);
         Aluno aluno = alunoRepository.findById(idAluno).orElseThrow();
         Curso curso = cursoRepository.findById(idCurso).orElseThrow();

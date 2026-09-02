@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.example.OfertaMatricula.Model.Disciplina;
 import com.example.OfertaMatricula.Repository.DisciplinaRepository;
+import com.example.OfertaMatricula.Model.Curso;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class DisciplinaController {
@@ -27,8 +29,8 @@ public class DisciplinaController {
     }
     
     @PostMapping("/cadastrarDisciplinas")
-    public String saveDisciplinas(@RequestParam String nome, @RequestParam int semestre,@RequestParam int nAulas, @RequestParam Double cHoraria, @RequestParam(required = false) Long cursoId, org.springframework.web.servlet.mvc.support.RedirectAttributes ra){
-        com.example.OfertaMatricula.Model.Curso curso = null;
+    public String saveDisciplinas(@RequestParam String nome, @RequestParam int semestre,@RequestParam int nAulas, @RequestParam Double cHoraria, @RequestParam(required = false) Long cursoId, RedirectAttributes ra){
+        Curso curso = null;
         if(cursoId == null){
             ra.addFlashAttribute("mensagem", "Selecione um curso válido!");
             ra.addFlashAttribute("mensagemTipo", "erro");
@@ -72,7 +74,7 @@ public class DisciplinaController {
     }
 
     @PostMapping("atualizarDisciplina")
-    public String atualizarDisciplina(@RequestParam long id,@RequestParam String nome,@RequestParam int semestre, @RequestParam int nAulas,@RequestParam Double cHoraria, @RequestParam(required = false) Long cursoId, org.springframework.web.servlet.mvc.support.RedirectAttributes ra){
+    public String atualizarDisciplina(@RequestParam long id,@RequestParam String nome,@RequestParam int semestre, @RequestParam int nAulas,@RequestParam Double cHoraria, @RequestParam(required = false) Long cursoId, RedirectAttributes ra){
         if(cursoId == null){
             ra.addFlashAttribute("mensagem", "Selecione um curso válido!");
             ra.addFlashAttribute("mensagemTipo", "erro");
@@ -83,7 +85,7 @@ public class DisciplinaController {
             ra.addFlashAttribute("cursoId", "");
             return "redirect:/editarDisciplina/" + id;
         }
-        com.example.OfertaMatricula.Model.Curso curso = cursoRepository.findById(cursoId).orElse(null);
+        Curso curso = cursoRepository.findById(cursoId).orElse(null);
         if(curso == null){
             ra.addFlashAttribute("mensagem", "Curso não encontrado!");
             ra.addFlashAttribute("mensagemTipo", "erro");
@@ -107,7 +109,7 @@ public class DisciplinaController {
     }
 
     @GetMapping("excluirDisciplina/{id}")
-    public String excluirDisciplina(@PathVariable long id, org.springframework.web.servlet.mvc.support.RedirectAttributes ra){
+    public String excluirDisciplina(@PathVariable long id, RedirectAttributes ra){
         if(ofertaDisciplinaRepository.existsByDisciplinaId(id)){
             ra.addFlashAttribute("mensagem", "Não é possível excluir: disciplina está associada a uma oferta de disciplina.");
             return "redirect:/listaDisciplinas";

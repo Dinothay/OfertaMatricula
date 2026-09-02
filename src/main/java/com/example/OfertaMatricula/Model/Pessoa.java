@@ -100,38 +100,26 @@ public class Pessoa {
         this.telefone = telefone;
     }
 
+    // Ajuda do Chat para fazer a validação do telefone
     public static String validarTelefone(String telefone) {
-
         if (telefone == null) {
             return null;
         }
-
         telefone = telefone.replaceAll("[^0-9]", "");
-
         if (telefone.length() != 10 && telefone.length() != 11) {
             return null;
         }
-
         int ddd = Integer.parseInt(telefone.substring(0, 2));
-
         if (ddd < 11 || ddd > 99) {
             return null;
         }
-
         if (telefone.length() == 11 && telefone.charAt(2) != '9') {
             return null;
         }
-
-        // Telefone válido → já retorna formatado
         if (telefone.length() == 11) {
-            return "(" + telefone.substring(0, 2) + ") " +
-                    telefone.substring(2, 7) + "-" +
-                    telefone.substring(7, 11);
+            return "(" + telefone.substring(0, 2) + ") " + telefone.substring(2, 7) + "-" + telefone.substring(7, 11);
         }
-
-        return "(" + telefone.substring(0, 2) + ") " +
-                telefone.substring(2, 6) + "-" +
-                telefone.substring(6, 10);
+        return "(" + telefone.substring(0, 2) + ") " + telefone.substring(2, 6) + "-" + telefone.substring(6, 10);
     }
 
     public static String validarCPF(String cpf) {
