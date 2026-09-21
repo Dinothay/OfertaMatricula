@@ -17,14 +17,14 @@
 
             <div class="form-body">
                 <form th:action="@{/atualizarOfertaDisciplina}" method="POST">
-                    <input type="hidden" name="id" th:value="${OfertaDisciplina.id}">
+                    <input type="hidden" name="id" th:value="${ofertaDisciplina.id}">
 
                     <div class="form-grid">
                         <div class="field">
                             <label for="idDisciplina">Disciplina</label>
                             <select name="idDisciplina" id="idDisciplina" required>
                                 <option th:each="disciplina : ${disciplinas}" th:value="${disciplina.id}" th:text="${disciplina.nome}"
-                                    th:selected="${disciplina.id == OfertaDisciplina.disciplina.id}">
+                                    th:selected="${disciplina.id == ofertaDisciplina.disciplina.id}">
                                 </option>
                             </select>
                         </div>
@@ -33,7 +33,7 @@
                             <label for="idProfessor">Professor</label>
                             <select name="idProfessor" id="idProfessor" required>
                                 <option th:each="professor : ${professores}" th:value="${professor.id}" th:text="${professor.nome}"
-                                    th:selected="${professor.id == OfertaDisciplina.professor.id}">
+                                    th:selected="${professor.id == ofertaDisciplina.professor.id}">
                                 </option>
                             </select>
                         </div>
@@ -41,18 +41,18 @@
                         <div class="field">
                             <label for="diaAula">Dia da aula</label>
                             <select name="diaAula" id="diaAula">
-                                <option value="Segunda-feira" th:selected="${OfertaDisciplina.diaAula == 'Segunda-feira'}">Segunda-feira</option>
-                                <option value="Terça-feira" th:selected="${OfertaDisciplina.diaAula == 'Terça-feira'}">Terça-feira</option>
-                                <option value="Quarta-feira" th:selected="${OfertaDisciplina.diaAula == 'Quarta-feira'}">Quarta-feira</option>
-                                <option value="Quinta-feira" th:selected="${OfertaDisciplina.diaAula == 'Quinta-feira'}">Quinta-feira</option>
-                                <option value="Sexta-feira" th:selected="${OfertaDisciplina.diaAula == 'Sexta-feira'}">Sexta-feira</option>
-                                <option value="Sábado" th:selected="${OfertaDisciplina.diaAula == 'Sábado'}">Sábado</option>
+                                <option value="Segunda-feira" th:selected="${ofertaDisciplina.diaAula == 'Segunda-feira'}">Segunda-feira</option>
+                                <option value="Terça-feira" th:selected="${ofertaDisciplina.diaAula == 'Terça-feira'}">Terça-feira</option>
+                                <option value="Quarta-feira" th:selected="${ofertaDisciplina.diaAula == 'Quarta-feira'}">Quarta-feira</option>
+                                <option value="Quinta-feira" th:selected="${ofertaDisciplina.diaAula == 'Quinta-feira'}">Quinta-feira</option>
+                                <option value="Sexta-feira" th:selected="${ofertaDisciplina.diaAula == 'Sexta-feira'}">Sexta-feira</option>
+                                <option value="Sábado" th:selected="${ofertaDisciplina.diaAula == 'Sábado'}">Sábado</option>
                             </select>
                         </div>
 
                         <div class="field">
                             <label for="nAulaSemana">Número de aulas por semana</label>
-                            <input type="number" name="nAulaSemana" id="nAulaSemana" min="1" th:value="${OfertaDisciplina.nAulaSemana}" required>
+                            <input type="number" name="nAulaSemana" id="nAulaSemana" min="1" th:value="${ofertaDisciplina.nAulaSemana}" required>
                         </div>
                     </div>
 

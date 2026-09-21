@@ -34,7 +34,8 @@ public class AlunoController {
     @PostMapping("/cadastrarAlunos")
     public String saveAlunos(@RequestParam String nome, @RequestParam String cpf, @RequestParam String email,
             @RequestParam String telefone, @RequestParam int prontuario, @RequestParam String endereco,
-            @RequestParam LocalDate dataInicio, RedirectAttributes ra) {
+            @RequestParam(required = false) LocalDate dataInicio, RedirectAttributes ra) {
+        LocalDate dataCadastro = (dataInicio != null) ? dataInicio : LocalDate.now();
         String cpfFormatado = Pessoa.validarCPF(cpf);
 
         if (cpfFormatado == null) {
@@ -46,7 +47,7 @@ public class AlunoController {
             ra.addFlashAttribute("telefone", telefone);
             ra.addFlashAttribute("prontuario", prontuario);
             ra.addFlashAttribute("endereco", endereco);
-            ra.addFlashAttribute("dataInicio", dataInicio);
+            ra.addFlashAttribute("dataInicio", dataCadastro);
             return "redirect:/aluno";
         }
 
@@ -61,13 +62,13 @@ public class AlunoController {
             ra.addFlashAttribute("telefone", "");
             ra.addFlashAttribute("prontuario", prontuario);
             ra.addFlashAttribute("endereco", endereco);
-            ra.addFlashAttribute("dataInicio", dataInicio);
+            ra.addFlashAttribute("dataInicio", dataCadastro);
             return "redirect:/aluno";
         }
 
         cpf = cpfFormatado;
         telefone = telefoneFormatado;
-        alunoRepository.save(new Aluno(nome, cpf, email, telefone, prontuario, endereco, dataInicio));
+        alunoRepository.save(new Aluno(nome, cpf, email, telefone, prontuario, endereco, dataCadastro));
         ra.addFlashAttribute("mensagem", "Aluno cadastrado com sucesso!");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaAlunos";
@@ -94,9 +95,15 @@ public class AlunoController {
             @RequestParam long id,
             @RequestParam String nome, @RequestParam String cpf, @RequestParam String email,
             @RequestParam String telefone, @RequestParam int prontuario, @RequestParam String endereco,
-            @RequestParam LocalDate dataInicio, RedirectAttributes ra) {
-        String cpfFormatado = Pessoa.validarCPF(cpf);
+            RedirectAttributes ra) {
+        Aluno aluno = alunoRepository.findById(id).orElse(null);
+        if (aluno == null) {
+            ra.addFlashAttribute("mensagem", "Aluno não encontrado!");
+            return "redirect:/listaAlunos";
+        }
 
+        LocalDate dataCadastro = aluno.getDataInicio();
+        String cpfFormatado = Pessoa.validarCPF(cpf);
         if (cpfFormatado == null) {
             ra.addFlashAttribute("mensagem", "CPF inválido!");
             ra.addFlashAttribute("mensagemTipo", "erro");
@@ -106,7 +113,7 @@ public class AlunoController {
             ra.addFlashAttribute("telefone", telefone);
             ra.addFlashAttribute("prontuario", prontuario);
             ra.addFlashAttribute("endereco", endereco);
-            ra.addFlashAttribute("dataInicio", dataInicio);
+            ra.addFlashAttribute("dataInicio", dataCadastro);
             return "redirect:/editarAluno/" + id;
         }
 
@@ -121,24 +128,19 @@ public class AlunoController {
             ra.addFlashAttribute("telefone", "");
             ra.addFlashAttribute("prontuario", prontuario);
             ra.addFlashAttribute("endereco", endereco);
-            ra.addFlashAttribute("dataInicio", dataInicio);
+            ra.addFlashAttribute("dataInicio", dataCadastro);
             return "redirect:/editarAluno/" + id;
         }
 
         cpf = cpfFormatado;
         telefone = telefoneFormatado;
-        Aluno aluno = alunoRepository.findById(id).orElse(null);
-        if (aluno == null) {
-            ra.addFlashAttribute("mensagem", "Aluno não encontrado!");
-            return "redirect:/listaAlunos";
-        }
         aluno.setNome(nome);
         aluno.setCpf(cpf);
         aluno.setEmail(email);
         aluno.setTelefone(telefone);
         aluno.setProntuario(prontuario);
         aluno.setEndereco(endereco);
-        aluno.setDataInicio(dataInicio);
+        aluno.setDataInicio(dataCadastro);
         alunoRepository.save(aluno);
         return "redirect:/listaAlunos";
     }

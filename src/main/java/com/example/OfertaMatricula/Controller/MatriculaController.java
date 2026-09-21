@@ -47,11 +47,13 @@ public class MatriculaController {
 
     @PostMapping("/cadastrarMatriculas")
     public String saveMatricula(@RequestParam Long idOfertaDisciplina, @RequestParam Long idAluno,
-            @RequestParam Long idCurso, @RequestParam LocalDate dataM, org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
+            @RequestParam Long idCurso, @RequestParam(required = false) LocalDate dataM,
+            org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
+        LocalDate dataMatricula = (dataM != null) ? dataM : LocalDate.now();
         Aluno aluno = alunoRepository.findById(idAluno).orElseThrow();
         Curso curso = cursoRepository.findById(idCurso).orElseThrow();
         OfertaDisciplina ofertaDisciplina = ofertaDisciplinaRepository.findById(idOfertaDisciplina).orElseThrow();
-        matriculaRepository.save(new Matricula(ofertaDisciplina, curso, aluno, dataM));
+        matriculaRepository.save(new Matricula(ofertaDisciplina, curso, aluno, dataMatricula));
         ra.addFlashAttribute("mensagem", "Matrícula cadastrada com sucesso.");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaMatricula";
@@ -77,17 +79,24 @@ public class MatriculaController {
         return "editarMatricula.html";
     }
 
-    @PostMapping("atualizarMatricula")
+    @PostMapping("/atualizarMatricula")
     public String atualizarMatricula(@RequestParam long id, @RequestParam Long idOfertaDisciplina,
-            @RequestParam Long idAluno, @RequestParam Long idCurso, @RequestParam LocalDate dataM, org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
+            @RequestParam Long idAluno, @RequestParam Long idCurso,
+            org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
         Matricula matricula = matriculaRepository.findById(id).orElse(null);
+        if (matricula == null) {
+            ra.addFlashAttribute("mensagem", "Matrícula não encontrada!");
+            return "redirect:/listaMatricula";
+        }
+
+        LocalDate dataMatricula = matricula.getDataM();
         Aluno aluno = alunoRepository.findById(idAluno).orElseThrow();
         Curso curso = cursoRepository.findById(idCurso).orElseThrow();
         OfertaDisciplina ofertaDisciplina = ofertaDisciplinaRepository.findById(idOfertaDisciplina).orElseThrow();
         matricula.setOfertaDisciplina(ofertaDisciplina);
         matricula.setAluno(aluno);
         matricula.setCurso(curso);
-        matricula.setDataM(dataM);
+        matricula.setDataM(dataMatricula);
         matriculaRepository.save(matricula);
         ra.addFlashAttribute("mensagem", "Matrícula atualizada com sucesso.");
         ra.addFlashAttribute("mensagemTipo", "sucesso");

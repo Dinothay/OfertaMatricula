@@ -44,7 +44,9 @@
 
                         <div class="field">
                             <label for="dataM">Data da matrícula</label>
-                            <input type="date" name="dataM" id="dataM" required>
+                            <input type="date" name="dataM" id="dataM"
+                                   th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}"
+                                   readonly required>
                         </div>
                     </div>
 
