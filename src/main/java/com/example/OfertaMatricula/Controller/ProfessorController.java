@@ -35,7 +35,6 @@ public class ProfessorController {
             @RequestParam String telefone, @RequestParam String endereco, @RequestParam String area,
             @RequestParam String formacao, @RequestParam Double salario, RedirectAttributes ra) {
         String cpfFormatado = Pessoa.validarCPF(cpf);
-
         if (cpfFormatado == null) {
             ra.addFlashAttribute("mensagem", "CPF inválido!");
             ra.addFlashAttribute("mensagemTipo", "erro");
@@ -49,9 +48,7 @@ public class ProfessorController {
             ra.addFlashAttribute("salario", salario);
             return "redirect:/professor";
         }
-
         String telefoneFormatado = Pessoa.validarTelefone(telefone);
-
         if (telefoneFormatado == null) {
             ra.addFlashAttribute("mensagem", "Telefone inválido!");
             ra.addFlashAttribute("mensagemTipo", "erro");
@@ -65,7 +62,6 @@ public class ProfessorController {
             ra.addFlashAttribute("salario", salario);
             return "redirect:/professor";
         }
-
         cpf = cpfFormatado;
         telefone = telefoneFormatado;
         professorRepository.save(new Professor(nome, cpf, email, telefone, area, formacao, endereco, salario));
@@ -77,19 +73,14 @@ public class ProfessorController {
     @GetMapping("/listaProfessores")
     public String listaProfessores(Model model) {
         List<Professor> listaProfessores = professorRepository.findAll();
-
         model.addAttribute("listaProfessores", listaProfessores);
-
         return "listaProfessores.html";
     }
 
     @GetMapping("/editarProfessor/{id}")
     public String editarProfessor(@PathVariable long id, Model model) {
-
         Professor professor = professorRepository.findById(id).orElse(null);
-
         model.addAttribute("professor", professor);
-
         return "editarProfessor.html";
     }
 
@@ -141,7 +132,6 @@ public class ProfessorController {
         professor.setEndereco(endereco);
         professor.setArea(area);
         professor.setFormacao(formacao);
-
         professorRepository.save(professor);
         ra.addFlashAttribute("mensagem", "Professor atualizado com sucesso!");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
@@ -152,7 +142,6 @@ public class ProfessorController {
     public String excluirProfessor(
             @PathVariable long id,
             RedirectAttributes ra) {
-
         if (ofertaDisciplinaRepository.existsByProfessorId(id)) {
             ra.addFlashAttribute(
                     "mensagem",
@@ -160,7 +149,6 @@ public class ProfessorController {
 
             return "redirect:/listaProfessores";
         }
-
         professorRepository.deleteById(id);
 
         return "redirect:/listaProfessores";

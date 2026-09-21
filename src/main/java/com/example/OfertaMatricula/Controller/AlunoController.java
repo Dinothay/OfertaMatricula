@@ -37,7 +37,6 @@ public class AlunoController {
             @RequestParam(required = false) LocalDate dataInicio, RedirectAttributes ra) {
         LocalDate dataCadastro = (dataInicio != null) ? dataInicio : LocalDate.now();
         String cpfFormatado = Pessoa.validarCPF(cpf);
-
         if (cpfFormatado == null) {
             ra.addFlashAttribute("mensagem", "CPF inválido!");
             ra.addFlashAttribute("mensagemTipo", "erro");
@@ -50,9 +49,7 @@ public class AlunoController {
             ra.addFlashAttribute("dataInicio", dataCadastro);
             return "redirect:/aluno";
         }
-
         String telefoneFormatado = Pessoa.validarTelefone(telefone);
-
         if (telefoneFormatado == null) {
             ra.addFlashAttribute("mensagem", "Telefone inválido!");
             ra.addFlashAttribute("mensagemTipo", "erro");
@@ -65,7 +62,6 @@ public class AlunoController {
             ra.addFlashAttribute("dataInicio", dataCadastro);
             return "redirect:/aluno";
         }
-
         cpf = cpfFormatado;
         telefone = telefoneFormatado;
         alunoRepository.save(new Aluno(nome, cpf, email, telefone, prontuario, endereco, dataCadastro));
@@ -84,9 +80,7 @@ public class AlunoController {
     @GetMapping("/editarAluno/{id}")
     public String editarAluno(@PathVariable long id, Model model) {
         Aluno aluno = alunoRepository.findById(id).orElse(null);
-
         model.addAttribute("aluno", aluno);
-
         return "editarAluno.html";
     }
 
@@ -116,9 +110,7 @@ public class AlunoController {
             ra.addFlashAttribute("dataInicio", dataCadastro);
             return "redirect:/editarAluno/" + id;
         }
-
         String telefoneFormatado = Pessoa.validarTelefone(telefone);
-
         if (telefoneFormatado == null) {
             ra.addFlashAttribute("mensagem", "Telefone inválido!");
             ra.addFlashAttribute("mensagemTipo", "erro");
@@ -131,7 +123,6 @@ public class AlunoController {
             ra.addFlashAttribute("dataInicio", dataCadastro);
             return "redirect:/editarAluno/" + id;
         }
-
         cpf = cpfFormatado;
         telefone = telefoneFormatado;
         aluno.setNome(nome);

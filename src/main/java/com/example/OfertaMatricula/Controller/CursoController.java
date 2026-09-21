@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.OfertaMatricula.Model.Curso;
 import com.example.OfertaMatricula.Repository.CursoRepository;
 import com.example.OfertaMatricula.Repository.DisciplinaRepository;
@@ -29,7 +29,7 @@ public class CursoController {
     }
     
     @PostMapping("/cadastrarCurso")
-    public String saveCursos(@RequestParam String nome, @RequestParam int semestres,@RequestParam int nDisciplinas, org.springframework.web.servlet.mvc.support.RedirectAttributes ra){
+    public String saveCursos(@RequestParam String nome, @RequestParam int semestres,@RequestParam int nDisciplinas, RedirectAttributes ra){
         cursoRepository.save(new Curso(nome, semestres, nDisciplinas));
         ra.addFlashAttribute("mensagem", "Curso cadastrado com sucesso.");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
@@ -51,7 +51,7 @@ public class CursoController {
     }
 
     @PostMapping("atualizarCurso")
-    public String atualizarCurso(@RequestParam long id,@RequestParam String nome,@RequestParam int semestres, @RequestParam int nDisciplinas, org.springframework.web.servlet.mvc.support.RedirectAttributes ra){
+    public String atualizarCurso(@RequestParam long id,@RequestParam String nome,@RequestParam int semestres, @RequestParam int nDisciplinas, RedirectAttributes ra){
         Curso curso = cursoRepository.findById(id).get();
         curso.setNome(nome);
         curso.setSemestres(semestres);
@@ -63,7 +63,7 @@ public class CursoController {
     }
 
     @GetMapping("excluirCurso/{id}")
-    public String excluirCurso(@PathVariable long id, org.springframework.web.servlet.mvc.support.RedirectAttributes ra){
+    public String excluirCurso(@PathVariable long id, RedirectAttributes ra){
         if(disciplinaRepository.existsByCursoId(id)){
             ra.addFlashAttribute("mensagem", "Não é possível excluir: curso está associado a uma disciplina.");
             ra.addFlashAttribute("mensagemTipo", "erro");
