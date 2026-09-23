@@ -7,14 +7,12 @@
     <title>Cadastrar Professor</title>
     <link rel="stylesheet" th:href="@{/css/formulario.css}">
 </head>
-
 <body>
     <div class="page">
         <div class="form-shell">
             <div class="form-header">
                 <h2>Cadastrar Professor</h2>
             </div>
-
             <div class="form-body">
                 <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
                     <p th:text="${mensagem}"></p>
@@ -69,8 +67,6 @@
                 </form>
             </div>
         </div>
-    </div>
-    
+    </div>  
 </body>
-
 </html>

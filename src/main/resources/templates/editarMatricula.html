@@ -7,7 +7,6 @@
     <title>Editar Matrícula</title>
     <link rel="stylesheet" th:href="@{/css/formulario.css}">
 </head>
-
 <body>
     <div class="page">
         <div class="form-shell">
@@ -53,7 +52,7 @@
                             <input type="date" name="dataM" id="dataM" th:value="${matricula.dataM}" readonly>
                         </div>
                     </div>
-
+                    
                     <div class="actions">
                         <button type="submit" class="btn btn-primary">Atualizar</button>
                         <a th:href="@{/listaMatricula}" class="btn btn-secondary">Ir para lista</a>
@@ -63,5 +62,4 @@
         </div>
     </div>
 </body>
-
 </html>

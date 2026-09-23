@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Provas</title>
+    <link rel="stylesheet" th:href="@{/css/lista.css}">
+</head>
+<body>
+    <div class="page">
+        <header class="topbar">
+            <div class="brand">Lista de Provas</div>
+            <div class="nav-actions">
+                <a th:href="@{/biblioteca}" class="btn btn-secondary">Voltar à biblioteca</a>
+                <a th:href="@{/prova}" class="btn btn-primary">Cadastrar prova</a>
+            </div>
+        </header>
+
+        <div th:if="${#lists.isEmpty(listaProva)}" class="empty-state">
+            <h2>Nenhuma prova cadastrada</h2>
+            <p>Cadastre a primeira prova para continuar.</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(listaProva)}" class="table-wrap">
+            <table class="records-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data</th>
+                        <th>Conteúdo</th>
+                        <th>Peso</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="prova : ${listaProva}">
+                        <td th:text="${prova.id}"></td>
+                        <td th:text="${prova.data}"></td>
+                        <td th:text="${prova.conteudo}"></td>
+                        <td th:text="${prova.peso}"></td>
+                        <td>
+                            <div class="actions-inline">
+                                <form th:action="@{/editarProva/{id}(id=${prova.id})}" method="GET">
+                                    <button type="submit" class="btn btn-secondary">Editar</button>
+                                </form>
+                                <form th:action="@{/excluirProva/{id}(id=${prova.id})}" method="GET">
+                                    <button type="submit" class="btn btn-danger">Excluir</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

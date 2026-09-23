@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Reserva</title>
+    <link rel="stylesheet" th:href="@{/css/formulario.css}">
+</head>
+<body>
+    <div class="page">
+        <div class="form-shell">
+            <div class="form-header">
+                <h2>Cadastrar Reserva</h2>
+            </div>
+
+            <div class="form-body">
+                <form th:action="@{/cadastraReserva}" method="POST">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="dataReserva">Data da reserva</label>
+                            <input type="datetime-local" name="dataReserva" id="dataReserva" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="posicaoFila">Posição na fila</label>
+                            <input type="number" name="posicaoFila" id="posicaoFila" placeholder="Digite a posição" required>
+                        </div>
+
+                        <div class="field full">
+                            <label for="status">Status</label>
+                            <input type="text" name="status" id="status" placeholder="Digite o status" required>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit" class="btn btn-primary">Criar</button>
+                        <a th:href="@{/listaReserva}" class="btn btn-secondary">Ir para lista</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

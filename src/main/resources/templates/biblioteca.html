@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" th:href="@{/css/inicio.css}">
+    <link rel="stylesheet" th:href="@{/css/biblioteca.css}">
+</head>
+<body>
+    <div class="container">
+        <header class="topbar">
+            <div class="brand">
+                <span class="badge">BL</span>
+                <h1>Biblioteca</h1>
+            </div>
+            <div class="topbar-actions">
+                <a th:href="@{/index}" class="back-btn">← Voltar</a>
+                <p class="subtitle">Módulos da biblioteca</p>
+            </div>
+        </header>
+        <main class="grid">
+            <a th:href="@{/listaLivro}" class="card card-livros">
+                <span class="icon">📚</span>
+                <h2>Livros</h2>
+                <p>Gerenciar o catálogo de livros da biblioteca.</p>
+            </a>
+            <a th:href="@{/listaExemplar}" class="card card-exemplares">
+                <span class="icon">🗂️</span>
+                <h2>Exemplares</h2>
+                <p>Consultar e controlar exemplares cadastrados.</p>
+            </a>
+            <a th:href="@{/listaEmprestimo}" class="card card-emprestimos">
+                <span class="icon">📦</span>
+                <h2>Empréstimos</h2>
+                <p>Acompanhar registros de retirada e devolução.</p>
+            </a>
+            <a th:href="@{/listaReserva}" class="card card-reservas">
+                <span class="icon">📌</span>
+                <h2>Reservas</h2>
+                <p>Visualizar filas e status das reservas.</p>
+            </a>
+            <a th:href="@{/listaProva}" class="card card-provas">
+                <span class="icon">📝</span>
+                <h2>Provas</h2>
+                <p>Administrar provas e seus respectivos conteúdos.</p>
+            </a>
+        </main>
+    </div>
+</body>
+</html>

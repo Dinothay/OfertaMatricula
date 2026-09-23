@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Livros</title>
+    <link rel="stylesheet" th:href="@{/css/lista.css}">
+</head>
+<body>
+    <div class="page">
+        <header class="topbar">
+            <div class="brand">Lista de Livros</div>
+            <div class="nav-actions">
+                <a th:href="@{/biblioteca}" class="btn btn-secondary">Voltar à biblioteca</a>
+                <a th:href="@{/livro}" class="btn btn-primary">Cadastrar livro</a>
+            </div>
+        </header>
+
+        <div th:if="${#lists.isEmpty(listaLivro)}" class="empty-state">
+            <h2>Nenhum livro cadastrado</h2>
+            <p>Cadastre o primeiro livro para continuar.</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(listaLivro)}" class="table-wrap">
+            <table class="records-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>ISBN</th>
+                        <th>Edição</th>
+                        <th>Capalmagem</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="livro : ${listaLivro}">
+                        <td th:text="${livro.id}"></td>
+                        <td th:text="${livro.titulo}"></td>
+                        <td th:text="${livro.autor}"></td>
+                        <td th:text="${livro.isbn}"></td>
+                        <td th:text="${livro.edicao}"></td>
+                        <td th:text="${livro.capalmagem}"></td>
+                        <td>
+                            <div class="actions-inline">
+                                <form th:action="@{/editarLivro/{id}(id=${livro.id})}" method="GET">
+                                    <button type="submit" class="btn btn-secondary">Editar</button>
+                                </form>
+                                <form th:action="@{/excluirLivro/{id}(id=${livro.id})}" method="GET">
+                                    <button type="submit" class="btn btn-danger">Excluir</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

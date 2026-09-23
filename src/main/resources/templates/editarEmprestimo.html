@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Empréstimo</title>
+    <link rel="stylesheet" th:href="@{/css/formulario.css}">
+</head>
+<body>
+    <div class="page">
+        <div class="form-shell">
+            <div class="form-header">
+                <h2>Editar Empréstimo</h2>
+            </div>
+
+            <div class="form-body">
+                <form th:action="@{/atualizarEmprestimo}" th:method="POST">
+                    <input type="hidden" name="id" th:value="${emprestimo.id}">
+
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="dataRetirada">Data de retirada</label>
+                            <input type="date" name="dataRetirada" id="dataRetirada" th:value="${emprestimo.dataRetirada}" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="dataPrevista">Data prevista</label>
+                            <input type="date" name="dataPrevista" id="dataPrevista" th:value="${emprestimo.dataPrevista}" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="dataDevolucao">Data de devolução</label>
+                            <input type="date" name="dataDevolucao" id="dataDevolucao" th:value="${emprestimo.dataDevolucao}">
+                        </div>
+
+                        <div class="field">
+                            <label for="status">Status</label>
+                            <input type="text" name="status" id="status" th:value="${emprestimo.status}" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="renovacoes">Renovações</label>
+                            <input type="number" name="renovacoes" id="renovacoes" th:value="${emprestimo.renovacoes}" required>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit" class="btn btn-primary">Atualizar</button>
+                        <a th:href="@{/listaEmprestimo}" class="btn btn-secondary">Ir para lista</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

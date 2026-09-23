@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Exemplar</title>
+    <link rel="stylesheet" th:href="@{/css/formulario.css}">
+</head>
+<body>
+    <div class="page">
+        <div class="form-shell">
+            <div class="form-header">
+                <h2>Editar Exemplar</h2>
+            </div>
+
+            <div class="form-body">
+                <form th:action="@{/atualizarExemplar}" th:method="POST">
+                    <input type="hidden" name="id" th:value="${exemplar.id}">
+
+                    <div class="form-grid">
+                        <div class="field full">
+                            <label for="tombo">Tombo</label>
+                            <input type="text" name="tombo" id="tombo" th:value="${exemplar.tombo}" required>
+                        </div>
+
+                        <div class="field full">
+                            <label for="idEmprestimo">Empréstimo</label>
+                            <select name="idEmprestimo" id="idEmprestimo" required>
+                                <option value="">Selecione o empréstimo</option>
+                                <option th:each="emprestimo : ${emprestimos}"
+                                        th:value="${emprestimo.id}"
+                                        th:text="${emprestimo.status + ' - ' + emprestimo.dataRetirada}"
+                                        th:selected="${exemplar.status != null and exemplar.status.id == emprestimo.id}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit" class="btn btn-primary">Atualizar</button>
+                        <a th:href="@{/listaExemplar}" class="btn btn-secondary">Ir para lista</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

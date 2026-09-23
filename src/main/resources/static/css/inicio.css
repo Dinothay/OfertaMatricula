@@ -143,6 +143,30 @@ h1 {
     background: linear-gradient(135deg, rgba(34, 197, 94, 0.35), rgba(30, 41, 59, 0.9));
 }
 
+.card-biblioteca {
+    background: linear-gradient(135deg, rgba(250, 204, 21, 0.35), rgba(30, 41, 59, 0.9));
+}
+
+.card-livros {
+    background: linear-gradient(135deg, rgba(45, 212, 191, 0.35), rgba(30, 41, 59, 0.9));
+}
+
+.card-exemplares {
+    background: linear-gradient(135deg, rgba(251, 146, 60, 0.35), rgba(30, 41, 59, 0.9));
+}
+
+.card-emprestimos {
+    background: linear-gradient(135deg, rgba(251, 113, 133, 0.35), rgba(30, 41, 59, 0.9));
+}
+
+.card-reservas {
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.35), rgba(30, 41, 59, 0.9));
+}
+
+.card-provas {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.35), rgba(30, 41, 59, 0.9));
+}
+
 @media (max-width: 640px) {
     .topbar {
         flex-direction: column;
