@@ -24,8 +24,7 @@ public class LivroController {
     }
 
     @PostMapping("/cadastraLivro")
-    public String saveLivro(@RequestParam String titulo, @RequestParam String autor, @RequestParam String isbn,
-            @RequestParam String edicao, @RequestParam String capalmagem) {
+    public String saveLivro(@RequestParam String titulo, @RequestParam String autor, @RequestParam String isbn, @RequestParam String edicao, @RequestParam String capalmagem) {
         livroRepository.save(new Livro(titulo, autor, isbn, edicao, capalmagem));
         return "redirect:/livro";
     }
