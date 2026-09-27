@@ -4,43 +4,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Curso</title>
-    <link rel="stylesheet" th:href="@{/css/formulario.css}">
+    <title>Cadastro de Curso | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
+
 <body>
-    <div class="page">
-        <div class="form-shell">
-            <div class="form-header">
-                <h2>Cadastrar Curso</h2>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/listaCursos}">Ver cursos</a>
+                <a th:href="@{/}">Início</a>
             </div>
+        </nav>
+    </header>
 
-            <div class="form-body">
-                <form th:action="@{/cadastrarCurso}" method="POST">
-                    <div class="form-grid">
-                        <div class="field full">
-                            <label for="nome">Nome</label>
-                            <input type="text" name="nome" id="nome" placeholder="Digite o nome do curso" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="semestres">Semestres</label>
-                            <input type="number" name="semestres" id="semestres" placeholder="Quantidade de semestres" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="nDisciplinas">Número de disciplinas</label>
-                            <input type="number" name="nDisciplinas" id="nDisciplinas" placeholder="Total de disciplinas" required>
-                        </div>
-                    </div>
-
-                    <div class="actions">
-                        <button type="submit" class="btn btn-primary">Criar</button>
-                        <a th:href="@{/listaCursos}" class="btn btn-secondary">Ir para lista</a>
-                    </div>
-                </form>
+    <main class="container">
+        <div class="page-heading centered">
+            <div>
+                <p class="eyebrow">Acadêmico</p>
+                <h2>Novo curso</h2>
+                <p class="subtitle">Adicione um curso ao sistema.</p>
             </div>
         </div>
-    </div>
 
+        <section class="card form-card">
+            <div class="alert" th:if="${mensagem}" th:text="${mensagem}"></div>
+            <form th:action="@{/cadastrarCurso}" method="POST">
+                <label for="nome">Informe o nome:</label>
+                <input type="text" name="nome" id="nome" placeholder="Digite o nome do curso" required>
+
+                <label for="semestres">Informe a quantidade de semestres:</label>
+                <input type="number" name="semestres" id="semestres" placeholder="Quantidade de semestres" required>
+
+                <label for="nDisciplinas">Informe o número de disciplinas:</label>
+                <input type="number" name="nDisciplinas" id="nDisciplinas" placeholder="Total de disciplinas" required>
+
+                <div class="botoes">
+                    <button type="submit">Cadastrar</button>
+                    <a class="button secondary" th:href="@{/listaCursos}">Voltar</a>
+                </div>
+            </form>
+        </section>
+    </main>
 </body>
 </html>

@@ -3,44 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Reserva</title>
-    <link rel="stylesheet" th:href="@{/css/formulario.css}">
+    <title>Editar Reserva | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <div class="page">
-        <div class="form-shell">
-            <div class="form-header">
-                <h2>Editar Reserva</h2>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/listaReserva}">Ver reservas</a>
+                <a th:href="@{/biblioteca}">Biblioteca</a>
+                <a th:href="@{/}">Início</a>
             </div>
+        </nav>
+    </header>
 
-            <div class="form-body">
-                <form th:action="@{/atualizarReserva}" th:method="POST">
-                    <input type="hidden" name="id" th:value="${reserva.id}">
-
-                    <div class="form-grid">
-                        <div class="field">
-                            <label for="dataReserva">Data da reserva</label>
-                            <input type="datetime-local" name="dataReserva" id="dataReserva" th:value="${reserva.dataReserva}" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="posicaoFila">Posição na fila</label>
-                            <input type="number" name="posicaoFila" id="posicaoFila" th:value="${reserva.posicaoFila}" required>
-                        </div>
-
-                        <div class="field full">
-                            <label for="status">Status</label>
-                            <input type="text" name="status" id="status" th:value="${reserva.status}" required>
-                        </div>
-                    </div>
-
-                    <div class="actions">
-                        <button type="submit" class="btn btn-primary">Atualizar</button>
-                        <a th:href="@{/listaReserva}" class="btn btn-secondary">Ir para lista</a>
-                    </div>
-                </form>
+    <main class="container">
+        <div class="page-heading centered">
+            <div>
+                <p class="eyebrow">Biblioteca</p>
+                <h2>Editar reserva</h2>
+                <p class="subtitle">Atualize os dados da reserva.</p>
             </div>
         </div>
-    </div>
+
+        <section class="card form-card">
+            <form th:action="@{/atualizarReserva}" th:method="POST">
+                <input type="hidden" name="id" th:value="${reserva.id}">
+
+                <label for="dataReserva">Data da reserva:</label>
+                <input type="datetime-local" name="dataReserva" id="dataReserva" th:value="${reserva.dataReserva}" required>
+
+                <label for="posicaoFila">Posição na fila:</label>
+                <input type="number" name="posicaoFila" id="posicaoFila" th:value="${reserva.posicaoFila}" required>
+
+                <label for="status">Status:</label>
+                <input type="text" name="status" id="status" th:value="${reserva.status}" required>
+
+                <div class="botoes">
+                    <button type="submit">Atualizar</button>
+                    <a class="button secondary" th:href="@{/listaReserva}">Voltar</a>
+                </div>
+            </form>
+        </section>
+    </main>
 </body>
 </html>

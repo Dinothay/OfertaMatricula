@@ -3,38 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Exemplar</title>
-    <link rel="stylesheet" th:href="@{/css/formulario.css}">
+    <title>Cadastro de Exemplar | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <div class="page">
-        <div class="form-shell">
-            <div class="form-header">
-                <h2>Cadastrar Exemplar</h2>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/listaExemplar}">Ver exemplares</a>
+                <a th:href="@{/biblioteca}">Biblioteca</a>
+                <a th:href="@{/}">Início</a>
             </div>
+        </nav>
+    </header>
 
-            <div class="form-body">
-                <form th:action="@{/cadastraExemplar}" method="POST">
-                    <div class="form-grid">
-                        <div class="field full">
-                            <label for="tombo">Tombo</label>
-                            <input type="text" name="tombo" id="tombo" placeholder="Digite o tombo" required>
-                        </div>
-                        <div class="field full">
-                            <label for="idEmprestimo">Empréstimo</label>
-                            <select name="idEmprestimo" id="idEmprestimo" required>
-                                <option value="">Selecione o empréstimo</option>
-                                <option th:each="emprestimo : ${emprestimos}" th:value="${emprestimo.id}" th:text="${emprestimo.status + ' - ' + emprestimo.dataRetirada}"></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="actions">
-                        <button type="submit" class="btn btn-primary">Criar</button>
-                        <a th:href="@{/listaExemplar}" class="btn btn-secondary">Ir para lista</a>
-                    </div>
-                </form>
+    <main class="container">
+        <div class="page-heading centered">
+            <div>
+                <p class="eyebrow">Biblioteca</p>
+                <h2>Novo exemplar</h2>
+                <p class="subtitle">Cadastre um novo item físico.</p>
             </div>
         </div>
-    </div>
+
+        <section class="card form-card">
+            <form th:action="@{/cadastraExemplar}" method="POST">
+                <label for="tombo">Tombo:</label>
+                <input type="text" name="tombo" id="tombo" placeholder="Digite o tombo" required>
+
+                <label for="idEmprestimo">Empréstimo:</label>
+                <select name="idEmprestimo" id="idEmprestimo" required>
+                    <option value="">Selecione o empréstimo</option>
+                    <option th:each="emprestimo : ${emprestimos}" th:value="${emprestimo.id}" th:text="${emprestimo.status + ' - ' + emprestimo.dataRetirada}"></option>
+                </select>
+
+                <div class="botoes">
+                    <button type="submit">Cadastrar</button>
+                    <a class="button secondary" th:href="@{/listaExemplar}">Voltar</a>
+                </div>
+            </form>
+        </section>
+    </main>
 </body>
 </html>

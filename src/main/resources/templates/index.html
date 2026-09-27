@@ -4,61 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listas e Cadastros</title>
-    <link rel="stylesheet" th:href="@{/css/inicio.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <div class="container">
-        <header class="topbar">
-            <div class="brand">
-                <span class="badge">OF</span>
-                <h1>Listas e Cadastros</h1>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/listaAlunos}">Alunos</a>
+                <a th:href="@{/listaCursos}">Cursos</a>
+                <a th:href="@{/listaDisciplinas}">Disciplinas</a>
+                <a th:href="@{/listaProfessores}">Professores</a>
+                <a th:href="@{/listaOfertaDisciplinas}">Ofertas</a>
+                <a th:href="@{/listaMatricula}">Matrículas</a>
+                <a th:href="@{/listaProva}">Provas</a>
+                <a th:href="@{/biblioteca}">Biblioteca</a>
             </div>
-            <p class="subtitle">Painel principal</p>
-        </header>
+        </nav>
+    </header>
 
-        <main class="grid">
-            <a th:href="@{/listaAlunos}" class="card card-alunos">
+    <main class="container">
+        <section class="hero">
+            <div class="hero-copy">
+                <p class="eyebrow">Painel</p>
+                <h1>Listas e cadastros</h1>
+                <p class="subtitle">Acesse os módulos do sistema para acompanhar matrículas, cursos, professores e biblioteca em um único lugar.</p>
+            </div>
+
+            <div class="hero-art">
+                <div class="art-card">
+                    <div class="art-line"></div>
+                    <div class="art-line short"></div>
+                    <div class="art-line"></div>
+                    <div class="art-pill"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="quick-grid">
+            <a th:href="@{/listaAlunos}" class="card quick-card card-alunos">
                 <span class="icon">🎓</span>
                 <h2>Alunos</h2>
                 <p>Consultar e gerenciar alunos cadastrados.</p>
             </a>
 
-            <a th:href="@{/listaCursos}" class="card card-cursos">
+            <a th:href="@{/listaCursos}" class="card quick-card card-cursos">
                 <span class="icon">📚</span>
                 <h2>Cursos</h2>
                 <p>Visualizar cursos e suas informações.</p>
             </a>
 
-            <a th:href="@{/listaDisciplinas}" class="card card-disciplinas">
+            <a th:href="@{/listaDisciplinas}" class="card quick-card card-disciplinas">
                 <span class="icon">📝</span>
                 <h2>Disciplinas</h2>
                 <p>Acompanhar as disciplinas disponíveis.</p>
             </a>
 
-            <a th:href="@{/listaProfessores}" class="card card-professores">
+            <a th:href="@{/listaProfessores}" class="card quick-card card-professores">
                 <span class="icon">👨‍🏫</span>
                 <h2>Professores</h2>
                 <p>Controlar o cadastro dos professores.</p>
             </a>
 
-            <a th:href="@{/listaOfertaDisciplinas}" class="card card-oferta">
+            <a th:href="@{/listaOfertaDisciplinas}" class="card quick-card card-oferta">
                 <span class="icon">🗂️</span>
                 <h2>Oferta de Disciplinas</h2>
                 <p>Gerenciar as ofertas por semestre ou turno.</p>
             </a>
 
-            <a th:href="@{/listaMatricula}" class="card card-matriculas">
+            <a th:href="@{/listaMatricula}" class="card quick-card card-matriculas">
                 <span class="icon">✅</span>
                 <h2>Matrículas</h2>
                 <p>Consultar registros de matrículas realizadas.</p>
             </a>
 
-            <a th:href="@{/biblioteca}" class="card card-biblioteca">
+            <a th:href="@{/listaProva}" class="card quick-card card-provas">
+                <span class="icon">📝</span>
+                <h2>Provas</h2>
+                <p>Administrar e acompanhar provas do sistema.</p>
+            </a>
+
+            <a th:href="@{/biblioteca}" class="card quick-card card-biblioteca">
                 <span class="icon">📖</span>
                 <h2>Biblioteca</h2>
-                <p>Gerenciar provas, reservas, livros, exemplares e empréstimos.</p>
+                <p>Gerenciar reservas, livros, exemplares e empréstimos.</p>
             </a>
-        </main>
-    </div>
+        </section>
+    </main>
 </body>
 </html>

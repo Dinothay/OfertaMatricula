@@ -3,26 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Provas</title>
-    <link rel="stylesheet" th:href="@{/css/lista.css}">
+    <title>Provas | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <div class="page">
-        <header class="topbar">
-            <div class="brand">Lista de Provas</div>
-            <div class="nav-actions">
-                <a th:href="@{/biblioteca}" class="btn btn-secondary">Voltar à biblioteca</a>
-                <a th:href="@{/prova}" class="btn btn-primary">Cadastrar prova</a>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/}">Início</a>
+                <a th:href="@{/listaMatricula}">Matrículas</a>
+                <a th:href="@{/biblioteca}">Biblioteca</a>
             </div>
-        </header>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Academico</p>
+                <h2>Provas</h2>
+                <p class="subtitle">Registro de avaliações e pesos.</p>
+            </div>
+            <a class="button" th:href="@{/prova}">+ Nova prova</a>
+        </div>
 
         <div th:if="${#lists.isEmpty(listaProva)}" class="empty-state">
             <h2>Nenhuma prova cadastrada</h2>
             <p>Cadastre a primeira prova para continuar.</p>
         </div>
 
-        <div th:unless="${#lists.isEmpty(listaProva)}" class="table-wrap">
-            <table class="records-table">
+        <section th:unless="${#lists.isEmpty(listaProva)}" class="card table-wrap">
+            <table>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -39,19 +51,15 @@
                         <td th:text="${prova.conteudo}"></td>
                         <td th:text="${prova.peso}"></td>
                         <td>
-                            <div class="actions-inline">
-                                <form th:action="@{/editarProva/{id}(id=${prova.id})}" method="GET">
-                                    <button type="submit" class="btn btn-secondary">Editar</button>
-                                </form>
-                                <form th:action="@{/excluirProva/{id}(id=${prova.id})}" method="GET">
-                                    <button type="submit" class="btn btn-danger">Excluir</button>
-                                </form>
+                            <div class="actions">
+                                <a class="button secondary" th:href="@{/editarProva/{id}(id=${prova.id})}">Editar</a>
+                                <a class="button danger" th:href="@{/excluirProva/{id}(id=${prova.id})}">Excluir</a>
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
+        </section>
+    </main>
 </body>
 </html>

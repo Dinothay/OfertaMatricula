@@ -1,28 +1,44 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Livros</title>
-    <link rel="stylesheet" th:href="@{/css/lista.css}">
+    <title>Livros | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
+
 <body>
-    <div class="page">
-        <header class="topbar">
-            <div class="brand">Lista de Livros</div>
-            <div class="nav-actions">
-                <a th:href="@{/biblioteca}" class="btn btn-secondary">Voltar à biblioteca</a>
-                <a th:href="@{/livro}" class="btn btn-primary">Cadastrar livro</a>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/biblioteca}">Biblioteca</a>
+                <a th:href="@{/listaExemplar}">Exemplares</a>
+                <a th:href="@{/listaEmprestimo}">Empréstimos</a>
+                <a th:href="@{/listaReserva}">Reservas</a>
+                <a th:href="@{/}">Início</a>
             </div>
-        </header>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Biblioteca</p>
+                <h2>Livros</h2>
+                <p class="subtitle">Acervo cadastrado no sistema.</p>
+            </div>
+            <a class="button" th:href="@{/livro}">+ Novo livro</a>
+        </div>
 
         <div th:if="${#lists.isEmpty(listaLivro)}" class="empty-state">
             <h2>Nenhum livro cadastrado</h2>
             <p>Cadastre o primeiro livro para continuar.</p>
         </div>
 
-        <div th:unless="${#lists.isEmpty(listaLivro)}" class="table-wrap">
-            <table class="records-table">
+        <section th:unless="${#lists.isEmpty(listaLivro)}" class="card table-wrap">
+            <table>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -41,21 +57,20 @@
                         <td th:text="${livro.autor}"></td>
                         <td th:text="${livro.isbn}"></td>
                         <td th:text="${livro.edicao}"></td>
-                        <td th:text="${livro.capalmagem}"></td>
                         <td>
-                            <div class="actions-inline">
-                                <form th:action="@{/editarLivro/{id}(id=${livro.id})}" method="GET">
-                                    <button type="submit" class="btn btn-secondary">Editar</button>
-                                </form>
-                                <form th:action="@{/excluirLivro/{id}(id=${livro.id})}" method="GET">
-                                    <button type="submit" class="btn btn-danger">Excluir</button>
-                                </form>
+                            <img th:src="@{${livro.capalmagem}}" alt="Capa do livro" style="width: 80px; height: 110px; object-fit: cover; border-radius: 8px;">
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <a class="button secondary" th:href="@{/editarLivro/{id}(id=${livro.id})}">Editar</a>
+                                <a class="button danger" th:href="@{/excluirLivro/{id}(id=${livro.id})}">Excluir</a>
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
+        </section>
+    </main>
 </body>
+
 </html>

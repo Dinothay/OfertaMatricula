@@ -4,68 +4,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Professores</title>
-    <link rel="stylesheet" th:href="@{/css/lista.css}">
+    <title>Professores | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
-    <div class="page">
-        <header class="topbar">
-            <div class="brand">Lista de Professores</div>
-            <div class="nav-actions">
-                <a th:href="@{/index}" class="btn btn-secondary">Voltar ao início</a>
-                <a th:href="@{/professor}" class="btn btn-primary">Cadastrar professor</a>
-            </div>
-        </header>
 
-        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
-            <p th:text="${mensagem}"></p>
+<body>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/professor}">Novo professor</a>
+                <a th:href="@{/}">Início</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Docentes</p>
+                <h2>Professores</h2>
+                <p class="subtitle">Professores cadastrados no sistema.</p>
+            </div>
+            <a class="button" th:href="@{/professor}">+ Novo professor</a>
         </div>
+
+        <div class="alert" th:if="${mensagem}" th:text="${mensagem}"></div>
+        <div class="alert" th:if="${erro}" th:text="${erro}"></div>
 
         <div th:if="${#lists.isEmpty(listaProfessores)}" class="empty-state">
             <h2>Nenhum professor cadastrado</h2>
             <p>Cadastre o primeiro professor para começar.</p>
         </div>
-        <div th:unless="${#lists.isEmpty(listaProfessores)}" class="table-wrap">
-            <table class="records-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>CPF</th>
-                        <th>E-mail</th>
-                        <th>Telefone</th>
-                        <th>Área</th>
-                        <th>Formação</th>
-                        <th>Endereço</th>
-                        <th>Salário</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="professor : ${listaProfessores}">
-                        <td th:text="${professor.id}"></td>
-                        <td th:text="${professor.nome}"></td>
-                        <td th:text="${professor.cpf}"></td>
-                        <td th:text="${professor.email}"></td>
-                        <td th:text="${professor.telefone}"></td>
-                        <td th:text="${professor.area}"></td>
-                        <td th:text="${professor.formacao}"></td>
-                        <td th:text="${professor.endereco}"></td>
-                        <td th:text="${professor.salario}"></td>
-                        <td>
-                            <div class="actions-inline">
-                                <form th:action="@{/editarProfessor/{id}(id=${professor.id})}" method="GET">
-                                    <button type="submit" class="btn btn-secondary">Editar</button>
-                                </form>
-                                <form th:action="@{/excluirProfessor/{id}(id=${professor.id})}" method="GET">
-                                    <button type="submit" class="btn btn-danger">Excluir</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
+
+        <section th:unless="${#lists.isEmpty(listaProfessores)}" class="card table-wrap">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>E-mail</th>
+                    <th>Telefone</th>
+                    <th>Área</th>
+                    <th>Formação</th>
+                    <th>Endereço</th>
+                    <th>Salário</th>
+                    <th>Ações</th>
+                </tr>
+
+                <tr th:each="professor : ${listaProfessores}">
+                    <td th:text="${professor.id}"></td>
+                    <td th:text="${professor.nome}"></td>
+                    <td th:text="${professor.cpf}"></td>
+                    <td th:text="${professor.email}"></td>
+                    <td th:text="${professor.telefone}"></td>
+                    <td th:text="${professor.area}"></td>
+                    <td th:text="${professor.formacao}"></td>
+                    <td th:text="${professor.endereco}"></td>
+                    <td th:text="${professor.salario}"></td>
+                    <td>
+                        <div class="actions">
+                            <a class="button secondary" th:href="@{/editarProfessor/{id}(id=${professor.id})}">Editar</a>
+                            <a class="button danger" th:href="@{/excluirProfessor/{id}(id=${professor.id})}">Excluir</a>
+                        </div>
+                    </td>
+                </tr>
             </table>
-        </div>
-    </div>
+        </section>
+    </main>
 </body>
 </html>

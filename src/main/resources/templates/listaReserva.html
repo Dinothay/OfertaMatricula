@@ -3,26 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Reservas</title>
-    <link rel="stylesheet" th:href="@{/css/lista.css}">
+    <title>Reservas | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <div class="page">
-        <header class="topbar">
-            <div class="brand">Lista de Reservas</div>
-            <div class="nav-actions">
-                <a th:href="@{/biblioteca}" class="btn btn-secondary">Voltar à biblioteca</a>
-                <a th:href="@{/reserva}" class="btn btn-primary">Cadastrar reserva</a>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/biblioteca}">Biblioteca</a>
+                <a th:href="@{/listaLivro}">Livros</a>
+                <a th:href="@{/listaExemplar}">Exemplares</a>
+                <a th:href="@{/listaEmprestimo}">Empréstimos</a>
+                <a th:href="@{/}">Início</a>
             </div>
-        </header>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Biblioteca</p>
+                <h2>Reservas</h2>
+                <p class="subtitle">Fila de solicitações aguardando atendimento.</p>
+            </div>
+            <a class="button" th:href="@{/reserva}">+ Nova reserva</a>
+        </div>
 
         <div th:if="${#lists.isEmpty(listaReserva)}" class="empty-state">
             <h2>Nenhuma reserva cadastrada</h2>
             <p>Cadastre a primeira reserva para continuar.</p>
         </div>
 
-        <div th:unless="${#lists.isEmpty(listaReserva)}" class="table-wrap">
-            <table class="records-table">
+        <section th:unless="${#lists.isEmpty(listaReserva)}" class="card table-wrap">
+            <table>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -39,19 +53,15 @@
                         <td th:text="${reserva.posicaoFila}"></td>
                         <td th:text="${reserva.status}"></td>
                         <td>
-                            <div class="actions-inline">
-                                <form th:action="@{/editarReserva/{id}(id=${reserva.id})}" method="GET">
-                                    <button type="submit" class="btn btn-secondary">Editar</button>
-                                </form>
-                                <form th:action="@{/excluirReserva/{id}(id=${reserva.id})}" method="GET">
-                                    <button type="submit" class="btn btn-danger">Excluir</button>
-                                </form>
+                            <div class="actions">
+                                <a class="button secondary" th:href="@{/editarReserva/{id}(id=${reserva.id})}">Editar</a>
+                                <a class="button danger" th:href="@{/excluirReserva/{id}(id=${reserva.id})}">Excluir</a>
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
+        </section>
+    </main>
 </body>
 </html>

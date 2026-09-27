@@ -4,69 +4,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Professor</title>
-    <link rel="stylesheet" th:href="@{/css/formulario.css}">
+    <title>Cadastro de Professor | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <div class="page">
-        <div class="form-shell">
-            <div class="form-header">
-                <h2>Cadastrar Professor</h2>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/listaProfessores}">Ver professores</a>
+                <a th:href="@{/index}">Início</a>
             </div>
-            <div class="form-body">
-                <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
-                    <p th:text="${mensagem}"></p>
-                </div>
-                <form th:action="@{/cadastrarProfessores}" method="POST">
-                    <div class="form-grid">
-                        <div class="field full">
-                            <label for="nome">Nome</label>
-                            <input type="text" name="nome" id="nome" th:value="${nome}" placeholder="Digite o nome do professor" required>
-                        </div>
+        </nav>
+    </header>
 
-                        <div class="field">
-                            <label for="cpf">CPF</label>
-                            <input type="text" name="cpf" id="cpf" th:value="${cpf}" placeholder="Digite o CPF" title="Informe o CPF no formato 123.456.789-09" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="email">E-mail</label>
-                            <input type="email" name="email" id="email" th:value="${email}" placeholder="Digite o e-mail" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="telefone">Telefone</label>
-                            <input type="tel" name="telefone" id="telefone" th:value="${telefone}" placeholder="(99) 99999-9999" title="Informe o telefone com DDD e 10 ou 11 dígitos" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="area">Área</label>
-                            <input type="text" name="area" id="area" placeholder="Ex: Matemática" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="formacao">Formação</label>
-                            <input type="text" name="formacao" id="formacao" placeholder="Ex: Mestre em Educação" required>
-                        </div>
-
-                        <div class="field full">
-                            <label for="endereco">Endereço</label>
-                            <input type="text" name="endereco" id="endereco" placeholder="Digite o endereço" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="salario">Salário</label>
-                            <input type="number" step="0.01" name="salario" id="salario" placeholder="Ex: 4500.00" required>
-                        </div>
-                    </div>
-
-                    <div class="actions">
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
-                        <a th:href="@{/listaProfessores}" class="btn btn-secondary">Ir para lista</a>
-                    </div>
-                </form>
+    <main class="container">
+        <div class="page-heading centered">
+            <div>
+                <p class="eyebrow">Pessoas</p>
+                <h2>Novo professor</h2>
+                <p class="subtitle">Adicione um novo docente ao sistema.</p>
             </div>
         </div>
-    </div>  
+
+        <section class="card form-card">
+            <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
+                <p th:text="${mensagem}"></p>
+            </div>
+
+            <form th:action="@{/cadastrarProfessores}" method="POST">
+                <label for="nome">Nome:</label>
+                <input type="text" name="nome" id="nome" th:value="${nome}" placeholder="Digite o nome do professor" required>
+
+                <label for="cpf">CPF:</label>
+                <input type="text" name="cpf" id="cpf" th:value="${cpf}" placeholder="Digite o CPF" title="Informe o CPF no formato 123.456.789-09" required>
+
+                <label for="email">E-mail:</label>
+                <input type="email" name="email" id="email" th:value="${email}" placeholder="Digite o e-mail" required>
+
+                <label for="telefone">Telefone:</label>
+                <input type="tel" name="telefone" id="telefone" th:value="${telefone}" placeholder="(99) 99999-9999" title="Informe o telefone com DDD e 10 ou 11 dígitos" required>
+
+                <label for="area">Área:</label>
+                <input type="text" name="area" id="area" placeholder="Ex: Matemática" required>
+
+                <label for="formacao">Formação:</label>
+                <input type="text" name="formacao" id="formacao" placeholder="Ex: Mestre em Educação" required>
+
+                <label for="endereco">Endereço:</label>
+                <input type="text" name="endereco" id="endereco" placeholder="Digite o endereço" required>
+
+                <label for="salario">Salário:</label>
+                <input type="number" step="0.01" name="salario" id="salario" placeholder="Ex: 4500.00" required>
+
+                <div class="botoes">
+                    <button type="submit">Cadastrar</button>
+                    <a class="button secondary" th:href="@{/listaProfessores}">Voltar</a>
+                </div>
+            </form>
+        </section>
+    </main>
 </body>
 </html>

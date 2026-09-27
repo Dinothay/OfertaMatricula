@@ -3,44 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Prova</title>
-    <link rel="stylesheet" th:href="@{/css/formulario.css}">
+    <title>Editar Prova | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <div class="page">
-        <div class="form-shell">
-            <div class="form-header">
-                <h2>Editar Prova</h2>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/listaProva}">Ver provas</a>
+                <a th:href="@{/}">Início</a>
             </div>
+        </nav>
+    </header>
 
-            <div class="form-body">
-                <form th:action="@{/atualizarProva}" th:method="POST">
-                    <input type="hidden" name="id" th:value="${prova.id}">
-
-                    <div class="form-grid">
-                        <div class="field">
-                            <label for="data">Data</label>
-                            <input type="date" name="data" id="data" th:value="${prova.data}" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="peso">Peso</label>
-                            <input type="number" step="0.01" name="peso" id="peso" th:value="${prova.peso}" required>
-                        </div>
-
-                        <div class="field full">
-                            <label for="conteudo">Conteúdo</label>
-                            <input type="text" name="conteudo" id="conteudo" th:value="${prova.conteudo}" required>
-                        </div>
-                    </div>
-
-                    <div class="actions">
-                        <button type="submit" class="btn btn-primary">Atualizar</button>
-                        <a th:href="@{/listaProva}" class="btn btn-secondary">Ir para lista</a>
-                    </div>
-                </form>
+    <main class="container">
+        <div class="page-heading centered">
+            <div>
+                <p class="eyebrow">Acadêmico</p>
+                <h2>Editar prova</h2>
+                <p class="subtitle">Atualize os detalhes da avaliação.</p>
             </div>
         </div>
-    </div>
+
+        <section class="card form-card">
+            <form th:action="@{/atualizarProva}" th:method="POST">
+                <input type="hidden" name="id" th:value="${prova.id}">
+
+                <label for="data">Data:</label>
+                <input type="date" name="data" id="data" th:value="${prova.data}" required>
+
+                <label for="peso">Peso:</label>
+                <input type="number" step="0.01" name="peso" id="peso" th:value="${prova.peso}" required>
+
+                <label for="conteudo">Conteúdo:</label>
+                <input type="text" name="conteudo" id="conteudo" th:value="${prova.conteudo}" required>
+
+                <div class="botoes">
+                    <button type="submit">Atualizar</button>
+                    <a class="button secondary" th:href="@{/listaProva}">Voltar</a>
+                </div>
+            </form>
+        </section>
+    </main>
 </body>
 </html>

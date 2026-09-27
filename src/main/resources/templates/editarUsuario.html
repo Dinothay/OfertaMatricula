@@ -5,54 +5,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Usuário</title>
-    <link rel="stylesheet" th:href="@{/css/formulario.css}">
+    <title>Editar usuário | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
+
 <body>
-    <div class="page">
-        <div class="form-shell">
-            <div class="form-header">
-                <h2>Editar Usuário</h2>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/listaUsuarios}">Ver usuários</a>
+                <a th:href="@{/}">Início</a>
             </div>
-            <div class="form-body">
-                <div th:if="${mensagem}"
-                     th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
-                    <p th:text="${mensagem}"></p>
-                </div>
-                <form th:action="@{/atualizarUsuario}" method="POST">
-                    <input type="hidden" name="id" th:value="${usuario.id}">
-                    <div class="form-grid">
-                        <div class="field full">
-                            <label for="login">Login</label>
-                            <input type="text"name="login"id="login"th:value="${usuario.login}"required>
-                        </div>
-                        <div class="field full">
-                            <label for="senhaHash">Senha</label>
-                            <input type="password" name="senhaHash"id="senhaHash"th:value="${usuario.senhaHash}"required>
-                        </div>
-                        <div class="field">
-                            <label for="papel">Tipo de usuário</label>
-                            <select name="papel" id="papel" required>
-                                <option th:each="papel : ${papeis}"
-                                        th:value="${papel}"
-                                        th:text="${papel}"
-                                        th:selected="${papel == usuario.papel}">
-                                </option>
-                            </select>
-                        </div>
-                        <div class="field">
-                            <label for="fotoPerfil">Foto de perfil</label>
-                            <input type="text"name="fotoPerfil"id="fotoPerfil"th:value="${usuario.fotoPerfil}">
-                        </div>
-                    </div>
-                    <div class="actions">
-                        <button type="submit" class="btn btn-primary">Atualizar</button>
-                        <a th:href="@{/listaUsuarios}"class="btn btn-secondary">Ir para lista</a>
-                    </div>
-                </form>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-heading centered">
+            <div>
+                <p class="eyebrow">Sistema</p>
+                <h2>Editar usuário</h2>
             </div>
         </div>
-    </div>
+
+        <section class="card form-card">
+            <div class="alert" th:if="${mensagem}" th:text="${mensagem}"></div>
+
+            <form th:action="@{/atualizarUsuario}" method="POST">
+                <input type="hidden" name="id" th:value="${usuario.id}">
+
+                <label for="login">Informe o login:</label>
+                <input type="text" name="login" id="login" th:value="${usuario.login}" required>
+
+                <label for="senhaHash">Informe a senha:</label>
+                <input type="password" name="senhaHash" id="senhaHash" th:value="${usuario.senhaHash}" required>
+
+                <label for="papel">Selecione o tipo de usuário:</label>
+                <select name="papel" id="papel" required>
+                    <option th:each="papel : ${papeis}"
+                            th:value="${papel}"
+                            th:text="${papel}"
+                            th:selected="${papel == usuario.papel}">
+                    </option>
+                </select>
+
+                <label for="fotoPerfil">Informe a foto de perfil:</label>
+                <input type="text" name="fotoPerfil" id="fotoPerfil" th:value="${usuario.fotoPerfil}">
+
+                <div class="botoes">
+                    <button type="submit">Salvar</button>
+                    <a class="button secondary" th:href="@{/listaUsuarios}">Cancelar</a>
+                </div>
+            </form>
+        </section>
+    </main>
 </body>
 </html>
 

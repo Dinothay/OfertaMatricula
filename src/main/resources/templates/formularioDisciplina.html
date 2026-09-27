@@ -4,55 +4,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Disciplina</title>
-    <link rel="stylesheet" th:href="@{/css/formulario.css}">
+    <title>Cadastro de Disciplina | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
+
 <body>
-    <div class="page">
-        <div class="form-shell">
-            <div class="form-header">
-                <h2>Cadastrar Disciplina</h2>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/listaDisciplinas}">Ver disciplinas</a>
+                <a th:href="@{/}">Início</a>
             </div>
+        </nav>
+    </header>
 
-            <div class="form-body">
-                <form th:action="@{/cadastrarDisciplinas}" method="POST">
-                    <div class="form-grid">
-                        <div class="field full">
-                            <label for="nome">Nome</label>
-                            <input type="text" name="nome" id="nome" placeholder="Digite o nome da disciplina" th:value="${nome}" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="semestre">Semestre</label>
-                            <input type="number" name="semestre" id="semestre" placeholder="Semestre da disciplina" th:value="${semestre}" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="nAulas">Número de aulas</label>
-                            <input type="number" name="nAulas" id="nAulas" placeholder="Total de aulas" th:value="${nAulas}" required>
-                        </div>
-
-                        <div class="field full">
-                            <label for="cHoraria">Carga horária</label>
-                            <input type="number" name="cHoraria" id="cHoraria" step="0.01" placeholder="Ex: 60.00" th:value="${cHoraria}" required>
-                        </div>
-                        <div class="field full">
-                            <label for="cursoId">Curso</label>
-                            <select name="cursoId" id="cursoId" required>
-                                <option value="" disabled th:if="${cursoId == null}">-- selecione um curso --</option>
-                                <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nome}"
-                                        th:selected="${cursoId != null} ? ${curso.id} == ${cursoId} : false"></option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="actions">
-                        <button type="submit" class="btn btn-primary">Criar</button>
-                        <a th:href="@{/listaDisciplinas}" class="btn btn-secondary">Ir para lista</a>
-                    </div>
-                </form>
+    <main class="container">
+        <div class="page-heading centered">
+            <div>
+                <p class="eyebrow">Acadêmico</p>
+                <h2>Nova disciplina</h2>
+                <p class="subtitle">Adicione uma disciplina ao sistema.</p>
             </div>
         </div>
-    </div>
+
+        <section class="card form-card">
+            <div class="alert" th:if="${mensagem}" th:text="${mensagem}"></div>
+            <form th:action="@{/cadastrarDisciplinas}" method="POST">
+                <label for="nome">Informe o nome:</label>
+                <input type="text" name="nome" id="nome" placeholder="Digite o nome da disciplina" th:value="${nome}" required>
+
+                <label for="semestre">Informe o semestre:</label>
+                <input type="number" name="semestre" id="semestre" placeholder="Semestre da disciplina" th:value="${semestre}" required>
+
+                <label for="nAulas">Informe o número de aulas:</label>
+                <input type="number" name="nAulas" id="nAulas" placeholder="Total de aulas" th:value="${nAulas}" required>
+
+                <label for="cHoraria">Informe a carga horária:</label>
+                <input type="number" name="cHoraria" id="cHoraria" step="0.01" placeholder="Ex: 60.00" th:value="${cHoraria}" required>
+
+                <label for="cursoId">Selecione o curso:</label>
+                <select name="cursoId" id="cursoId" required>
+                    <option value="" disabled th:if="${cursoId == null}">-- selecione um curso --</option>
+                    <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nome}"
+                            th:selected="${cursoId != null} ? ${curso.id} == ${cursoId} : false"></option>
+                </select>
+
+                <div class="botoes">
+                    <button type="submit">Cadastrar</button>
+                    <a class="button secondary" th:href="@{/listaDisciplinas}">Voltar</a>
+                </div>
+            </form>
+        </section>
+    </main>
 </body>
 </html>

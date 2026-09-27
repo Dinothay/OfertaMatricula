@@ -4,62 +4,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Oferta de Disciplina</title>
-    <link rel="stylesheet" th:href="@{/css/formulario.css}">
+    <title>Cadastro de Oferta de Disciplina | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <div class="page">
-        <div class="form-shell">
-            <div class="form-header">
-                <h2>Cadastrar Oferta de Disciplina</h2>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/listaOfertaDisciplinas}">Ver ofertas</a>
+                <a th:href="@{/index}">Início</a>
             </div>
+        </nav>
+    </header>
 
-            <div class="form-body">
-                <form th:action="@{/cadastrarOfertaDisciplinas}" method="POST">
-                    <div class="form-grid">
-                        <div class="field">
-                            <label for="idDisciplina">Disciplina</label>
-                            <select name="idDisciplina" id="idDisciplina" required>
-                                <option value="">Selecione uma disciplina</option>
-                                <option th:each="disciplina : ${disciplinas}" th:value="${disciplina.id}"
-                                    th:text="${disciplina.nome}"></option>
-                            </select>
-                        </div>
-
-                        <div class="field">
-                            <label for="idProfessor">Professor</label>
-                            <select name="idProfessor" id="idProfessor" required>
-                                <option value="">Selecione um professor</option>
-                                <option th:each="professor : ${professores}" th:value="${professor.id}"
-                                    th:text="${professor.nome}"></option>
-                            </select>
-                        </div>
-
-                        <div class="field">
-                            <label for="diaAula">Dia da aula</label>
-                            <select name="diaAula" id="diaAula">
-                                <option value="Segunda-feira">Segunda-feira</option>
-                                <option value="Terça-feira">Terça-feira</option>
-                                <option value="Quarta-feira">Quarta-feira</option>
-                                <option value="Quinta-feira">Quinta-feira</option>
-                                <option value="Sexta-feira">Sexta-feira</option>
-                                <option value="Sábado">Sábado</option>
-                            </select>
-                        </div>
-
-                        <div class="field">
-                            <label for="nAulaSemana">Número de aulas por semana</label>
-                            <input type="number" name="nAulaSemana" id="nAulaSemana" min="1" placeholder="Ex: 2" required>
-                        </div>
-                    </div>
-
-                    <div class="actions">
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
-                        <a th:href="@{/listaOfertaDisciplinas}" class="btn btn-secondary">Ir para lista</a>
-                    </div>
-                </form>
+    <main class="container">
+        <div class="page-heading centered">
+            <div>
+                <p class="eyebrow">Acadêmico</p>
+                <h2>Nova oferta de disciplina</h2>
+                <p class="subtitle">Cadastre uma nova disciplina para o professor.</p>
             </div>
         </div>
-    </div>
+
+        <section class="card form-card">
+            <form th:action="@{/cadastrarOfertaDisciplinas}" method="POST">
+                <label for="idDisciplina">Disciplina:</label>
+                <select name="idDisciplina" id="idDisciplina" required>
+                    <option value="">Selecione uma disciplina</option>
+                    <option th:each="disciplina : ${disciplinas}" th:value="${disciplina.id}"
+                        th:text="${disciplina.nome}"></option>
+                </select>
+
+                <label for="idProfessor">Professor:</label>
+                <select name="idProfessor" id="idProfessor" required>
+                    <option value="">Selecione um professor</option>
+                    <option th:each="professor : ${professores}" th:value="${professor.id}"
+                        th:text="${professor.nome}"></option>
+                </select>
+
+                <label for="diaAula">Dia da aula:</label>
+                <select name="diaAula" id="diaAula">
+                    <option value="Segunda-feira">Segunda-feira</option>
+                    <option value="Terça-feira">Terça-feira</option>
+                    <option value="Quarta-feira">Quarta-feira</option>
+                    <option value="Quinta-feira">Quinta-feira</option>
+                    <option value="Sexta-feira">Sexta-feira</option>
+                    <option value="Sábado">Sábado</option>
+                </select>
+
+                <label for="nAulaSemana">Número de aulas por semana:</label>
+                <input type="number" name="nAulaSemana" id="nAulaSemana" min="1" placeholder="Ex: 2" required>
+
+                <div class="botoes">
+                    <button type="submit">Cadastrar</button>
+                    <a class="button secondary" th:href="@{/listaOfertaDisciplinas}">Voltar</a>
+                </div>
+            </form>
+        </section>
+    </main>
 </body>
 </html>

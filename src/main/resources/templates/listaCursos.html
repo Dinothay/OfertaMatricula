@@ -4,59 +4,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Cursos</title>
-    <link rel="stylesheet" th:href="@{/css/lista.css}">
+    <title>Cursos | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
-    <div class="page">
-        <header class="topbar">
-            <div class="brand">Lista de Cursos</div>
-            <div class="nav-actions">
-                <a th:href="@{/index}" class="btn btn-secondary">Voltar ao início</a>
-                <a th:href="@{/curso}" class="btn btn-primary">Cadastrar curso</a>
-            </div>
-        </header>
 
-        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
-            <p th:text="${mensagem}"></p>
+<body>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/curso}">Novo curso</a>
+                <a th:href="@{/}">Início</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Acadêmico</p>
+                <h2>Cursos</h2>
+                <p class="subtitle">Cursos cadastrados no sistema.</p>
+            </div>
+            <a class="button" th:href="@{/curso}">+ Novo curso</a>
         </div>
+
+        <div class="alert" th:if="${mensagem}" th:text="${mensagem}"></div>
+        <div class="alert" th:if="${erro}" th:text="${erro}"></div>
 
         <div th:if="${#lists.isEmpty(listaCursos)}" class="empty-state">
             <h2>Nenhum curso cadastrado</h2>
             <p>Cadastre o primeiro curso para continuar.</p>
         </div>
 
-        <div th:unless="${#lists.isEmpty(listaCursos)}" class="table-wrap">
-            <table class="records-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Semestres</th>
-                        <th>Número de disciplinas</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="curso : ${listaCursos}">
-                        <td th:text="${curso.id}"></td>
-                        <td th:text="${curso.nome}"></td>
-                        <td th:text="${curso.semestres}"></td>
-                        <td th:text="${curso.nDisciplinas}"></td>
-                        <td>
-                            <div class="actions-inline">
-                                <form th:action="@{/editarCurso/{id}(id=${curso.id})}" method="GET">
-                                    <button type="submit" class="btn btn-secondary">Editar</button>
-                                </form>
-                                <form th:action="@{/excluirCurso/{id}(id=${curso.id})}" method="GET">
-                                    <button type="submit" class="btn btn-danger">Excluir</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
+        <section th:unless="${#lists.isEmpty(listaCursos)}" class="card table-wrap">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Semestres</th>
+                    <th>Número de disciplinas</th>
+                    <th>Ações</th>
+                </tr>
+
+                <tr th:each="curso : ${listaCursos}">
+                    <td th:text="${curso.id}"></td>
+                    <td th:text="${curso.nome}"></td>
+                    <td th:text="${curso.semestres}"></td>
+                    <td th:text="${curso.nDisciplinas}"></td>
+                    <td>
+                        <div class="actions">
+                            <a class="button secondary" th:href="@{/editarCurso/{id}(id=${curso.id})}">Editar</a>
+                            <a class="button danger" th:href="@{/excluirCurso/{id}(id=${curso.id})}">Excluir</a>
+                        </div>
+                    </td>
+                </tr>
             </table>
-        </div>
-    </div>
+        </section>
+    </main>
 </body>
 </html>

@@ -4,55 +4,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Livro</title>
-    <link rel="stylesheet" th:href="@{/css/formulario.css}">
+    <title>Editar Livro | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
+
 <body>
-    <div class="page">
-        <div class="form-shell">
-            <div class="form-header">
-                <h2>Editar Livro</h2>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/listaLivro}">Ver livros</a>
+                <a th:href="@{/biblioteca}">Biblioteca</a>
+                <a th:href="@{/}">Início</a>
             </div>
+        </nav>
+    </header>
 
-            <div class="form-body">
-                <form th:action="@{/atualizarLivro}" th:method="POST">
-                    <input type="hidden" name="id" th:value="${livro.id}">
-
-                    <div class="form-grid">
-                        <div class="field full">
-                            <label for="titulo">Título</label>
-                            <input type="text" name="titulo" id="titulo" th:value="${livro.titulo}" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="autor">Autor</label>
-                            <input type="text" name="autor" id="autor" th:value="${livro.autor}" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="isbn">ISBN</label>
-                            <input type="text" name="isbn" id="isbn" th:value="${livro.isbn}" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="edicao">Edição</label>
-                            <input type="text" name="edicao" id="edicao" th:value="${livro.edicao}" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="capalmagem">Capa</label>
-                            <input type="text" name="capalmagem" id="capalmagem" th:value="${livro.capalmagem}"
-                                required>
-                        </div>
-                    </div>
-
-                    <div class="actions">
-                        <button type="submit" class="btn btn-primary">Atualizar</button>
-                        <a th:href="@{/listaLivro}" class="btn btn-secondary">Ir para lista</a>
-                    </div>
-                </form>
+    <main class="container">
+        <div class="page-heading centered">
+            <div>
+                <p class="eyebrow">Biblioteca</p>
+                <h2>Editar livro</h2>
+                <p class="subtitle">Atualize as informações do item cadastrado.</p>
             </div>
         </div>
-    </div>
+
+        <section class="card form-card">
+            <form th:action="@{/atualizarLivro}" th:method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="id" th:value="${livro.id}">
+
+                <label for="titulo">Título:</label>
+                <input type="text" name="titulo" id="titulo" th:value="${livro.titulo}" required>
+
+                <label for="autor">Autor:</label>
+                <input type="text" name="autor" id="autor" th:value="${livro.autor}" required>
+
+                <label for="isbn">ISBN:</label>
+                <input type="text" name="isbn" id="isbn" th:value="${livro.isbn}" required>
+
+                <label for="edicao">Edição:</label>
+                <input type="text" name="edicao" id="edicao" th:value="${livro.edicao}" required>
+
+                <label>Capa atual:</label>
+                <img th:src="@{'/' + ${livro.capalmagem}}" alt="Capa do livro" style="width: 150px; height: 200px; object-fit: cover; border-radius: 10px; display: block; margin-bottom: 8px;">
+
+                <label for="capalmagem">Nova capa:</label>
+                <input type="file" name="capalmagem" id="capalmagem" accept="image/*">
+
+                <div class="botoes">
+                    <button type="submit">Atualizar</button>
+                    <a class="button secondary" th:href="@{/listaLivro}">Voltar</a>
+                </div>
+            </form>
+        </section>
+    </main>
 </body>
+
 </html>

@@ -1,70 +1,75 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Alunos</title>
-    <link rel="stylesheet" th:href="@{/css/lista.css}">
+    <title>Alunos | Oferta</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
-    <div class="page">
-        <header class="topbar">
-            <div class="brand">Lista de Alunos</div>
-            <div class="nav-actions">
-                <a th:href="@{/index}" class="btn btn-secondary">Voltar ao início</a>
-                <a th:href="@{/aluno}" class="btn btn-primary">Cadastrar aluno</a>
-            </div>
-        </header>
 
-        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
-            <p th:text="${mensagem}"></p>
+<body>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/aluno}">Novo aluno</a>
+                <a th:href="@{/}">Início</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Pessoas</p>
+                <h2>Alunos</h2>
+                <p class="subtitle">Estudantes cadastrados no sistema.</p>
+            </div>
+            <a class="button" th:href="@{/aluno}">+ Novo aluno</a>
         </div>
+
+        <div class="alert" th:if="${mensagem}" th:text="${mensagem}"></div>
+        <div class="alert" th:if="${erro}" th:text="${erro}"></div>
 
         <div th:if="${#lists.isEmpty(listaAlunos)}" class="empty-state">
             <h2>Nenhum aluno cadastrado</h2>
             <p>Cadastre o primeiro aluno para começar.</p>
         </div>
 
-        <div th:unless="${#lists.isEmpty(listaAlunos)}" class="table-wrap">
-            <table class="records-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>CPF</th>
-                        <th>E-mail</th>
-                        <th>Telefone</th>
-                        <th>Prontuário</th>
-                        <th>Endereço</th>
-                        <th>Data de início</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="aluno : ${listaAlunos}">
-                        <td th:text="${aluno.id}"></td>
-                        <td th:text="${aluno.nome}"></td>
-                        <td th:text="${aluno.cpf}"></td>
-                        <td th:text="${aluno.email}"></td>
-                        <td th:text="${aluno.telefone}"></td>
-                        <td th:text="${aluno.prontuario}"></td>
-                        <td th:text="${aluno.endereco}"></td>
-                        <td th:text="${aluno.dataInicio}"></td>
-                        <td>
-                            <div class="actions-inline">
-                                <form th:action="@{/editarAluno/{id}(id=${aluno.id})}" method="GET">
-                                    <button type="submit" class="btn btn-secondary">Editar</button>
-                                </form>
-                                <form th:action="@{/excluirAluno/{id}(id=${aluno.id})}" method="GET">
-                                    <button type="submit" class="btn btn-danger">Excluir</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
+        <section th:unless="${#lists.isEmpty(listaAlunos)}" class="card table-wrap">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>E-mail</th>
+                    <th>Telefone</th>
+                    <th>Prontuário</th>
+                    <th>Endereço</th>
+                    <th>Data de início</th>
+                    <th>Ações</th>
+                </tr>
+
+                <tr th:each="aluno : ${listaAlunos}">
+                    <td th:text="${aluno.id}"></td>
+                    <td th:text="${aluno.nome}"></td>
+                    <td th:text="${aluno.cpf}"></td>
+                    <td th:text="${aluno.email}"></td>
+                    <td th:text="${aluno.telefone}"></td>
+                    <td th:text="${aluno.prontuario}"></td>
+                    <td th:text="${aluno.endereco}"></td>
+                    <td th:text="${aluno.dataInicio}"></td>
+                    <td>
+                        <div class="actions">
+                            <a class="button secondary" th:href="@{/editarAluno/{id}(id=${aluno.id})}">Editar</a>
+                            <a class="button danger" th:href="@{/excluirAluno/{id}(id=${aluno.id})}">Excluir</a>
+                        </div>
+                    </td>
+                </tr>
             </table>
-        </div>
-    </div>
+        </section>
+    </main>
 </body>
+
 </html>
