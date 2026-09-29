@@ -30,6 +30,8 @@
             <a class="button" th:href="@{/emprestimo}">+ Novo empréstimo</a>
         </div>
 
+        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
+
         <div th:if="${#lists.isEmpty(listaEmprestimo)}" class="empty-state">
             <h2>Nenhum empréstimo cadastrado</h2>
             <p>Cadastre o primeiro empréstimo para continuar.</p>
@@ -40,8 +42,10 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Aluno</th>
+                        <th>Livro</th>
                         <th>Data retirada</th>
-                        <th>Data prevista</th>
+                        <th>Devolução prevista</th>
                         <th>Data devolução</th>
                         <th>Status</th>
                         <th>Renovações</th>
@@ -51,6 +55,8 @@
                 <tbody>
                     <tr th:each="emprestimo : ${listaEmprestimo}">
                         <td th:text="${emprestimo.id}"></td>
+                        <td th:text="${emprestimo.aluno != null ? emprestimo.aluno.nome : '—'}"></td>
+                        <td th:text="${emprestimo.livro != null ? emprestimo.livro.titulo : '—'}"></td>
                         <td th:text="${emprestimo.dataRetirada}"></td>
                         <td th:text="${emprestimo.dataPrevista}"></td>
                         <td th:text="${emprestimo.dataDevolucao}"></td>
@@ -67,5 +73,7 @@
             </table>
         </section>
     </main>
+
+    <a class="floating-back-btn" th:href="@{/biblioteca}">⬅ Voltar</a>
 </body>
 </html>

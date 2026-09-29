@@ -90,9 +90,12 @@ public class OfertaDisciplinaController {
     public String excluirDisciplina(@PathVariable long id, RedirectAttributes ra) {
         if(matriculaRepository.existsByOfertaDisciplinaId(id)){
             ra.addFlashAttribute("mensagem", "Não é possível excluir: oferta de disciplina está associada a uma matrícula.");
+            ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/listaOfertaDisciplinas";
         }
         ofertaDisciplinaRepository.deleteById(id);
+        ra.addFlashAttribute("mensagem", "Oferta de disciplina excluída com sucesso!");
+        ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaOfertaDisciplinas";
     }
 }

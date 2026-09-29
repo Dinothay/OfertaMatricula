@@ -29,17 +29,37 @@
 
         <section class="card form-card">
             <form th:action="@{/cadastraEmprestimo}" method="POST">
-                <label for="dataRetirada">Data de retirada:</label>
-                <input type="date" name="dataRetirada" id="dataRetirada" required>
+                <label for="idAluno">Aluno:</label>
+                <select name="idAluno" id="idAluno" required>
+                    <option value="">Selecione um aluno</option>
+                    <option th:each="aluno : ${alunos}" th:value="${aluno.id}" th:text="${aluno.nome}"></option>
+                </select>
 
-                <label for="dataPrevista">Data prevista:</label>
-                <input type="date" name="dataPrevista" id="dataPrevista" required>
+                <label for="idLivro">Livro:</label>
+                <select name="idLivro" id="idLivro" required>
+                    <option value="">Selecione um livro</option>
+                    <option th:each="livro : ${livros}" th:value="${livro.id}" th:text="${livro.titulo}"></option>
+                </select>
+
+                <label for="dataRetirada">Data de retirada:</label>
+                <input type="date" name="dataRetirada" id="dataRetirada"
+                       th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}"
+                       required readonly>
+
+                <label for="dataPrevista">Devolução prevista:</label>
+                <input type="date" name="dataPrevista" id="dataPrevista"
+                       th:value="${#temporals.format(#temporals.createNow().plusDays(14), 'yyyy-MM-dd')}"
+                       required readonly>
 
                 <label for="dataDevolucao">Data de devolução:</label>
                 <input type="date" name="dataDevolucao" id="dataDevolucao">
 
                 <label for="status">Status:</label>
-                <input type="text" name="status" id="status" placeholder="Digite o status" required>
+                <select name="status" id="status" required>
+                    <option value="">Selecione o status</option>
+                    <option th:each="status : ${T(com.example.OfertaMatricula.Model.StatusEmprestimo).values()}"
+                            th:value="${status}" th:text="${status}"></option>
+                </select>
 
                 <label for="renovacoes">Renovações:</label>
                 <input type="number" name="renovacoes" id="renovacoes" placeholder="Número de renovações" required>
@@ -51,5 +71,37 @@
             </form>
         </section>
     </main>
-</body>
-</html>
+
+    <script>
+        function atualizarDataPrevista() {
+            const dataRetirada = document.getElementById('dataRetirada');
+            const dataPrevista = document.getElementById('dataPrevista');
+
+            if (!dataRetirada.value) {
+                dataPrevista.value = '';
+                return;
+            }
+
+            const data = new Date(dataRetirada.value + 'T00:00:00');
+            data.setDate(data.getDate() + 14);
+
+            const ano = data.getFullYear();
+            const mes = String(data.getMonth() + 1).padStart(2, '0');
+            const dia = String(data.getDate()).padStart(2, '0');
+            dataPrevista.value = `${ano}-${mes}-${dia}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const dataRetirada = document.getElementById('dataRetirada');
+            const dataPrevista = document.getElementById('dataPrevista');
+            if (dataRetirada && dataPrevista && !dataRetirada.value) {
+                const hoje = new Date();
+                const ano = hoje.getFullYear();
+                const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+                const dia = String(hoje.getDate()).padStart(2, '0');
+                dataRetirada.value = `${ano}-${mes}-${dia}`;
+                atualizarDataPrevista();
+            } else if (dataRetirada && dataPrevista) {
+                atualizarDataPrevista();
+            }
+        });

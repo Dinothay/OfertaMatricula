@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar associação | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/listaDisciplinaLivro}">Ver associações</a>
+                <a th:href="@{/}">Início</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-heading centered">
+            <div>
+                <p class="eyebrow">Biblioteca</p>
+                <h2>Editar associação disciplina/livro</h2>
+                <p class="subtitle">Atualize o tipo da relação cadastrada.</p>
+            </div>
+        </div>
+
+        <section class="card form-card">
+            <form th:action="@{/atualizarDisciplinaLivro}" method="POST">
+                <input type="hidden" name="disciplinaId" th:value="${disciplinaLivro.disciplina.id}">
+                <input type="hidden" name="livroId" th:value="${disciplinaLivro.livro.id}">
+
+                <label for="disciplinaNome">Disciplina:</label>
+                <input type="text" id="disciplinaNome" th:value="${disciplinaLivro.disciplina.nome}" readonly>
+
+                <label for="livroTitulo">Livro:</label>
+                <input type="text" id="livroTitulo" th:value="${disciplinaLivro.livro.titulo}" readonly>
+
+                <label for="tipo">Tipo:</label>
+                <select name="tipo" id="tipo" required>
+                    <option value="BASICA" th:selected="${disciplinaLivro.tipo.name() == 'BASICA'}">Básica</option>
+                    <option value="COMPLEMENTAR" th:selected="${disciplinaLivro.tipo.name() == 'COMPLEMENTAR'}">Complementar</option>
+                </select>
+
+                <div class="botoes">
+                    <button type="submit">Atualizar</button>
+                    <a class="button secondary" th:href="@{/listaDisciplinaLivro}">Voltar</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+
+</html>

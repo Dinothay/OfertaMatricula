@@ -1,54 +1,92 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Exemplar | Oferta</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
+
 <body>
+
     <header class="topbar">
         <nav class="nav">
-            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+
+            <a class="brand" th:href="@{/}">
+                <span class="brand-mark">O</span> Oferta
+            </a>
+
             <div class="nav-links">
                 <a th:href="@{/listaExemplar}">Ver exemplares</a>
-                <a th:href="@{/biblioteca}">Biblioteca</a>
-                <a th:href="@{/}">Início</a>
+                <a th:href="@{/index}">Início</a>
             </div>
+
         </nav>
     </header>
 
     <main class="container">
+
         <div class="page-heading centered">
             <div>
                 <p class="eyebrow">Biblioteca</p>
                 <h2>Editar exemplar</h2>
-                <p class="subtitle">Atualize o tombo e o vínculo do exemplar.</p>
+                <p class="subtitle">Atualize as informações do exemplar.</p>
             </div>
         </div>
 
         <section class="card form-card">
-            <form th:action="@{/atualizarExemplar}" th:method="POST">
+
+            <form th:action="@{/atualizarExemplar}" method="POST">
+
                 <input type="hidden" name="id" th:value="${exemplar.id}">
 
                 <label for="tombo">Tombo:</label>
+
                 <input type="text" name="tombo" id="tombo" th:value="${exemplar.tombo}" required>
 
-                <label for="idEmprestimo">Empréstimo:</label>
-                <select name="idEmprestimo" id="idEmprestimo" required>
-                    <option value="">Selecione o empréstimo</option>
-                    <option th:each="emprestimo : ${emprestimos}"
-                            th:value="${emprestimo.id}"
-                            th:text="${emprestimo.status + ' - ' + emprestimo.dataRetirada}"
-                            th:selected="${exemplar.status != null and exemplar.status.id == emprestimo.id}"></option>
+                <label for="status">Status do exemplar:</label>
+
+                <select name="status" id="status" required>
+
+                    <option value="">Selecione o status</option>
+
+                    <option th:each="status : ${T(com.example.OfertaMatricula.Model.StatusExemplar).values()}"
+                        th:value="${status}" th:text="${status}" th:selected="${exemplar.status == status}">
+                    </option>
+
+                </select>
+
+                <label for="idLivro">Livro:</label>
+
+                <select name="idLivro" id="idLivro" required>
+
+                    <option value="">Selecione um livro</option>
+
+                    <option th:each="livro : ${livros}" th:value="${livro.id}" th:text="${livro.titulo}"
+                        th:selected="${exemplar.livro != null and exemplar.livro.id == livro.id}">
+                    </option>
+
                 </select>
 
                 <div class="botoes">
-                    <button type="submit">Atualizar</button>
-                    <a class="button secondary" th:href="@{/listaExemplar}">Voltar</a>
+
+                    <button type="submit">
+                        Atualizar
+                    </button>
+
+                    <a class="button secondary" th:href="@{/listaExemplar}">
+                        Voltar
+                    </a>
+
                 </div>
+
             </form>
+
         </section>
+
     </main>
+
 </body>
+
 </html>

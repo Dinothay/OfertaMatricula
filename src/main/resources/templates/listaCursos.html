@@ -29,8 +29,7 @@
             <a class="button" th:href="@{/curso}">+ Novo curso</a>
         </div>
 
-        <div class="alert" th:if="${mensagem}" th:text="${mensagem}"></div>
-        <div class="alert" th:if="${erro}" th:text="${erro}"></div>
+        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
 
         <div th:if="${#lists.isEmpty(listaCursos)}" class="empty-state">
             <h2>Nenhum curso cadastrado</h2>
@@ -62,5 +61,7 @@
             </table>
         </section>
     </main>
+
+    <a class="floating-back-btn" th:href="@{/}">⬅ Voltar</a>
 </body>
 </html>

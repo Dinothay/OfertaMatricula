@@ -13,6 +13,7 @@
             <div class="nav-links">
                 <a th:href="@{/}">Início</a>
                 <a th:href="@{/listaLivro}">Livros</a>
+                <a th:href="@{/listaDisciplinaLivro}">Associações</a>
                 <a th:href="@{/listaExemplar}">Exemplares</a>
                 <a th:href="@{/listaEmprestimo}">Empréstimos</a>
                 <a th:href="@{/listaReserva}">Reservas</a>
@@ -49,6 +50,12 @@
                 <span class="icon">📚</span>
                 <h2>Livros</h2>
                 <p>Gerenciar o catálogo de livros da biblioteca.</p>
+            </a>
+
+            <a th:href="@{/listaDisciplinaLivro}" class="card quick-card">
+                <span class="icon">🔗</span>
+                <h2>Disciplinas e livros</h2>
+                <p>Associar livros básicos e complementares às disciplinas.</p>
             </a>
 
             <a th:href="@{/listaExemplar}" class="card quick-card">

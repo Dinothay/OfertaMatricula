@@ -28,9 +28,7 @@
         </div>
 
         <section class="card form-card">
-            <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
-                <p th:text="${mensagem}"></p>
-            </div>
+            <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
 
             <form th:action="@{/cadastrarProfessores}" method="POST">
                 <label for="nome">Nome:</label>

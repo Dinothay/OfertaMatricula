@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exemplares | Oferta</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
+
 <body>
     <header class="topbar">
         <nav class="nav">
@@ -30,6 +32,9 @@
             <a class="button" th:href="@{/exemplar}">+ Novo exemplar</a>
         </div>
 
+        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'"
+            th:text="${mensagem}"></div>
+
         <div th:if="${#lists.isEmpty(listaExemplar)}" class="empty-state">
             <h2>Nenhum exemplar cadastrado</h2>
             <p>Cadastre o primeiro exemplar para continuar.</p>
@@ -40,6 +45,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Livro</th>
                         <th>Tombo</th>
                         <th>Status</th>
                         <th>Ações</th>
@@ -48,12 +54,15 @@
                 <tbody>
                     <tr th:each="exemplar : ${listaExemplar}">
                         <td th:text="${exemplar.id}"></td>
+                        <td th:text="${exemplar.livro.titulo}"></td>
                         <td th:text="${exemplar.tombo}"></td>
-                        <td th:text="${exemplar.status != null ? exemplar.status.status : 'Sem status'}"></td>
+                        <td th:text="${exemplar.status != null ? exemplar.status : 'Sem status'}"></td>
                         <td>
                             <div class="actions">
-                                <a class="button secondary" th:href="@{/editarExemplar/{id}(id=${exemplar.id})}">Editar</a>
-                                <a class="button danger" th:href="@{/excluirExemplar/{id}(id=${exemplar.id})}">Excluir</a>
+                                <a class="button secondary"
+                                    th:href="@{/editarExemplar/{id}(id=${exemplar.id})}">Editar</a>
+                                <a class="button danger"
+                                    th:href="@{/excluirExemplar/{id}(id=${exemplar.id})}">Excluir</a>
                             </div>
                         </td>
                     </tr>
@@ -61,5 +70,8 @@
             </table>
         </section>
     </main>
+
+    <a class="floating-back-btn" th:href="@{/biblioteca}">⬅ Voltar</a>
 </body>
+
 </html>

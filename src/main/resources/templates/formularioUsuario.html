@@ -9,9 +9,13 @@
 </head>
 
 <body>
+
     <header class="topbar">
         <nav class="nav">
-            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <a class="brand" th:href="@{/}">
+                <span class="brand-mark">O</span> Oferta
+            </a>
+
             <div class="nav-links">
                 <a th:href="@{/listaUsuarios}">Ver usuários</a>
                 <a th:href="@{/}">Início</a>
@@ -20,6 +24,7 @@
     </header>
 
     <main class="container">
+
         <div class="page-heading centered">
             <div>
                 <p class="eyebrow">Sistema</p>
@@ -29,9 +34,14 @@
         </div>
 
         <section class="card form-card">
-            <div class="alert" th:if="${mensagem}" th:text="${mensagem}"></div>
 
-            <form th:action="@{/cadastrarUsuarios}" method="POST">
+            <div th:if="${mensagem}"
+                 th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'"
+                 th:text="${mensagem}">
+            </div>
+
+            <form th:action="@{/cadastrarUsuarios}" method="POST" enctype="multipart/form-data">
+
                 <label for="login">Informe o login:</label>
                 <input type="text" name="login" id="login" th:value="${login}" placeholder="Digite o login" required>
 
@@ -45,14 +55,18 @@
                 </select>
 
                 <label for="fotoPerfil">Informe a foto de perfil:</label>
-                <input type="text" name="fotoPerfil" id="fotoPerfil" th:value="${fotoPerfil}" placeholder="Caminho da foto (opcional)">
+                <input type="file" name="fotoPerfil" id="fotoPerfil" accept="image/*">
 
                 <div class="botoes">
                     <button type="submit">Cadastrar</button>
                     <a class="button secondary" th:href="@{/listaUsuarios}">Voltar</a>
                 </div>
+
             </form>
+
         </section>
+
     </main>
+
 </body>
 </html>

@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.OfertaMatricula.Model.Aluno;
 import com.example.OfertaMatricula.Model.Pessoa;
 import com.example.OfertaMatricula.Repository.AlunoRepository;
+import com.example.OfertaMatricula.Repository.EmprestimoRepository;
 import com.example.OfertaMatricula.Repository.MatriculaRepository;
 
 @Controller
@@ -25,6 +26,9 @@ public class AlunoController {
 
     @Autowired
     private MatriculaRepository matriculaRepository;
+
+    @Autowired
+    private EmprestimoRepository emprestimoRepository;
 
     @GetMapping("/aluno")
     public String cadastroAlunos() {
@@ -142,9 +146,17 @@ public class AlunoController {
             RedirectAttributes ra) {
         if (matriculaRepository.existsByAlunoId(id)) {
             ra.addFlashAttribute("mensagem", "Não é possível excluir: aluno está associado a uma matrícula.");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaAlunos";
+        }
+        if (emprestimoRepository.existsByAlunoId(id)) {
+            ra.addFlashAttribute("mensagem", "Não é possível excluir: aluno está associado a um empréstimo.");
+            ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/listaAlunos";
         }
         alunoRepository.deleteById(id);
+        ra.addFlashAttribute("mensagem", "Aluno excluído com sucesso!");
+        ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaAlunos";
     }
 }

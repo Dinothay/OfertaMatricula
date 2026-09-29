@@ -4,30 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Disciplinas</title>
+    <title>Disciplinas | Oferta</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
-    <div class="page">
-        <header class="topbar">
-            <div class="brand">Lista de Disciplinas</div>
-            <div class="nav-actions">
-                <a th:href="@{/index}" class="btn btn-secondary">Voltar ao início</a>
-                <a th:href="@{/disciplina}" class="btn btn-primary">Cadastrar disciplina</a>
-            </div>
-        </header>
 
-        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'">
-            <p th:text="${mensagem}"></p>
+<body>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/index}">Início</a>
+                <a th:href="@{/listaCursos}">Cursos</a>
+                <a th:href="@{/listaDisciplinas}">Disciplinas</a>
+                <a th:href="@{/listaOfertaDisciplinas}">Ofertas</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Acadêmico</p>
+                <h2>Disciplinas</h2>
+                <p class="subtitle">Catálogo de disciplinas cadastradas no sistema.</p>
+            </div>
+            <a class="button" th:href="@{/disciplina}">+ Nova disciplina</a>
         </div>
+
+        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
 
         <div th:if="${#lists.isEmpty(listaDisciplinas)}" class="empty-state">
             <h2>Nenhuma disciplina cadastrada</h2>
             <p>Cadastre a primeira disciplina para visualizar o catálogo.</p>
         </div>
 
-        <div th:unless="${#lists.isEmpty(listaDisciplinas)}" class="table-wrap">
-            <table class="records-table">
+        <section th:unless="${#lists.isEmpty(listaDisciplinas)}" class="card table-wrap">
+            <table>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -46,21 +58,20 @@
                         <td th:text="${disciplina.semestre}"></td>
                         <td th:text="${disciplina.nAulas}"></td>
                         <td th:text="${disciplina.cHoraria}"></td>
-                        <td th:text="${disciplina.curso != null} ? ${disciplina.curso.nome} : '—'"></td>
+                        <td th:text="${disciplina.curso != null ? disciplina.curso.nome : '—'}"></td>
                         <td>
-                            <div class="actions-inline">
-                                <form th:action="@{/editarDisciplina/{id}(id=${disciplina.id})}" method="GET">
-                                    <button type="submit" class="btn btn-secondary">Editar</button>
-                                </form>
-                                <form th:action="@{/excluirDisciplina/{id}(id=${disciplina.id})}" method="GET">
-                                    <button type="submit" class="btn btn-danger">Excluir</button>
-                                </form>
+                            <div class="actions">
+                                <a class="button secondary" th:href="@{/editarDisciplina/{id}(id=${disciplina.id})}">Editar</a>
+                                <a class="button danger" th:href="@{/excluirDisciplina/{id}(id=${disciplina.id})}">Excluir</a>
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
+        </section>
+    </main>
+
+    <a class="floating-back-btn" th:href="@{/}">⬅ Voltar</a>
 </body>
+
 </html>

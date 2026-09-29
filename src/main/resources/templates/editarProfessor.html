@@ -28,7 +28,7 @@
         </div>
 
         <section class="card form-card">
-            <div class="alert" th:if="${mensagem}" th:text="${mensagem}"></div>
+            <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
 
             <form th:action="@{/atualizarProfessor}" method="POST">
                 <input type="hidden" name="id" th:value="${professor.id}">

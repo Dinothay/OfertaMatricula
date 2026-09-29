@@ -29,7 +29,7 @@
         </div>
 
         <section class="card form-card">
-            <div class="alert" th:if="${mensagem}" th:text="${mensagem}"></div>
+            <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
             <form th:action="@{/cadastrarCurso}" method="POST">
                 <label for="nome">Informe o nome:</label>
                 <input type="text" name="nome" id="nome" placeholder="Digite o nome do curso" required>

@@ -4,9 +4,13 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity 
@@ -17,6 +21,14 @@ public class Emprestimo {
     @Column(name = "id")
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "aluno")
+    private Aluno aluno;
+
+    @ManyToOne
+    @JoinColumn(name = "livro")
+    private Livro livro;
+
     @Column (name = "dataRetirada")
     private LocalDate dataRetirada;
 
@@ -26,8 +38,9 @@ public class Emprestimo {
     @Column (name = "dataDevolucao")
     private LocalDate dataDevolucao;
 
+    @Enumerated(EnumType.STRING)
     @Column (name = "status")
-    private String status;
+    private StatusEmprestimo status;
     
     @Column (name = "renovacoes")
     private int renovacoes;
@@ -35,8 +48,10 @@ public class Emprestimo {
     public Emprestimo() {
     }
 
-    public Emprestimo(LocalDate dataRetirada, LocalDate dataPrevista, LocalDate dataDevolucao, String status,
-            int renovacoes) {
+    public Emprestimo(Aluno aluno, Livro livro, LocalDate dataRetirada, LocalDate dataPrevista, LocalDate dataDevolucao,
+            StatusEmprestimo status, int renovacoes) {
+        this.aluno = aluno;
+        this.livro = livro;
         this.dataRetirada = dataRetirada;
         this.dataPrevista = dataPrevista;
         this.dataDevolucao = dataDevolucao;
@@ -50,6 +65,22 @@ public class Emprestimo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Aluno getAluno() {
+        return aluno;
+    }
+
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
+    }
+
+    public Livro getLivro() {
+        return livro;
+    }
+
+    public void setLivro(Livro livro) {
+        this.livro = livro;
     }
 
     public LocalDate getDataRetirada() {
@@ -76,11 +107,11 @@ public class Emprestimo {
         this.dataDevolucao = dataDevolucao;
     }
 
-    public String getStatus() {
+    public StatusEmprestimo getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusEmprestimo status) {
         this.status = status;
     }
 

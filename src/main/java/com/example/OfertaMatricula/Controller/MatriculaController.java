@@ -100,8 +100,10 @@ public class MatriculaController {
     }
 
     @GetMapping("/excluirMatricula/{id}")
-    public String excluirMatricula(@PathVariable long id) {
+    public String excluirMatricula(@PathVariable long id, RedirectAttributes ra) {
         matriculaRepository.deleteById(id);
+        ra.addFlashAttribute("mensagem", "Matrícula excluída com sucesso!");
+        ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaMatricula";
     }
 }

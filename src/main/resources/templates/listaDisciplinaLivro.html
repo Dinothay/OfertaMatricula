@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disciplinas e livros | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/disciplinaLivro}">Nova associação</a>
+                <a th:href="@{/listaDisciplinas}">Disciplinas</a>
+                <a th:href="@{/listaLivro}">Livros</a>
+                <a th:href="@{/}">Início</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Biblioteca</p>
+                <h2>Disciplinas e livros</h2>
+                <p class="subtitle">Associações cadastradas entre disciplinas e livros.</p>
+            </div>
+            <a class="button" th:href="@{/disciplinaLivro}">+ Nova associação</a>
+        </div>
+
+        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
+
+        <div th:if="${#lists.isEmpty(listaDisciplinaLivro)}" class="empty-state">
+            <h2>Nenhuma associação cadastrada</h2>
+            <p>Cadastre a primeira relação entre disciplina e livro.</p>
+        </div>
+
+        <section th:unless="${#lists.isEmpty(listaDisciplinaLivro)}" class="card table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Disciplina</th>
+                        <th>Livro</th>
+                        <th>Tipo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="associacao : ${listaDisciplinaLivro}">
+                        <td th:text="${associacao.disciplina.nome}"></td>
+                        <td th:text="${associacao.livro.titulo}"></td>
+                        <td>
+                            <span th:text="${associacao.tipo == T(com.example.OfertaMatricula.Model.Tipo).BASICA ? 'Básica' : 'Complementar'}"></span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <a class="button secondary"
+                                   th:href="@{/editarDisciplinaLivro/{disciplinaId}/{livroId}(disciplinaId=${associacao.disciplina.id}, livroId=${associacao.livro.id})}">Editar</a>
+                                <a class="button danger"
+                                   th:href="@{/excluirDisciplinaLivro/{disciplinaId}/{livroId}(disciplinaId=${associacao.disciplina.id}, livroId=${associacao.livro.id})}">Excluir</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <a class="floating-back-btn" th:href="@{/biblioteca}">⬅ Voltar</a>
+</body>
+
+</html>
