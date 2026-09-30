@@ -57,9 +57,9 @@
                         <td th:text="${emprestimo.id}"></td>
                         <td th:text="${emprestimo.aluno != null ? emprestimo.aluno.nome : '—'}"></td>
                         <td th:text="${emprestimo.livro != null ? emprestimo.livro.titulo : '—'}"></td>
-                        <td th:text="${emprestimo.dataRetirada}"></td>
-                        <td th:text="${emprestimo.dataPrevista}"></td>
-                        <td th:text="${emprestimo.dataDevolucao}"></td>
+                        <td th:text="${#temporals.format(emprestimo.dataRetirada, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${#temporals.format(emprestimo.dataPrevista, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${#temporals.format(emprestimo.dataDevolucao, 'dd/MM/yyyy')}"></td>
                         <td th:text="${emprestimo.status}"></td>
                         <td th:text="${emprestimo.renovacoes}"></td>
                         <td>

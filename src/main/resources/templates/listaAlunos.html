@@ -58,7 +58,7 @@
                     <td th:text="${aluno.telefone}"></td>
                     <td th:text="${aluno.prontuario}"></td>
                     <td th:text="${aluno.endereco}"></td>
-                    <td th:text="${aluno.dataInicio}"></td>
+                    <td th:text="${#temporals.format(aluno.dataInicio, 'dd/MM/yyyy')}"></td>
                     <td>
                         <div class="actions">
                             <a class="button secondary" th:href="@{/editarAluno/{id}(id=${aluno.id})}">Editar</a>

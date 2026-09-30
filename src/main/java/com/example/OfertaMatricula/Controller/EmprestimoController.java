@@ -18,7 +18,6 @@ import com.example.OfertaMatricula.Model.Livro;
 import com.example.OfertaMatricula.Model.StatusEmprestimo;
 import com.example.OfertaMatricula.Repository.AlunoRepository;
 import com.example.OfertaMatricula.Repository.EmprestimoRepository;
-import com.example.OfertaMatricula.Repository.ExemplarRepository;
 import com.example.OfertaMatricula.Repository.LivroRepository;
 
 @Controller
@@ -31,9 +30,6 @@ public class EmprestimoController {
 
     @Autowired
     private LivroRepository livroRepository;
-
-    @Autowired
-    private ExemplarRepository exemplarRepository;
 
     @GetMapping("/emprestimo")
     public String cadastroEmprestimo(Model model) {

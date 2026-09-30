@@ -62,7 +62,7 @@
                         <td th:text="${matricula.ofertaDisciplina.professor.nome}"></td>
                         <td th:text="${matricula.ofertaDisciplina.diaAula}"></td>
                         <td th:text="${matricula.ofertaDisciplina.nAulaSemana}"></td>
-                        <td th:text="${matricula.dataM}"></td>
+                        <td th:text="${#temporals.format(matricula.dataM, 'dd/MM/yyyy')}"></td>
                         <td>
                             <div class="actions">
                                 <a class="button secondary" th:href="@{/editarMatricula/{id}(id=${matricula.id})}">Editar</a>

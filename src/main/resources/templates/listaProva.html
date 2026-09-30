@@ -28,6 +28,8 @@
             <a class="button" th:href="@{/prova}">+ Nova prova</a>
         </div>
 
+        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
+
         <div th:if="${#lists.isEmpty(listaProva)}" class="empty-state">
             <h2>Nenhuma prova cadastrada</h2>
             <p>Cadastre a primeira prova para continuar.</p>
@@ -47,7 +49,7 @@
                 <tbody>
                     <tr th:each="prova : ${listaProva}">
                         <td th:text="${prova.id}"></td>
-                        <td th:text="${prova.data}"></td>
+                        <td th:text="${#temporals.format(prova.data, 'dd/MM/yyyy')}"></td>
                         <td th:text="${prova.conteudo}"></td>
                         <td th:text="${prova.peso}"></td>
                         <td>

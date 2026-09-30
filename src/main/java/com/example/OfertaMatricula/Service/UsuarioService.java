@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UsuarioService {
-    public static final String endereco_armazenamento_arquivo ="C:\\Gui\\Escola\\Web2\\OfertaMatricula2\\OfertaMatricula\\src\\main\\resources\\static\\images";
+    public static final String endereco_armazenamento_arquivo ="C:\\Users\\3036448\\Documents\\ProjetoBiblioEntrega\\OfertaMatricula\\src\\main\\resources\\static\\images";
     public String salvarFoto(MultipartFile arquivo) throws IOException {
         if (arquivo == null) {
             throw new NullPointerException("Arquivo da imagem está vazio");
