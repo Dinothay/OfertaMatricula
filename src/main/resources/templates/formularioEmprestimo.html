@@ -19,11 +19,16 @@
     </header>
 
     <main class="container">
-        <div class="page-heading centered">
-            <div>
-                <p class="eyebrow">Biblioteca</p>
-                <h2>Novo empréstimo</h2>
-                <p class="subtitle">Registre uma nova retirada de material.</p>
+        <div class="page-header-shell">
+            <div class="page-heading centered">
+                <div>
+                    <p class="eyebrow">Biblioteca</p>
+                    <h2>Novo empréstimo</h2>
+                    <p class="subtitle">Registre uma nova retirada de material.</p>
+                </div>
+                <div class="page-actions">
+                    <a class="button secondary" th:href="@{/listaEmprestimo}">Voltar</a>
+                </div>
             </div>
         </div>
 
@@ -105,3 +110,6 @@
                 atualizarDataPrevista();
             }
         });
+    </script>
+</body>
+</html>

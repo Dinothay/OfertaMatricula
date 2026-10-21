@@ -6,6 +6,155 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Usuários | Oferta</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .metric-card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-top: 3px solid var(--primary);
+            border-radius: 18px;
+            padding: 20px 22px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, .05);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 34px rgba(15, 23, 42, .08);
+        }
+
+        .metric-card.accent {
+            border-top-color: var(--accent);
+        }
+
+        .metric-card.danger {
+            border-top-color: var(--danger);
+        }
+
+        .metric-label {
+            display: block;
+            color: var(--muted);
+            font-size: .76rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            font-weight: 800;
+        }
+
+        .metric-value {
+            display: block;
+            margin-top: 10px;
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            font-weight: 800;
+            letter-spacing: -.04em;
+            color: var(--ink);
+        }
+
+        .metric-meta {
+            display: block;
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: .86rem;
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-name {
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .user-avatar {
+            display: none;
+        }
+
+        .user-photo-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 110px;
+            width: 110px;
+            vertical-align: middle;
+            text-align: center;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+
+        .photo-thumb {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #dfe7f5;
+            background: linear-gradient(135deg, #e0e7ff, #d1fae5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, .08);
+            object-fit: cover;
+            margin: 0 auto;
+        }
+
+        .photo-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-thumb.empty-photo {
+            font-size: .8rem;
+            font-weight: 800;
+            color: var(--muted);
+        }
+
+        .records-table th:nth-child(2),
+        .records-table td:nth-child(2) {
+            width: 110px;
+            min-width: 110px;
+            text-align: center;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+
+        .records-table td:nth-child(2) {
+            vertical-align: middle;
+        }
+
+        .role-badge,
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: .75rem;
+            font-weight: 800;
+            letter-spacing: .02em;
+        }
+
+        .role-badge {
+            background: #eef2ff;
+            color: var(--primary-dark);
+        }
+
+        .status-badge {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        .table-wrap.user-table-wrap {
+            margin-top: 24px;
+        }
+
+        @media (max-width: 560px) {
+            .metric-card {
+                padding: 18px 16px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -27,7 +176,7 @@
                 <div>
                     <p class="eyebrow">Sistema</p>
                     <h1 class="page-title">Usuários</h1>
-                    <p class="page-subtitle">Gerencie usuários, permissões e perfis do sistema.</p>
+                    <p class="page-subtitle">Gerencie contas, acessos e perfis de usuário do sistema.</p>
                 </div>
                 <div class="page-actions">
                     <a class="button" th:href="@{/usuario}">+ Novo usuário</a>
@@ -36,21 +185,25 @@
         </div>
 
         <div class="quick-grid">
-            <div class="quick-card">
-                <strong th:text="${#lists.size(listaUsuarios)}">0</strong>
-                <span>Usuários cadastrados</span>
+            <div class="metric-card">
+                <span class="metric-label">Total</span>
+                <strong class="metric-value" th:text="${#lists.size(listaUsuarios)}">0</strong>
+                <span class="metric-meta">usuários cadastrados</span>
             </div>
-            <div class="quick-card">
-                <strong>Controle</strong>
-                <span>Cadastro e edição em um só lugar</span>
+            <div class="metric-card accent">
+                <span class="metric-label">Perfis</span>
+                <strong class="metric-value">4</strong>
+                <span class="metric-meta">tipos de acesso ativos</span>
             </div>
-            <div class="quick-card">
-                <strong>Perfil</strong>
-                <span>Identidade visual e acessos</span>
+            <div class="metric-card danger">
+                <span class="metric-label">Controle</span>
+                <strong class="metric-value">Ativo</strong>
+                <span class="metric-meta">gestão centralizada</span>
             </div>
         </div>
 
-        <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'"
+        <div th:if="${mensagem}"
+            th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'"
             th:text="${mensagem}">
         </div>
 
@@ -59,14 +212,15 @@
             <p>Cadastre o primeiro usuário para começar.</p>
         </div>
 
-        <section th:unless="${#lists.isEmpty(listaUsuarios)}" class="table-wrap">
+        <section th:unless="${#lists.isEmpty(listaUsuarios)}" class="table-wrap user-table-wrap">
             <table class="records-table">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Nome de usuário</th>
-                        <th>Tipo de usuário</th>
-                        <th>Foto de perfil</th>
+                        <th>Foto</th>
+                        <th>Usuário</th>
+                        <th>Tipo de acesso</th>
+                        <th>Status</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -74,26 +228,27 @@
                 <tbody>
                     <tr th:each="usuario : ${listaUsuarios}">
                         <td th:text="${usuario.id}"></td>
-                        <td th:text="${usuario.username}"></td>
-                        <td th:text="${usuario.papel}"></td>
+                        <td class="user-photo-cell">
+                            <div class="photo-thumb" th:if="${usuario.fotoPerfil != null and !usuario.fotoPerfil.isEmpty()}">
+                                <img th:src="@{'/' + ${usuario.fotoPerfil}}" alt="Foto de perfil" />
+                            </div>
+                            <div class="photo-thumb empty-photo" th:unless="${usuario.fotoPerfil != null and !usuario.fotoPerfil.isEmpty()}">U</div>
+                        </td>
                         <td>
-                            <img th:if="${usuario.fotoPerfil != null and !usuario.fotoPerfil.isEmpty()}"
-                                th:src="@{'/' + ${usuario.fotoPerfil}}" alt="Foto de perfil"
-                                style="width: 56px; height: 56px; object-fit: cover; border-radius: 50%; border: 2px solid #e2e8f0; background: #f8fafc;">
-
-                            <span th:if="${usuario.fotoPerfil == null or usuario.fotoPerfil.isEmpty()}">
-                                Sem foto
-                            </span>
+                            <div class="user-cell">
+                                <span class="user-name" th:text="${usuario.username}"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="role-badge" th:text="${usuario.papel}"></span>
+                        </td>
+                        <td>
+                            <span class="status-badge">Ativo</span>
                         </td>
                         <td>
                             <div class="actions">
-                                <a class="button secondary" th:href="@{/editarUsuario/{id}(id=${usuario.id})}">
-                                    Editar
-                                </a>
-
-                                <a class="button danger" th:href="@{/excluirUsuario/{id}(id=${usuario.id})}">
-                                    Excluir
-                                </a>
+                                <a class="button secondary" th:href="@{/editarUsuario/{id}(id=${usuario.id})}">Editar</a>
+                                <a class="button danger" th:href="@{/excluirUsuario/{id}(id=${usuario.id})}">Excluir</a>
                             </div>
                         </td>
                     </tr>
