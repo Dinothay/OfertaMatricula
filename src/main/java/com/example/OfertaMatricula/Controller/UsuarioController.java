@@ -1,9 +1,11 @@
+
 package com.example.OfertaMatricula.Controller;
 
 import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping("/usuario")
     public String cadastroUsuarios(Model model) {
         model.addAttribute("papeis", Papel.values());
@@ -34,19 +39,20 @@ public class UsuarioController {
     }
 
     @PostMapping("/cadastrarUsuarios")
-    public String saveUsuarios(@RequestParam String login, @RequestParam String senhaHash, @RequestParam Papel papel,
-            @RequestParam(required = false) MultipartFile fotoPerfil, RedirectAttributes ra) {
-
-        if (usuarioRepository.findByLogin(login).isPresent()) {
-            ra.addFlashAttribute("mensagem", "Esse login já está cadastrado!");
+    public String saveUsuarios(
+            @RequestParam String username,
+            @RequestParam String password,
+            @RequestParam Papel papel,
+            @RequestParam(required = false) MultipartFile fotoPerfil,
+            RedirectAttributes ra) {
+        if (usuarioRepository.findByUsername(username).isPresent()) {
+            ra.addFlashAttribute("mensagem","Esse nome de usuário já está cadastrado!");
             ra.addFlashAttribute("mensagemTipo", "erro");
-            ra.addFlashAttribute("login", login);
+            ra.addFlashAttribute("username", username);
             ra.addFlashAttribute("papel", papel);
             return "redirect:/usuario";
         }
-
         String caminhoFoto = null;
-
         try {
             if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
                 caminhoFoto = usuarioService.salvarFoto(fotoPerfil);
@@ -56,13 +62,10 @@ public class UsuarioController {
             ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/usuario";
         }
-
-        Usuario usuario = new Usuario(login, senhaHash, papel, caminhoFoto);
+        Usuario usuario = new Usuario(username,passwordEncoder.encode(password),papel, caminhoFoto);
         usuarioRepository.save(usuario);
-
-        ra.addFlashAttribute("mensagem", "Usuário cadastrado com sucesso!");
+        ra.addFlashAttribute("mensagem","Usuário cadastrado com sucesso!");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
-
         return "redirect:/listaUsuarios";
     }
 
@@ -74,16 +77,21 @@ public class UsuarioController {
     }
 
     @GetMapping("/editarUsuario/{id}")
-    public String editarUsuario(@PathVariable long id, Model model) {
+    public String editarUsuario(
+            @PathVariable Long id, Model model,RedirectAttributes ra) {
         Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        if (usuario == null) {
+            ra.addFlashAttribute("mensagem", "Usuário não encontrado!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaUsuarios";
+        }
         model.addAttribute("usuario", usuario);
         model.addAttribute("papeis", Papel.values());
         return "editarUsuario.html";
     }
 
     @PostMapping("/atualizarUsuario")
-    public String atualizarUsuario(@RequestParam long id, @RequestParam String login, @RequestParam String senhaHash,
-            @RequestParam Papel papel, @RequestParam(required = false) MultipartFile fotoPerfil, RedirectAttributes ra) {
+    public String atualizarUsuario(@RequestParam Long id,@RequestParam String username,@RequestParam(required = false, defaultValue = "") String password,@RequestParam Papel papel,@RequestParam(required = false) MultipartFile fotoPerfil,RedirectAttributes ra) {
 
         Usuario usuario = usuarioRepository.findById(id).orElse(null);
 
@@ -92,19 +100,17 @@ public class UsuarioController {
             ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/listaUsuarios";
         }
-
-        Usuario usuarioComMesmoLogin = usuarioRepository.findByLogin(login).orElse(null);
-
-        if (usuarioComMesmoLogin != null && usuarioComMesmoLogin.getId() != id) {
-            ra.addFlashAttribute("mensagem", "Esse login já está cadastrado!");
+        Usuario usuarioComMesmoNome = usuarioRepository.findByUsername(username).orElse(null);
+        if (usuarioComMesmoNome != null && !usuarioComMesmoNome.getId().equals(id)) {
+            ra.addFlashAttribute("mensagem","Esse nome de usuário já está cadastrado!");
             ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/editarUsuario/" + id;
         }
-
-        usuario.setLogin(login);
-        usuario.setSenhaHash(senhaHash);
+        usuario.setUsername(username);
         usuario.setPapel(papel);
-
+        if (!password.isBlank()) {
+            usuario.setPassword(passwordEncoder.encode(password));
+        }
         try {
             if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
                 String caminhoFoto = usuarioService.salvarFoto(fotoPerfil);
@@ -115,50 +121,28 @@ public class UsuarioController {
             ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/editarUsuario/" + id;
         }
-
         usuarioRepository.save(usuario);
-
-        ra.addFlashAttribute("mensagem", "Usuário atualizado com sucesso!");
+        ra.addFlashAttribute("mensagem","Usuário atualizado com sucesso!");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
-
         return "redirect:/listaUsuarios";
     }
 
     @GetMapping("/excluirUsuario/{id}")
-    public String excluirUsuario(@PathVariable long id, RedirectAttributes ra) {
+    public String excluirUsuario(@PathVariable Long id, RedirectAttributes ra) {
         Usuario usuario = usuarioRepository.findById(id).orElse(null);
-
         if (usuario == null) {
             ra.addFlashAttribute("mensagem", "Usuário não encontrado!");
             ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/listaUsuarios";
         }
-
-        usuarioRepository.deleteById(id);
-
-        ra.addFlashAttribute("mensagem", "Usuário excluído com sucesso!");
+        usuarioRepository.delete(usuario);
+        ra.addFlashAttribute("mensagem","Usuário excluído com sucesso!");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
-
         return "redirect:/listaUsuarios";
     }
 
     @GetMapping("/login")
     public String login() {
         return "login";
-    }
-
-    @PostMapping("/entrar")
-    public String entrar(@RequestParam String login, @RequestParam String senhaHash, RedirectAttributes ra) {
-
-        Usuario usuario = usuarioRepository.findByLogin(login).orElse(null);
-
-        if (usuario == null || !usuario.getSenhaHash().equals(senhaHash)) {
-            ra.addFlashAttribute("mensagem", "Login ou senha inválidos!");
-            ra.addFlashAttribute("mensagemTipo", "erro");
-            ra.addFlashAttribute("login", login);
-            return "redirect:/login";
-        }
-
-        return "redirect:/index";
     }
 }

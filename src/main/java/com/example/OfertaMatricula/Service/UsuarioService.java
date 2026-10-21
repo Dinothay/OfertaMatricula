@@ -1,30 +1,36 @@
 package com.example.OfertaMatricula.Service;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Objects;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UsuarioService {
-    public static final String endereco_armazenamento_arquivo ="C:\\Users\\3036448\\Documents\\ProjetoBiblioEntrega\\OfertaMatricula\\src\\main\\resources\\static\\images";
+    private static final Path ENDERECO_ARMAZENAMENTO_ARQUIVO = Paths.get("src/main/resources/static/images").toAbsolutePath().normalize();
+
     public String salvarFoto(MultipartFile arquivo) throws IOException {
-        if (arquivo == null) {
-            throw new NullPointerException("Arquivo da imagem está vazio");
+        if (arquivo == null || arquivo.isEmpty()) {
+            throw new IllegalArgumentException("Arquivo da imagem está vazio");
         }
-        var enderecoArquivo = new File(endereco_armazenamento_arquivo+ File.separator+ arquivo.getOriginalFilename());
-        System.out.println("Endereço do arquivo: "+ enderecoArquivo.getAbsolutePath());
-        System.out.println("Nome do arquivo: "+ enderecoArquivo.getParent());System.out.println("Endereço de armazenamento: "+ endereco_armazenamento_arquivo);
-        if (!Objects.equals(enderecoArquivo.getParent(),endereco_armazenamento_arquivo)) {
+
+        Files.createDirectories(ENDERECO_ARMAZENAMENTO_ARQUIVO);
+
+        String nomeOriginal = StringUtils.cleanPath(arquivo.getOriginalFilename());
+        String nomeSeguro = UUID.randomUUID() + "_" + nomeOriginal;
+        Path caminhoArquivo = ENDERECO_ARMAZENAMENTO_ARQUIVO.resolve(nomeSeguro).normalize();
+
+        if (!caminhoArquivo.startsWith(ENDERECO_ARMAZENAMENTO_ARQUIVO)) {
             throw new SecurityException("Nome do arquivo não é viável!");
         }
-        Files.copy(arquivo.getInputStream(),enderecoArquivo.toPath(),StandardCopyOption.REPLACE_EXISTING);
-        String endereco = new String();
-        endereco = "images/" + arquivo.getOriginalFilename();
-        return endereco;
+
+        Files.copy(arquivo.getInputStream(), caminhoArquivo, StandardCopyOption.REPLACE_EXISTING);
+        return "images/" + nomeSeguro;
     }
 }

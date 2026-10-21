@@ -9,7 +9,6 @@
 </head>
 
 <body>
-
     <header class="topbar">
         <nav class="nav">
             <a class="brand" th:href="@{/}">
@@ -23,50 +22,69 @@
         </nav>
     </header>
 
-    <main class="container">
-
-        <div class="page-heading centered">
-            <div>
-                <p class="eyebrow">Sistema</p>
-                <h2>Novo usuário</h2>
-                <p class="subtitle">Adicione um usuário ao sistema.</p>
+    <main class="page">
+        <div class="page-header">
+            <div class="page-header-inner">
+                <div>
+                    <p class="eyebrow">Sistema</p>
+                    <h1 class="page-title">Novo usuário</h1>
+                    <p class="page-subtitle">Adicione um usuário ao sistema e defina seu perfil de acesso.</p>
+                </div>
+                <div class="page-actions">
+                    <a class="button secondary" th:href="@{/listaUsuarios}">Voltar</a>
+                </div>
             </div>
         </div>
 
-        <section class="card form-card">
-
-            <div th:if="${mensagem}"
-                 th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'"
-                 th:text="${mensagem}">
+        <section class="form-shell">
+            <div class="form-header">
+                <p class="eyebrow">Cadastro</p>
+                <h2>Adicionar usuário</h2>
             </div>
 
-            <form th:action="@{/cadastrarUsuarios}" method="POST" enctype="multipart/form-data">
-
-                <label for="login">Informe o login:</label>
-                <input type="text" name="login" id="login" th:value="${login}" placeholder="Digite o login" required>
-
-                <label for="senhaHash">Informe a senha:</label>
-                <input type="password" name="senhaHash" id="senhaHash" placeholder="Digite a senha" required>
-
-                <label for="papel">Selecione o tipo de usuário:</label>
-                <select name="papel" id="papel" required>
-                    <option value="" disabled th:selected="${papel == null}">Selecione o tipo</option>
-                    <option th:each="p : ${papeis}" th:value="${p}" th:text="${p}" th:selected="${papel == p}"></option>
-                </select>
-
-                <label for="fotoPerfil">Informe a foto de perfil:</label>
-                <input type="file" name="fotoPerfil" id="fotoPerfil" accept="image/*">
-
-                <div class="botoes">
-                    <button type="submit">Cadastrar</button>
-                    <a class="button secondary" th:href="@{/listaUsuarios}">Voltar</a>
+            <div class="form-body">
+                <div th:if="${mensagem}"
+                    th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'"
+                    th:text="${mensagem}">
                 </div>
 
-            </form>
+                <form th:action="@{/cadastrarUsuarios}" method="POST" enctype="multipart/form-data">
+                    <div class="field">
+                        <label for="username">Nome de usuário</label>
+                        <input type="text" name="username" id="username" th:value="${username}"
+                            placeholder="Digite o nome de usuário" required>
+                    </div>
 
+                    <div class="field">
+                        <label for="password">Senha</label>
+                        <input type="password" name="password" id="password" placeholder="Digite a senha" required>
+                    </div>
+
+                    <div class="field full">
+                        <label for="papel">Tipo de usuário</label>
+                        <select name="papel" id="papel" required>
+                            <option value="" disabled th:selected="${papel == null}">
+                                Selecione o tipo
+                            </option>
+
+                            <option th:each="p : ${papeis}" th:value="${p}" th:text="${p}" th:selected="${papel == p}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="field full">
+                        <label for="fotoPerfil">Foto de perfil</label>
+                        <input type="file" name="fotoPerfil" id="fotoPerfil" accept="image/*">
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit">Cadastrar</button>
+                        <a class="button secondary" th:href="@{/listaUsuarios}">Cancelar</a>
+                    </div>
+                </form>
+            </div>
         </section>
-
     </main>
-
 </body>
+
 </html>
