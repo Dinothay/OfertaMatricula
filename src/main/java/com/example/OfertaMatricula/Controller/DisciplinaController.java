@@ -21,6 +21,8 @@ public class DisciplinaController {
     private com.example.OfertaMatricula.Repository.CursoRepository cursoRepository;
     @Autowired
     private com.example.OfertaMatricula.Repository.OfertaDisciplinaRepository ofertaDisciplinaRepository;
+    @Autowired
+    private com.example.OfertaMatricula.Repository.DisciplinaLivroRepository disciplinaLivroRepository;
 
     @GetMapping("/disciplina")
     public String cadastroDisciplinas(Model model){
@@ -112,6 +114,11 @@ public class DisciplinaController {
     public String excluirDisciplina(@PathVariable long id, RedirectAttributes ra){
         if(ofertaDisciplinaRepository.existsByDisciplinaId(id)){
             ra.addFlashAttribute("mensagem", "Não é possível excluir: disciplina está associada a uma oferta de disciplina.");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaDisciplinas";
+        }
+        if(disciplinaLivroRepository.existsByDisciplinaId(id)){
+            ra.addFlashAttribute("mensagem", "Não é possível excluir: disciplina está associada a um livro.");
             ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/listaDisciplinas";
         }

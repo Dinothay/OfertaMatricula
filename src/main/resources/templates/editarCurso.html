@@ -20,15 +20,21 @@
     </header>
 
     <main class="container">
-        <div class="page-heading centered">
-            <div>
-                <p class="eyebrow">Acadêmico</p>
-                <h2>Editar curso</h2>
+        <div class="page-header-shell">
+            <div class="page-heading centered">
+                <div>
+                    <p class="eyebrow">Acadêmico</p>
+                    <h2>Editar curso</h2>
+                </div>
+                <div class="page-actions">
+                    <a class="button secondary" th:href="@{/listaCursos}">Voltar</a>
+                </div>
             </div>
         </div>
 
         <section class="card form-card">
-            <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
+            <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'"
+                th:text="${mensagem}"></div>
 
             <form th:action="@{/atualizarCurso}" th:method="POST">
                 <input type="hidden" name="id" th:value="${curso.id}">
@@ -50,4 +56,5 @@
         </section>
     </main>
 </body>
+
 </html>
