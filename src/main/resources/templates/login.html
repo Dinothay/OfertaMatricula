@@ -8,8 +8,22 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <div class="page">
-        <div class="form-shell">
+    <header class="topbar login-topbar">
+        <nav class="nav">
+            <div class="brand" aria-label="Oferta">
+                <span class="brand-mark">O</span> Oferta
+            </div>
+
+            <div class="nav-links">
+                <span class="nav-placeholder">Acesso ao sistema</span>
+            </div>
+
+            <div class="nav-actions"></div>
+        </nav>
+    </header>
+
+    <div class="login-page">
+        <div class="form-shell login-shell">
             <div class="form-header">
                 <h2>Login</h2>
             </div>
@@ -18,7 +32,7 @@
                 <form th:action="@{/login}" method="POST">
                     <div class="form-grid">
                         <div class="field full">
-                            <label for="username">Login</label>
+                            <label for="username">Usuário</label>
                             <input type="text" name="username" id="username" th:value="${username}" required>
                         </div>
                         <div class="field full">
