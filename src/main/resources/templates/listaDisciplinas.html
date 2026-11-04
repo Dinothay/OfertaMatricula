@@ -18,6 +18,33 @@
                 <a th:href="@{/listaDisciplinas}">Disciplinas</a>
                 <a th:href="@{/listaOfertaDisciplinas}">Ofertas</a>
             </div>
+
+            <div class="nav-actions">
+                <div class="user-chip" th:if="${usuarioLogado != null}">
+                    <button type="button" class="user-chip-trigger" aria-expanded="false" aria-haspopup="true">
+                        <span class="user-status-dot"></span>
+                        <img th:if="${usuarioLogado.fotoPerfil != null and !usuarioLogado.fotoPerfil.isEmpty()}"
+                             th:src="${usuarioLogado.fotoPerfil.startsWith('/') ? usuarioLogado.fotoPerfil : '/' + usuarioLogado.fotoPerfil}"
+                             alt="Foto de perfil"
+                             class="user-avatar" />
+                        <div class="user-avatar user-avatar-fallback"
+                             th:unless="${usuarioLogado.fotoPerfil != null and !usuarioLogado.fotoPerfil.isEmpty()}">U</div>
+                        <div class="user-info">
+                            <strong th:text="${usuarioLogado.username}">Usuário</strong>
+                            <small>Online</small>
+                        </div>
+                    </button>
+
+                    <div class="user-menu">
+                        <a class="user-menu-item" th:href="@{/meuPerfil}">Meu perfil</a>
+                        <a class="user-menu-item" th:href="@{/editarUsuario/{id}(id=${usuarioLogado.id})}">Editar perfil</a>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="user-menu-item logout-button">Sair da conta</button>
+                        </form>
+                    </div>
+                </div>
+                <a th:unless="${usuarioLogado != null}" class="login-link" th:href="@{/login}">Entrar</a>
+            </div>
         </nav>
     </header>
 
@@ -58,7 +85,7 @@
                         <td th:text="${disciplina.semestre}"></td>
                         <td th:text="${disciplina.nAulas}"></td>
                         <td th:text="${disciplina.cHoraria}"></td>
-                        <td th:text="${disciplina.curso != null ? disciplina.curso.nome : '—'}"></td>
+                        <td th:text="${disciplina.curso != null ? disciplina.curso.nome : 'Não informado'}"></td>
                         <td>
                             <div class="actions">
                                 <a class="button secondary" th:href="@{/editarDisciplina/{id}(id=${disciplina.id})}">Editar</a>
@@ -71,7 +98,9 @@
         </section>
     </main>
 
-    <a class="floating-back-btn" th:href="@{/}">⬅ Voltar</a>
+    <a class="floating-back-btn" th:href="@{/}">← Voltar</a>
+    <script th:src="@{/js/profile-menu.js}"></script>
 </body>
 
 </html>
+

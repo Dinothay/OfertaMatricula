@@ -27,6 +27,11 @@ public class WebSecurityConfig {
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .permitAll()
+                )
                 .build();
     }
 

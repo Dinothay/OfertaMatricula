@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listas e Cadastros</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
+
 <body>
     <header class="topbar">
         <nav class="nav">
@@ -20,15 +22,47 @@
                 <a th:href="@{/listaProva}">Provas</a>
                 <a th:href="@{/biblioteca}">Biblioteca</a>
             </div>
+
+            <div class="nav-actions">
+                <div class="user-chip" th:if="${usuarioLogado != null}">
+                    <button type="button" class="user-chip-trigger" aria-expanded="false" aria-haspopup="true">
+                        <span class="user-status-dot"></span>
+                        <img th:if="${usuarioLogado.fotoPerfil != null and !usuarioLogado.fotoPerfil.isEmpty()}"
+                            th:src="${usuarioLogado.fotoPerfil.startsWith('/') ? usuarioLogado.fotoPerfil : '/' + usuarioLogado.fotoPerfil}"
+                            alt="Foto de perfil" class="user-avatar" />
+                        <div class="user-avatar user-avatar-fallback"
+                            th:unless="${usuarioLogado.fotoPerfil != null and !usuarioLogado.fotoPerfil.isEmpty()}">U
+                        </div>
+                        <div class="user-info">
+                            <strong th:text="${usuarioLogado.username}">Usuário</strong>
+                            <small>Online</small>
+                        </div>
+                    </button>
+
+                    <div class="user-menu">
+                        <a class="user-menu-item" th:href="@{/meuPerfil}">Meu perfil</a>
+                        <a class="user-menu-item" th:href="@{/editarUsuario/{id}(id=${usuarioLogado.id})}">Editar
+                            perfil</a>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="user-menu-item logout-button">Sair da conta</button>
+                        </form>
+                    </div>
+                </div>
+
+                <a th:unless="${usuarioLogado != null}" class="login-link" th:href="@{/login}">Entrar</a>
+            </div>
         </nav>
     </header>
+
+    <script th:src="@{/js/profile-menu.js}"></script>
 
     <main class="container">
         <section class="hero">
             <div class="hero-copy">
                 <p class="eyebrow">Painel</p>
                 <h1>Listas e cadastros</h1>
-                <p class="subtitle">Acesse os módulos do sistema para acompanhar matrículas, cursos, professores e biblioteca em um único lugar.</p>
+                <p class="subtitle">Acesse os módulos do sistema para acompanhar matrículas, cursos, professores e
+                    biblioteca em um único lugar.</p>
             </div>
 
             <div class="hero-art">
@@ -55,19 +89,19 @@
             </a>
 
             <a th:href="@{/listaDisciplinas}" class="card quick-card card-disciplinas">
-                <span class="icon">📝</span>
+                <span class="icon">📘</span>
                 <h2>Disciplinas</h2>
                 <p>Acompanhar as disciplinas disponíveis.</p>
             </a>
 
             <a th:href="@{/listaProfessores}" class="card quick-card card-professores">
-                <span class="icon">👨‍🏫</span>
+                <span class="icon">👩‍🏫</span>
                 <h2>Professores</h2>
                 <p>Controlar o cadastro dos professores.</p>
             </a>
 
             <a th:href="@{/listaOfertaDisciplinas}" class="card quick-card card-oferta">
-                <span class="icon">🗂️</span>
+                <span class="icon">🗓️</span>
                 <h2>Oferta de Disciplinas</h2>
                 <p>Gerenciar as ofertas por semestre ou turno.</p>
             </a>
@@ -79,7 +113,7 @@
             </a>
 
             <a th:href="@{/listaProva}" class="card quick-card card-provas">
-                <span class="icon">📝</span>
+                <span class="icon">📘</span>
                 <h2>Provas</h2>
                 <p>Administrar e acompanhar provas do sistema.</p>
             </a>
@@ -92,4 +126,6 @@
         </section>
     </main>
 </body>
+
 </html>
+

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -29,10 +29,16 @@
                     <div class="actions">
                         <button type="submit" class="btn btn-primary">Entrar</button>
                     </div>
+                    <div class="auth-switch">
+                        <span>Primeira vez por aqui?</span>
+                        <a class="auth-link" th:href="@{/usuario}">Criar conta</a>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </body>
 </html>
+
+
 

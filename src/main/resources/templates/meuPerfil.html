@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu perfil | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/}">Início</a>
+                <a th:href="@{/listaUsuarios}">Usuários</a>
+            </div>
+
+            <div class="nav-actions">
+                <div class="user-chip" th:if="${usuarioLogado != null}">
+                    <button type="button" class="user-chip-trigger" aria-expanded="false" aria-haspopup="true">
+                        <span class="user-status-dot"></span>
+                        <img th:if="${usuarioLogado.fotoPerfil != null and !usuarioLogado.fotoPerfil.isEmpty()}"
+                            th:src="${usuarioLogado.fotoPerfil.startsWith('/') ? usuarioLogado.fotoPerfil : '/' + usuarioLogado.fotoPerfil}"
+                            alt="Foto de perfil" class="user-avatar" />
+                        <div class="user-avatar user-avatar-fallback"
+                            th:unless="${usuarioLogado.fotoPerfil != null and !usuarioLogado.fotoPerfil.isEmpty()}">U</div>
+                        <div class="user-info">
+                            <strong th:text="${usuarioLogado.username}">Usuário</strong>
+                            <small>Online</small>
+                        </div>
+                    </button>
+
+                    <div class="user-menu">
+                        <a class="user-menu-item" th:href="@{/meuPerfil}">Meu perfil</a>
+                        <a class="user-menu-item" th:href="@{/editarUsuario/{id}(id=${usuarioLogado.id})}">Editar perfil</a>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="user-menu-item logout-button">Sair da conta</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <script th:src="@{/js/profile-menu.js}"></script>
+
+    <main class="container">
+        <div class="page-header">
+            <div class="page-header-inner">
+                <div>
+                    <p class="eyebrow">Perfil</p>
+                    <h1 class="page-title">Meu perfil</h1>
+                    <p class="page-subtitle">Visualize as informações da sua conta e mantenha seu acesso atualizado.</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="profile-card" th:if="${usuarioLogado != null}">
+            <div class="profile-header">
+                <p class="eyebrow">Conta</p>
+                <h2>Dados do usuário</h2>
+            </div>
+
+            <div class="profile-body">
+                <div th:if="${usuarioLogado.fotoPerfil != null and !usuarioLogado.fotoPerfil.isEmpty()}">
+                    <img class="profile-avatar"
+                         th:src="${usuarioLogado.fotoPerfil.startsWith('/') ? usuarioLogado.fotoPerfil : '/' + usuarioLogado.fotoPerfil}"
+                         alt="Foto de perfil">
+                </div>
+                <div th:unless="${usuarioLogado.fotoPerfil != null and !usuarioLogado.fotoPerfil.isEmpty()}"
+                     class="profile-avatar-fallback">U</div>
+
+                <div class="profile-info">
+                    <div class="profile-info-item">
+                        <label>Nome de usuário</label>
+                        <strong th:text="${usuarioLogado.username}">Usuário</strong>
+                    </div>
+
+                    <div class="profile-info-item">
+                        <label>Papel</label>
+                        <strong th:text="${usuarioLogado.papel}">ADMIN</strong>
+                    </div>
+
+                    <div class="profile-info-item">
+                        <label>Status</label>
+                        <strong>Online</strong>
+                    </div>
+
+                    <div class="profile-actions">
+                        <a class="button" th:href="@{/editarUsuario/{id}(id=${usuarioLogado.id})}">Editar perfil</a>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="button secondary">Sair da conta</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
+
+
