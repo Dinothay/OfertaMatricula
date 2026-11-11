@@ -67,7 +67,11 @@
         }
 
         .user-avatar {
-            display: none;
+            display: inline-block;
+        }
+
+        .user-avatar-fallback {
+            display: grid;
         }
 
         .user-photo-cell {
@@ -146,7 +150,19 @@
         }
 
         .table-wrap.user-table-wrap {
+            width: 100%;
+            max-width: 1180px;
             margin-top: 24px;
+        }
+
+        .page-header {
+            width: 100%;
+            max-width: 1180px;
+        }
+
+        .quick-grid {
+            width: 100%;
+            max-width: 1180px;
         }
 
         @media (max-width: 560px) {

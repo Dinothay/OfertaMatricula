@@ -65,17 +65,38 @@
                     biblioteca em um único lugar.</p>
             </div>
 
-            <div class="hero-art">
-                <div class="art-card">
-                    <div class="art-line"></div>
-                    <div class="art-line short"></div>
-                    <div class="art-line"></div>
-                    <div class="art-pill"></div>
+            <a th:href="@{/biblioteca}" class="library-feature-card" aria-label="Ir para biblioteca">
+                <div class="library-feature-header">
+                    <span class="library-feature-badge">Biblioteca</span>
+                    <span class="library-feature-pill">Abrir</span>
                 </div>
-            </div>
+                <div class="library-feature-body">
+                    <div class="library-icon">📚</div>
+                    <div>
+                        <h2>Acervo e empréstimos</h2>
+                        <p>Livros, exemplares, reservas e gestão de empréstimos.</p>
+                    </div>
+                </div>
+                <div class="library-feature-stats">
+                    <span>📖 <span th:text="${totalLivros}">0</span> livros</span>
+                    <span>🔄 <span th:text="${totalDisponiveisEmprestimo}">0</span> disponíveis</span>
+                </div>
+            </a>
         </section>
 
         <section class="quick-grid">
+            <a th:href="@{/listaUsuarios}" class="card quick-card card-usuarios">
+                <span class="icon">👤</span>
+                <h2>Usuários</h2>
+                <p>Gerenciar contas, acessos e perfis do sistema.</p>
+            </a>
+
+            <a th:href="@{/listaProfessores}" class="card quick-card card-professores">
+                <span class="icon">👩‍🏫</span>
+                <h2>Professores</h2>
+                <p>Controlar o cadastro dos professores.</p>
+            </a>
+
             <a th:href="@{/listaAlunos}" class="card quick-card card-alunos">
                 <span class="icon">🎓</span>
                 <h2>Alunos</h2>
@@ -94,34 +115,16 @@
                 <p>Acompanhar as disciplinas disponíveis.</p>
             </a>
 
-            <a th:href="@{/listaProfessores}" class="card quick-card card-professores">
-                <span class="icon">👩‍🏫</span>
-                <h2>Professores</h2>
-                <p>Controlar o cadastro dos professores.</p>
-            </a>
-
             <a th:href="@{/listaOfertaDisciplinas}" class="card quick-card card-oferta">
                 <span class="icon">🗓️</span>
                 <h2>Oferta de Disciplinas</h2>
                 <p>Gerenciar as ofertas por semestre ou turno.</p>
             </a>
 
-            <a th:href="@{/listaMatricula}" class="card quick-card card-matriculas">
-                <span class="icon">✅</span>
-                <h2>Matrículas</h2>
-                <p>Consultar registros de matrículas realizadas.</p>
-            </a>
-
             <a th:href="@{/listaProva}" class="card quick-card card-provas">
                 <span class="icon">📘</span>
                 <h2>Provas</h2>
                 <p>Administrar e acompanhar provas do sistema.</p>
-            </a>
-
-            <a th:href="@{/biblioteca}" class="card quick-card card-biblioteca">
-                <span class="icon">📖</span>
-                <h2>Biblioteca</h2>
-                <p>Gerenciar reservas, livros, exemplares e empréstimos.</p>
             </a>
         </section>
     </main>

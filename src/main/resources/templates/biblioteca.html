@@ -56,23 +56,24 @@
                 <p class="subtitle">Acompanhe livros, exemplares, empréstimos, reservas e provas em um painel organizado.</p>
             </div>
 
-            <div class="hero-art">
-                <div class="art-card">
-                    <div class="art-line"></div>
-                    <div class="art-line short"></div>
-                    <div class="art-line"></div>
-                    <div class="art-pill"></div>
+            <a th:href="@{/}" class="library-feature-card home-feature-card" aria-label="Ir para tela inicial">
+                <div class="library-feature-header">
+                    <span class="library-feature-badge">Início</span>
+                    <span class="library-feature-pill">Abrir</span>
                 </div>
-            </div>
+                <div class="library-feature-body">
+                    <div class="library-feature-content">
+                        <div class="library-icon">🏠</div>
+                        <div class="library-feature-copy">
+                            <h2>Painel principal</h2>
+                            <p>Voltar para o dashboard geral do sistema.</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
         </section>
 
         <section class="quick-grid">
-            <a th:href="@{/}" class="card quick-card">
-                <span class="icon">🏠</span>
-                <h2>Início</h2>
-                <p>Voltar para o painel principal do sistema.</p>
-            </a>
-
             <a th:href="@{/listaLivro}" class="card quick-card">
                 <span class="icon">📚</span>
                 <h2>Livros</h2>
