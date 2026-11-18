@@ -69,7 +69,8 @@ public class LivroController {
     @PostMapping("/cadastraLivro")
     public String saveLivro(@RequestParam String titulo, @RequestParam String autor, @RequestParam String isbn,
             @RequestParam String edicao, @RequestParam StatusLivro status,
-            @RequestParam("capalmagem") MultipartFile capalmagem, Principal principal, RedirectAttributes ra) throws IOException {
+            @RequestParam("capalmagem") MultipartFile capalmagem, Principal principal, RedirectAttributes ra)
+            throws IOException {
         Usuario usuario = principal != null ? usuarioRepository.findByUsername(principal.getName()).orElse(null) : null;
         if (usuario == null || (usuario.getPapel() != Papel.ADMIN && usuario.getPapel() != Papel.BIBLIOTECARIO)) {
             ra.addFlashAttribute("mensagem", "Apenas administradores e bibliotecários podem cadastrar livros.");
@@ -98,11 +99,18 @@ public class LivroController {
 
     @PostMapping("/reservarLivro/{id}")
     public String reservarLivro(@PathVariable Long id, Principal principal, RedirectAttributes ra) {
-        Usuario usuario = usuarioRepository.findByUsername(principal.getName()).orElse(null);
-        if (usuario == null || (usuario.getPapel() != Papel.ALUNO && usuario.getPapel() != Papel.PROFESSOR) || !(usuario.getPessoa() instanceof Aluno || usuario.getPessoa() instanceof com.example.OfertaMatricula.Model.Professor)) {
+        Usuario usuario = principal != null
+                ? usuarioRepository.findByUsername(principal.getName()).orElse(null)
+                : null;
+
+        if (usuario == null
+                || usuario.getPessoa() == null
+                || (usuario.getPapel() != Papel.ALUNO
+                        && usuario.getPapel() != Papel.PROFESSOR)) {
             ra.addFlashAttribute("mensagem", "Acesso inválido para reserva.");
             ra.addFlashAttribute("mensagemTipo", "erro");
-            return usuario != null && usuario.getPapel() == Papel.PROFESSOR ? "redirect:/indexProfessor" : "redirect:/indexAluno";
+            return usuario != null && usuario.getPapel() == Papel.PROFESSOR ? "redirect:/indexProfessor"
+                    : "redirect:/indexAluno";
         }
 
         Livro livro = livroRepository.findById(id).orElse(null);
@@ -145,11 +153,18 @@ public class LivroController {
 
     @PostMapping("/pegarLivroEmprestimo/{id}")
     public String pegarLivroEmprestimo(@PathVariable Long id, Principal principal, RedirectAttributes ra) {
-        Usuario usuario = usuarioRepository.findByUsername(principal.getName()).orElse(null);
-        if (usuario == null || (usuario.getPapel() != Papel.ALUNO && usuario.getPapel() != Papel.PROFESSOR) || !(usuario.getPessoa() instanceof Aluno || usuario.getPessoa() instanceof com.example.OfertaMatricula.Model.Professor)) {
+        Usuario usuario = principal != null
+                ? usuarioRepository.findByUsername(principal.getName()).orElse(null)
+                : null;
+
+        if (usuario == null
+                || usuario.getPessoa() == null
+                || (usuario.getPapel() != Papel.ALUNO
+                        && usuario.getPapel() != Papel.PROFESSOR)) {
             ra.addFlashAttribute("mensagem", "Acesso inválido para empréstimo.");
             ra.addFlashAttribute("mensagemTipo", "erro");
-            return usuario != null && usuario.getPapel() == Papel.PROFESSOR ? "redirect:/indexProfessor" : "redirect:/indexAluno";
+            return usuario != null && usuario.getPapel() == Papel.PROFESSOR ? "redirect:/indexProfessor"
+                    : "redirect:/indexAluno";
         }
 
         Livro livro = livroRepository.findById(id).orElse(null);
@@ -175,7 +190,8 @@ public class LivroController {
             return "redirect:/listaLivro";
         }
 
-        if (emprestimoRepository.existsByAlunoIdAndLivroIdAndStatus(pessoa.getId(), livro.getId(), StatusEmprestimo.ATIVO)) {
+        if (emprestimoRepository.existsByAlunoIdAndLivroIdAndStatus(pessoa.getId(), livro.getId(),
+                StatusEmprestimo.ATIVO)) {
             ra.addFlashAttribute("mensagem", "Você já está com este livro em empréstimo.");
             ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/listaLivro";
@@ -183,13 +199,15 @@ public class LivroController {
 
         Reserva primeiraReserva = reservaRepository.findFirstByLivroIdOrderByDataReservaAsc(id).orElse(null);
 
-        if (livro.getStatus() == StatusLivro.DISPONIVEL && primeiraReserva != null && !primeiraReserva.getPessoa().getId().equals(pessoa.getId())) {
+        if (livro.getStatus() == StatusLivro.DISPONIVEL && primeiraReserva != null
+                && !primeiraReserva.getPessoa().getId().equals(pessoa.getId())) {
             ra.addFlashAttribute("mensagem", "Este livro está reservado para outra pessoa na fila de espera.");
             ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/listaLivro";
         }
 
-        if (livro.getStatus() == StatusLivro.DISPONIVEL && primeiraReserva != null && primeiraReserva.getPessoa().getId().equals(pessoa.getId())) {
+        if (livro.getStatus() == StatusLivro.DISPONIVEL && primeiraReserva != null
+                && primeiraReserva.getPessoa().getId().equals(pessoa.getId())) {
             reservaRepository.delete(primeiraReserva);
         }
 
@@ -207,7 +225,8 @@ public class LivroController {
             livro.setStatus(StatusLivro.RESERVADO);
             livroRepository.save(livro);
 
-            ra.addFlashAttribute("mensagem", "Livro indisponível. Você foi colocado na fila de reserva e receberá a prioridade quando estiver disponível.");
+            ra.addFlashAttribute("mensagem",
+                    "Livro indisponível. Você foi colocado na fila de reserva e receberá a prioridade quando estiver disponível.");
             ra.addFlashAttribute("mensagemTipo", "sucesso");
             return "redirect:/listaLivro";
         }
@@ -220,7 +239,8 @@ public class LivroController {
         }
 
         LocalDate hoje = LocalDate.now();
-        emprestimoRepository.save(new Emprestimo(pessoa, livro, hoje, hoje.plusDays(14), null, StatusEmprestimo.ATIVO, 0));
+        emprestimoRepository
+                .save(new Emprestimo(pessoa, livro, hoje, hoje.plusDays(14), null, StatusEmprestimo.ATIVO, 0));
         livro.setStatus(StatusLivro.EMPRESTADO);
         livroRepository.save(livro);
 
@@ -318,7 +338,8 @@ public class LivroController {
         }
 
         boolean associadoAProva = provarRepository.findAll().stream()
-                .anyMatch(prova -> prova.getLivros() != null && prova.getLivros().stream().anyMatch(livro -> livro.getId().equals(id)));
+                .anyMatch(prova -> prova.getLivros() != null
+                        && prova.getLivros().stream().anyMatch(livro -> livro.getId().equals(id)));
         if (associadoAProva) {
             ra.addFlashAttribute("mensagem", "Não é possível excluir: livro está associado a uma prova.");
             ra.addFlashAttribute("mensagemTipo", "erro");

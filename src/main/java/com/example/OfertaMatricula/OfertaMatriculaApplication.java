@@ -39,12 +39,12 @@ public class OfertaMatriculaApplication {
 		return args -> {
 			if (usuarioRepository.count() == 0) {
 				Usuario admin = new Usuario();
-				admin.setUsername("admim");
-				admin.setPassword(passwordEncoder.encode("admim"));
+				admin.setUsername("admin");
+				admin.setPassword(passwordEncoder.encode("admin"));
 				admin.setPapel(Papel.ADMIN);
 				admin.setFotoPerfil(null);
 				usuarioRepository.save(admin);
-				System.out.println("Usuário administrador padrão criado: admim / admim");
+				System.out.println("Usuário administrador padrão criado: admin / admin");
 			}
 		};
 	}
