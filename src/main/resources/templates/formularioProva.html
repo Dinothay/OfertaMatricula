@@ -59,6 +59,15 @@
 
         <section class="card form-card">
             <form th:action="@{/cadastraProva}" method="POST">
+                <label for="disciplinaId">Disciplina:</label>
+                <select name="disciplinaId" id="disciplinaId" required>
+                    <option value="">Selecione a disciplina</option>
+                    <option th:each="disciplina : ${disciplinas}"
+                            th:value="${disciplina.id}"
+                            th:text="${disciplina.nome}">
+                    </option>
+                </select>
+
                 <label for="data">Data:</label>
                 <input type="date" name="data" id="data" required>
 
@@ -67,6 +76,15 @@
 
                 <label for="conteudo">Conteúdo:</label>
                 <input type="text" name="conteudo" id="conteudo" placeholder="Digite o conteúdo da prova" required>
+
+                <label>Livros relacionados:</label>
+                <div class="checkbox-list" th:if="${!#lists.isEmpty(livros)}">
+                    <label class="checkbox-item" th:each="livro : ${livros}">
+                        <input type="checkbox" name="livroIds" th:value="${livro.id}" />
+                        <span th:text="${livro.titulo}"></span>
+                    </label>
+                </div>
+                <p th:if="${#lists.isEmpty(livros)}">Nenhum livro cadastrado no sistema.</p>
 
                 <div class="botoes">
                     <button type="submit">Cadastrar</button>

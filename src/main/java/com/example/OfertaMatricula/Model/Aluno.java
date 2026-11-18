@@ -19,11 +19,8 @@ public class Aluno extends Pessoa {
     public Aluno() {
     }
 
-    public Aluno(String nome, String cpf, String email, String telefone, int prontuario,
-                 String endereco, LocalDate dataInicio) {
-
+    public Aluno(String nome, String cpf, String email, String telefone, int prontuario,String endereco, LocalDate dataInicio) {
         super(nome, cpf, "", "", endereco, email, telefone);
-
         this.prontuario = prontuario;
         this.dataInicio = dataInicio;
     }

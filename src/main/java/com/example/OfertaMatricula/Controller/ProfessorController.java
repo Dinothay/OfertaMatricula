@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.OfertaMatricula.Model.Papel;
 import com.example.OfertaMatricula.Model.Pessoa;
 import com.example.OfertaMatricula.Model.Professor;
+import com.example.OfertaMatricula.Model.Usuario;
 import com.example.OfertaMatricula.Repository.OfertaDisciplinaRepository;
 import com.example.OfertaMatricula.Repository.ProfessorRepository;
+import com.example.OfertaMatricula.Repository.UsuarioRepository;
 
 @Controller
 public class ProfessorController {
@@ -25,13 +28,16 @@ public class ProfessorController {
     @Autowired
     private OfertaDisciplinaRepository ofertaDisciplinaRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     @GetMapping("/professor")
     public String cadastroProfessores() {
         return "formularioProfessor.html";
     }
 
     @PostMapping("/cadastrarProfessores")
-    public String saveProfessores(@RequestParam String nome, @RequestParam String cpf, @RequestParam String email,
+    public String saveProfessores(@RequestParam String username, @RequestParam String nome, @RequestParam String cpf, @RequestParam String email,
             @RequestParam String telefone, @RequestParam String endereco, @RequestParam String area,
             @RequestParam String formacao, @RequestParam Double salario, RedirectAttributes ra) {
         String cpfFormatado = Pessoa.validarCPF(cpf);
@@ -64,7 +70,41 @@ public class ProfessorController {
         }
         cpf = cpfFormatado;
         telefone = telefoneFormatado;
-        professorRepository.save(new Professor(nome, cpf, email, telefone, area, formacao, endereco, salario));
+
+        if (username == null || username.isBlank()) {
+            ra.addFlashAttribute("mensagem", "Informe o nome de usuário do professor!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            ra.addFlashAttribute("nome", nome);
+            ra.addFlashAttribute("cpf", cpf);
+            ra.addFlashAttribute("email", email);
+            ra.addFlashAttribute("telefone", telefone);
+            ra.addFlashAttribute("endereco", endereco);
+            ra.addFlashAttribute("area", area);
+            ra.addFlashAttribute("formacao", formacao);
+            ra.addFlashAttribute("salario", salario);
+            return "redirect:/professor";
+        }
+
+        if (usuarioRepository.findByUsername(username).isPresent()) {
+            ra.addFlashAttribute("mensagem", "Esse nome de usuário já está cadastrado!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            ra.addFlashAttribute("nome", nome);
+            ra.addFlashAttribute("cpf", cpf);
+            ra.addFlashAttribute("email", email);
+            ra.addFlashAttribute("telefone", telefone);
+            ra.addFlashAttribute("endereco", endereco);
+            ra.addFlashAttribute("area", area);
+            ra.addFlashAttribute("formacao", formacao);
+            ra.addFlashAttribute("salario", salario);
+            return "redirect:/professor";
+        }
+
+        Professor professor = new Professor(nome, cpf, email, telefone, area, formacao, endereco, salario);
+        professorRepository.save(professor);
+
+        Usuario usuario = new Usuario(username, null, Papel.PROFESSOR, null, professor);
+        usuarioRepository.save(usuario);
+
         ra.addFlashAttribute("mensagem", "Professor cadastrado com sucesso!");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaProfessores";

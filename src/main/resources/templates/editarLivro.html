@@ -76,6 +76,12 @@
                 <label for="edicao">Edição:</label>
                 <input type="text" name="edicao" id="edicao" th:value="${livro.edicao}" required>
 
+                <label for="status">Status do livro:</label>
+                <select name="status" id="status" required>
+                    <option th:each="status : ${T(com.example.OfertaMatricula.Model.StatusLivro).values()}"
+                            th:value="${status}" th:text="${status}" th:selected="${livro.status == status}"></option>
+                </select>
+
                 <label>Capa atual:</label>
                 <img th:src="@{'/' + ${livro.capalmagem}}" alt="Capa do livro" style="width: 150px; height: 200px; object-fit: cover; border-radius: 10px; display: block; margin-bottom: 8px;">
 

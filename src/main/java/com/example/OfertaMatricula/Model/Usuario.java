@@ -15,6 +15,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -28,14 +30,19 @@ public class Usuario implements UserDetails {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Papel papel;
 
+    @Column(nullable = true)
     private String fotoPerfil;
+
+    @OneToOne
+    @JoinColumn(name = "pessoa_id", unique = true)
+    private Pessoa pessoa;
 
     public Usuario() {
     }
@@ -45,6 +52,11 @@ public class Usuario implements UserDetails {
         this.password = password;
         this.papel = papel;
         this.fotoPerfil = fotoPerfil;
+    }
+
+    public Usuario(String username, String password, Papel papel, String fotoPerfil, Pessoa pessoa) {
+        this(username, password, papel, fotoPerfil);
+        this.pessoa = pessoa;
     }
 
     public Long getId() {
@@ -87,6 +99,17 @@ public class Usuario implements UserDetails {
 
     public void setFotoPerfil(String fotoPerfil) {
         this.fotoPerfil = fotoPerfil;
+    }
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+        if (pessoa != null && pessoa.getUsuario() != this) {
+            pessoa.setUsuario(this);
+        }
     }
 
     @Override

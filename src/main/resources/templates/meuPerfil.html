@@ -89,7 +89,25 @@
                     </div>
 
                     <div class="profile-actions">
-                        <a class="button" th:href="@{/editarUsuario/{id}(id=${usuarioLogado.id})}">Editar perfil</a>
+                        <form th:if="${usuarioLogado.papel.name() == 'ALUNO'}"
+                              th:action="@{/editarAluno/{id}(id=${pessoaLogada.id})}" method="get" style="display: inline;">
+                            <button type="submit" class="button">Editar dados pessoais</button>
+                        </form>
+                        <form th:if="${usuarioLogado.papel.name() == 'PROFESSOR'}"
+                              th:action="@{/editarProfessor/{id}(id=${pessoaLogada.id})}" method="get" style="display: inline;">
+                            <button type="submit" class="button">Editar dados pessoais</button>
+                        </form>
+                        <form th:if="${usuarioLogado.papel.name() == 'ADMIN'}"
+                              th:action="@{/editarAdmin/{id}(id=${pessoaLogada.id})}" method="get" style="display: inline;">
+                            <button type="submit" class="button">Editar dados pessoais</button>
+                        </form>
+                        <form th:if="${usuarioLogado.papel.name() == 'BIBLIOTECARIO'}"
+                              th:action="@{/editarBibliotecario/{id}(id=${pessoaLogada.id})}" method="get" style="display: inline;">
+                            <button type="submit" class="button">Editar dados pessoais</button>
+                        </form>
+                        <form th:action="@{/editarUsuario/{id}(id=${usuarioLogado.id})}" method="get" style="display: inline;">
+                            <button type="submit" class="button secondary">Editar conta</button>
+                        </form>
                         <form th:action="@{/logout}" method="post" style="display: inline;">
                             <button type="submit" class="button secondary">Sair da conta</button>
                         </form>

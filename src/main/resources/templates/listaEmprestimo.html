@@ -13,7 +13,6 @@
             <div class="nav-links">
                 <a th:href="@{/biblioteca}">Biblioteca</a>
                 <a th:href="@{/listaLivro}">Livros</a>
-                <a th:href="@{/listaExemplar}">Exemplares</a>
                 <a th:href="@{/listaReserva}">Reservas</a>
                 <a th:href="@{/}">Início</a>
             </div>
@@ -64,11 +63,11 @@
         </div>
 
         <section th:unless="${#lists.isEmpty(listaEmprestimo)}" class="card table-wrap">
-            <table>
+            <table class="emprestimo-table">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Aluno</th>
+                        <th>Aluno/Professor</th>
                         <th>Livro</th>
                         <th>Data retirada</th>
                         <th>Devolução prevista</th>
@@ -81,7 +80,7 @@
                 <tbody>
                     <tr th:each="emprestimo : ${listaEmprestimo}">
                         <td th:text="${emprestimo.id}"></td>
-                        <td th:text="${emprestimo.aluno != null ? emprestimo.aluno.nome : 'Não informado'}"></td>
+                        <td th:text="${emprestimo.pessoa != null ? emprestimo.pessoa.nome : 'Não informado'}"></td>
                         <td th:text="${emprestimo.livro != null ? emprestimo.livro.titulo : 'Não informado'}"></td>
                         <td th:text="${#temporals.format(emprestimo.dataRetirada, 'dd/MM/yyyy')}"></td>
                         <td th:text="${#temporals.format(emprestimo.dataPrevista, 'dd/MM/yyyy')}"></td>
@@ -89,9 +88,14 @@
                         <td th:text="${emprestimo.status}"></td>
                         <td th:text="${emprestimo.renovacoes}"></td>
                         <td>
-                            <div class="actions">
+                            <div class="emprestimo-actions">
                                 <a class="button secondary" th:href="@{/editarEmprestimo/{id}(id=${emprestimo.id})}">Editar</a>
-                                <a class="button danger" th:href="@{/excluirEmprestimo/{id}(id=${emprestimo.id})}">Excluir</a>
+                                <a th:if="${emprestimo.status.name() != 'DEVOLVIDO'}"
+                                   class="button danger"
+                                   th:href="@{/excluirEmprestimo/{id}(id=${emprestimo.id})}">Devolvido</a>
+                                <a th:if="${emprestimo.status.name() == 'DEVOLVIDO'}"
+                                   class="button danger"
+                                   th:href="@{/removerEmprestimo/{id}(id=${emprestimo.id})}">Excluir</a>
                             </div>
                         </td>
                     </tr>

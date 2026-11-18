@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de bibliotecário | Oferta</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/listaBibliotecarios}">Ver bibliotecários</a>
+                <a th:href="@{/}">Início</a>
+            </div>
+
+            <div class="nav-actions">
+                <div class="user-chip" th:if="${usuarioLogado != null}">
+                    <button type="button" class="user-chip-trigger" aria-expanded="false" aria-haspopup="true">
+                        <span class="user-status-dot"></span>
+                        <img th:if="${usuarioLogado.fotoPerfil != null and !usuarioLogado.fotoPerfil.isEmpty()}"
+                             th:src="${usuarioLogado.fotoPerfil.startsWith('/') ? usuarioLogado.fotoPerfil : '/' + usuarioLogado.fotoPerfil}"
+                             alt="Foto de perfil"
+                             class="user-avatar" />
+                        <div class="user-avatar user-avatar-fallback"
+                             th:unless="${usuarioLogado.fotoPerfil != null and !usuarioLogado.fotoPerfil.isEmpty()}">U</div>
+                        <div class="user-info">
+                            <strong th:text="${usuarioLogado.username}">Usuário</strong>
+                            <small>Online</small>
+                        </div>
+                    </button>
+
+                    <div class="user-menu">
+                        <a class="user-menu-item" th:href="@{/meuPerfil}">Meu perfil</a>
+                        <a class="user-menu-item" th:href="@{/editarUsuario/{id}(id=${usuarioLogado.id})}">Editar perfil</a>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="user-menu-item logout-button">Sair da conta</button>
+                        </form>
+                    </div>
+                </div>
+                <a th:unless="${usuarioLogado != null}" class="login-link" th:href="@{/login}">Entrar</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page">
+        <div class="page-header-shell">
+            <div class="page-header-inner">
+                <div>
+                    <p class="eyebrow">Sistema</p>
+                    <h1 class="page-title">Novo bibliotecário</h1>
+                    <p class="page-subtitle">Cadastre um bibliotecário e associe um usuário ao perfil.</p>
+                </div>
+                <div class="page-actions">
+                    <a class="button secondary" th:href="@{/listaBibliotecarios}">Voltar</a>
+                </div>
+            </div>
+        </div>
+
+        <section class="form-shell">
+            <div class="form-header">
+                <p class="eyebrow">Cadastro</p>
+                <h2>Adicionar bibliotecário</h2>
+            </div>
+
+            <div class="form-body">
+                <div th:if="${mensagem}"
+                     th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'"
+                     th:text="${mensagem}">
+                </div>
+
+                <form th:action="@{/cadastrarBibliotecarios}" method="POST">
+                    <div class="field">
+                        <label for="username">Nome de usuário</label>
+                        <input type="text" name="username" id="username" th:value="${username != null ? username : ''}" placeholder="Digite o nome de usuário" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="nome">Nome completo</label>
+                        <input type="text" name="nome" id="nome" th:value="${nome != null ? nome : ''}" placeholder="Digite o nome completo" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="cpf">CPF</label>
+                        <input type="text" name="cpf" id="cpf" th:value="${cpf != null ? cpf : ''}" placeholder="000.000.000-00" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="email">E-mail</label>
+                        <input type="email" name="email" id="email" th:value="${email != null ? email : ''}" placeholder="nome@exemplo.com" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="telefone">Telefone</label>
+                        <input type="tel" name="telefone" id="telefone" th:value="${telefone != null ? telefone : ''}" placeholder="(11) 99999-9999" required>
+                    </div>
+
+                    <div class="field full">
+                        <label for="endereco">Endereço</label>
+                        <input type="text" name="endereco" id="endereco" th:value="${endereco != null ? endereco : ''}" placeholder="Digite o endereço" required>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit">Cadastrar</button>
+                        <a class="button secondary" th:href="@{/listaBibliotecarios}">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+    <script th:src="@{/js/profile-menu.js}"></script>
+</body>
+
+</html>

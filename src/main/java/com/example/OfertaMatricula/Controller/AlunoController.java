@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.OfertaMatricula.Model.Aluno;
+import com.example.OfertaMatricula.Model.Papel;
 import com.example.OfertaMatricula.Model.Pessoa;
+import com.example.OfertaMatricula.Model.Usuario;
 import com.example.OfertaMatricula.Repository.AlunoRepository;
 import com.example.OfertaMatricula.Repository.EmprestimoRepository;
 import com.example.OfertaMatricula.Repository.MatriculaRepository;
+import com.example.OfertaMatricula.Repository.UsuarioRepository;
 
 @Controller
 public class AlunoController {
@@ -30,14 +33,17 @@ public class AlunoController {
     @Autowired
     private EmprestimoRepository emprestimoRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     @GetMapping("/aluno")
     public String cadastroAlunos() {
         return "formularioAluno.html";
     }
 
     @PostMapping("/cadastrarAlunos")
-    public String saveAlunos(@RequestParam String nome, @RequestParam String cpf, @RequestParam String email,
-            @RequestParam String telefone, @RequestParam int prontuario, @RequestParam String endereco,
+    public String saveAlunos(@RequestParam String username, @RequestParam String nome, @RequestParam String cpf, @RequestParam String email,
+            @RequestParam String telefone, @RequestParam(required = false) Integer prontuario, @RequestParam String endereco,
             @RequestParam(required = false) LocalDate dataInicio, RedirectAttributes ra) {
         LocalDate dataCadastro = (dataInicio != null) ? dataInicio : LocalDate.now();
         String cpfFormatado = Pessoa.validarCPF(cpf);
@@ -68,7 +74,41 @@ public class AlunoController {
         }
         cpf = cpfFormatado;
         telefone = telefoneFormatado;
-        alunoRepository.save(new Aluno(nome, cpf, email, telefone, prontuario, endereco, dataCadastro));
+
+        if (username == null || username.isBlank()) {
+            ra.addFlashAttribute("mensagem", "Informe o nome de usuário do aluno!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            ra.addFlashAttribute("nome", nome);
+            ra.addFlashAttribute("cpf", cpf);
+            ra.addFlashAttribute("email", email);
+            ra.addFlashAttribute("telefone", telefone);
+            ra.addFlashAttribute("prontuario", prontuario);
+            ra.addFlashAttribute("endereco", endereco);
+            ra.addFlashAttribute("dataInicio", dataCadastro);
+            return "redirect:/aluno";
+        }
+
+        if (usuarioRepository.findByUsername(username).isPresent()) {
+            ra.addFlashAttribute("mensagem", "Esse nome de usuário já está cadastrado!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            ra.addFlashAttribute("nome", nome);
+            ra.addFlashAttribute("cpf", cpf);
+            ra.addFlashAttribute("email", email);
+            ra.addFlashAttribute("telefone", telefone);
+            ra.addFlashAttribute("prontuario", prontuario);
+            ra.addFlashAttribute("endereco", endereco);
+            ra.addFlashAttribute("dataInicio", dataCadastro);
+            return "redirect:/aluno";
+        }
+
+        int prontuarioGerado = alunoRepository.findAll().stream().mapToInt(Aluno::getProntuario).max().orElse(-1) + 1;
+
+        Aluno aluno = new Aluno(nome, cpf, email, telefone, prontuarioGerado, endereco, dataCadastro);
+        alunoRepository.save(aluno);
+
+        Usuario usuario = new Usuario(username, null, Papel.ALUNO, null, aluno);
+        usuarioRepository.save(usuario);
+
         ra.addFlashAttribute("mensagem", "Aluno cadastrado com sucesso!");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaAlunos";

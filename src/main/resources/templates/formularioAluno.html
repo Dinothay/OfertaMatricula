@@ -62,6 +62,9 @@
         <section class="card form-card">
             <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
             <form th:method="POST" th:action="@{/cadastrarAlunos}">
+                <label for="username">Nome de usuário:</label>
+                <input type="text" th:name="username" id="username" th:value="${username}" required>
+
                 <label for="nome">Informe o nome:</label>
                 <input type="text" th:name="nome" id="nome" th:value="${nome}" required>
 

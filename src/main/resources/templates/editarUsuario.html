@@ -89,7 +89,7 @@
                             placeholder="Deixe vazio para manter a senha atual">
                     </div>
 
-                    <div class="field full">
+                    <div class="field full" th:if="${podeEditarPapel}">
                         <label for="papel">Tipo de usuário</label>
                         <select name="papel" id="papel" required>
                             <option th:each="p : ${papeis}" th:value="${p}" th:text="${p}" th:selected="${p == usuario.papel}">

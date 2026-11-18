@@ -74,7 +74,7 @@
                     <div class="library-icon">📚</div>
                     <div>
                         <h2>Acervo e empréstimos</h2>
-                        <p>Livros, exemplares, reservas e gestão de empréstimos.</p>
+                        <p>Livros, reservas e gestão de empréstimos.</p>
                     </div>
                 </div>
                 <div class="library-feature-stats">
@@ -89,6 +89,18 @@
                 <span class="icon">👤</span>
                 <h2>Usuários</h2>
                 <p>Gerenciar contas, acessos e perfis do sistema.</p>
+            </a>
+
+            <a th:href="@{/listaAdmins}" class="card quick-card card-admins">
+                <span class="icon">🛡️</span>
+                <h2>Administradores</h2>
+                <p>Gerenciar administradores do sistema e seus acessos.</p>
+            </a>
+
+            <a th:href="@{/listaBibliotecarios}" class="card quick-card card-bibliotecarios">
+                <span class="icon">📚</span>
+                <h2>Bibliotecários</h2>
+                <p>Controlar o cadastro e a gestão da biblioteca.</p>
             </a>
 
             <a th:href="@{/listaProfessores}" class="card quick-card card-professores">

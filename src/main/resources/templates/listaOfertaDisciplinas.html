@@ -52,7 +52,7 @@
                 <h2>Ofertas de disciplinas</h2>
                 <p class="subtitle">Ofertas cadastradas no sistema.</p>
             </div>
-            <a class="button" th:href="@{/ofertaDisciplina}">+ Nova oferta</a>
+            <a th:if="${usuarioLogado != null and usuarioLogado.papel != null and usuarioLogado.papel.name() == 'ADMIN'}" class="button" th:href="@{/ofertaDisciplina}">+ Nova oferta</a>
         </div>
 
         <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
@@ -80,10 +80,16 @@
                     <td th:text="${oferta.diaAula}"></td>
                     <td th:text="${oferta.nAulaSemana}"></td>
                     <td>
-                        <div class="actions">
+                        <div th:if="${usuarioLogado != null and usuarioLogado.papel != null and usuarioLogado.papel.name() == 'ADMIN'}" class="actions">
                             <a class="button secondary" th:href="@{/editarOfertaDisciplina/{id}(id=${oferta.id})}">Editar</a>
                             <a class="button danger" th:href="@{/excluirOfertaDisciplina/{id}(id=${oferta.id})}">Excluir</a>
                         </div>
+
+                        <form th:if="${usuarioLogado != null and usuarioLogado.papel != null and usuarioLogado.papel.name() == 'ALUNO' and (ofertasMatriculadasIds == null or !ofertasMatriculadasIds.contains(oferta.id))}"
+                              th:action="@{/matricularEmOferta/{id}(id=${oferta.id})}" method="post">
+                            <button type="submit" class="button">Matricular-se</button>
+                        </form>
+                        <span th:if="${usuarioLogado != null and usuarioLogado.papel != null and usuarioLogado.papel.name() == 'ALUNO' and ofertasMatriculadasIds != null and ofertasMatriculadasIds.contains(oferta.id)}">Já matriculado</span>
                     </td>
                 </tr>
             </table>

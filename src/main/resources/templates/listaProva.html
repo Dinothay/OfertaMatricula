@@ -51,7 +51,7 @@
                 <h2>Provas</h2>
                 <p class="subtitle">Registro de avaliações e pesos.</p>
             </div>
-            <a class="button" th:href="@{/prova}">+ Nova prova</a>
+            <a th:if="${usuarioLogado != null and (usuarioLogado.papel.name() == 'ADMIN' or usuarioLogado.papel.name() == 'PROFESSOR')}" class="button" th:href="@{/prova}">+ Nova prova</a>
         </div>
 
         <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
@@ -66,8 +66,11 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Disciplina</th>
+                        <th>Professor</th>
                         <th>Data</th>
                         <th>Conteúdo</th>
+                        <th>Livros</th>
                         <th>Peso</th>
                         <th>Ações</th>
                     </tr>
@@ -75,13 +78,24 @@
                 <tbody>
                     <tr th:each="prova : ${listaProva}">
                         <td th:text="${prova.id}"></td>
+                        <td th:text="${prova.disciplina != null ? prova.disciplina.nome : '—'}"></td>
+                        <td th:text="${prova.professor != null ? prova.professor.nome : '—'}"></td>
                         <td th:text="${#temporals.format(prova.data, 'dd/MM/yyyy')}"></td>
                         <td th:text="${prova.conteudo}"></td>
+                        <td>
+                            <span th:if="${prova.livros != null and !#lists.isEmpty(prova.livros)}"
+                                  th:text="${#strings.listJoin(prova.livros.![titulo], ', ')}"></span>
+                            <span th:unless="${prova.livros != null and !#lists.isEmpty(prova.livros)}">—</span>
+                        </td>
                         <td th:text="${prova.peso}"></td>
                         <td>
-                            <div class="actions">
-                                <a class="button secondary" th:href="@{/editarProva/{id}(id=${prova.id})}">Editar</a>
-                                <a class="button danger" th:href="@{/excluirProva/{id}(id=${prova.id})}">Excluir</a>
+                            <div th:if="${usuarioLogado != null and (usuarioLogado.papel.name() == 'ADMIN' or (usuarioLogado.papel.name() == 'PROFESSOR' and prova.professor != null and usuarioLogado.pessoa != null and usuarioLogado.pessoa.id == prova.professor.id))}" class="actions">
+                                <form th:action="@{/editarProva/{id}(id=${prova.id})}" method="get" style="display: inline;">
+                                    <button type="submit" class="button secondary">Editar</button>
+                                </form>
+                                <form th:action="@{/excluirProva/{id}(id=${prova.id})}" method="get" style="display: inline;">
+                                    <button type="submit" class="button danger">Excluir</button>
+                                </form>
                             </div>
                         </td>
                     </tr>

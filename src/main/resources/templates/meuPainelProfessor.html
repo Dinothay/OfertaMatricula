@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu painel professor</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="brand" th:href="@{/indexProfessor}"><span class="brand-mark">O</span> Oferta</a>
+            <div class="nav-links">
+                <a th:href="@{/indexProfessor}">Início</a>
+                <a th:href="@{/listaLivro}">Livros</a>
+                <a th:href="@{/listaProva}">Provas</a>
+                <a th:href="@{/meuPainelProfessor}">Meu painel</a>
+            </div>
+
+            <div class="nav-actions">
+                <div class="user-chip" th:if="${usuarioLogado != null}">
+                    <button type="button" class="user-chip-trigger" aria-expanded="false" aria-haspopup="true">
+                        <span class="user-status-dot"></span>
+                        <img th:if="${usuarioLogado.fotoPerfil != null and !usuarioLogado.fotoPerfil.isEmpty()}"
+                            th:src="${usuarioLogado.fotoPerfil.startsWith('/') ? usuarioLogado.fotoPerfil : '/' + usuarioLogado.fotoPerfil}"
+                            alt="Foto de perfil" class="user-avatar" />
+                        <div class="user-avatar user-avatar-fallback"
+                            th:unless="${usuarioLogado.fotoPerfil != null and !usuarioLogado.fotoPerfil.isEmpty()}">U</div>
+                        <div class="user-info">
+                            <strong th:text="${usuarioLogado.username}">Usuário</strong>
+                            <small>Online</small>
+                        </div>
+                    </button>
+
+                    <div class="user-menu">
+                        <a class="user-menu-item" th:href="@{/meuPerfil}">Meu perfil</a>
+                        <a class="user-menu-item" th:href="@{/editarUsuario/{id}(id=${usuarioLogado.id})}">Editar perfil</a>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="user-menu-item logout-button">Sair da conta</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Professor</p>
+                <h2>Meu painel</h2>
+                <p class="subtitle">Acompanhe suas provas, empréstimos e reservas de livros.</p>
+            </div>
+        </div>
+
+        <section class="card table-wrap" style="margin-bottom: 30px;">
+            <h3>Provas que criei</h3>
+            <div th:if="${#lists.isEmpty(minhasProvas)}" class="empty-state">
+                <p>Você ainda não criou nenhuma prova.</p>
+            </div>
+
+            <table th:unless="${#lists.isEmpty(minhasProvas)}">
+                <tr>
+                    <th>Disciplina</th>
+                    <th>Professor</th>
+                    <th>Data</th>
+                    <th>Conteúdo</th>
+                    <th>Peso</th>
+                    <th>Ações</th>
+                </tr>
+
+                <tr th:each="prova : ${minhasProvas}">
+                    <td th:text="${prova.disciplina != null ? prova.disciplina.nome : '—'}"></td>
+                    <td th:text="${prova.professor != null ? prova.professor.nome : '—'}"></td>
+                    <td th:text="${#temporals.format(prova.data, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${prova.conteudo}"></td>
+                    <td th:text="${prova.peso}"></td>
+                    <td>
+                        <form th:action="@{/editarProva/{id}(id=${prova.id})}" method="get" style="display: inline;">
+                            <button type="submit" class="button secondary">Editar prova</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section class="card table-wrap" style="margin-bottom: 30px;">
+            <h3>Livros que peguei emprestado</h3>
+            <div th:if="${#lists.isEmpty(meusEmprestimos)}" class="empty-state">
+                <p>Você ainda não pegou nenhum livro emprestado.</p>
+            </div>
+
+            <table th:unless="${#lists.isEmpty(meusEmprestimos)}">
+                <tr>
+                    <th>Livro</th>
+                    <th>Autor</th>
+                    <th>Data de retirada</th>
+                    <th>Data prevista</th>
+                    <th>Status</th>
+                    <th>Renovações</th>
+                    <th>Ações</th>
+                </tr>
+
+                <tr th:each="emprestimo : ${meusEmprestimos}">
+                    <td th:text="${emprestimo.livro.titulo}"></td>
+                    <td th:text="${emprestimo.livro.autor}"></td>
+                    <td th:text="${emprestimo.dataRetirada}"></td>
+                    <td th:text="${emprestimo.dataPrevista}"></td>
+                    <td th:text="${emprestimo.status}"></td>
+                    <td th:text="${emprestimo.renovacoes}"></td>
+                    <td>
+                        <form th:if="${emprestimosRenovaveisIds != null and emprestimosRenovaveisIds.contains(emprestimo.id)}"
+                              th:action="@{/renovarMeuEmprestimo/{id}(id=${emprestimo.id})}" method="post">
+                            <button type="submit" class="button secondary">Renovar +7 dias</button>
+                        </form>
+                        <span th:if="${emprestimosRenovaveisIds == null or !emprestimosRenovaveisIds.contains(emprestimo.id)}">Indisponível</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section class="card table-wrap">
+            <h3>Reservas de livros</h3>
+            <div th:if="${#lists.isEmpty(minhasReservas)}" class="empty-state">
+                <p>Você ainda não reservou nenhum livro.</p>
+            </div>
+
+            <table th:unless="${#lists.isEmpty(minhasReservas)}">
+                <tr>
+                    <th>Livro</th>
+                    <th>Autor</th>
+                    <th>Data da reserva</th>
+                    <th>Posição</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+
+                <tr th:each="reserva : ${minhasReservas}">
+                    <td th:text="${reserva.livro.titulo}"></td>
+                    <td th:text="${reserva.livro.autor}"></td>
+                    <td th:text="${#temporals.format(reserva.dataReserva, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${reserva.posicaoFila}"></td>
+                    <td th:text="${reserva.status}"></td>
+                    <td>
+                        <form th:action="@{/excluirMinhaReserva/{id}(id=${reserva.id})}" method="get">
+                            <button type="submit">Remover item da lista</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+
+    <script th:src="@{/js/profile-menu.js}"></script>
+</body>
+
+</html>

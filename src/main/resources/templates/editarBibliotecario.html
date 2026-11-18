@@ -4,23 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Exemplar | Oferta</title>
+    <title>Editar bibliotecário | Oferta</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 
 <body>
-
     <header class="topbar">
         <nav class="nav">
-            <a class="brand" th:href="@{/}">
-                <span class="brand-mark">O</span> Oferta
-            </a>
-
+            <a class="brand" th:href="@{/}"><span class="brand-mark">O</span> Oferta</a>
             <div class="nav-links">
-                <a th:href="@{/listaExemplar}">Ver exemplares</a>
-                <a th:href="@{/index}">Início</a>
+                <a th:href="@{/listaBibliotecarios}">Ver bibliotecários</a>
+                <a th:href="@{/}">Início</a>
             </div>
-                    <div class="nav-actions">
+            <div class="nav-actions">
                 <div class="user-chip" th:if="${usuarioLogado != null}">
                     <button type="button" class="user-chip-trigger" aria-expanded="false" aria-haspopup="true">
                         <span class="user-status-dot"></span>
@@ -46,77 +42,54 @@
                 </div>
                 <a th:unless="${usuarioLogado != null}" class="login-link" th:href="@{/login}">Entrar</a>
             </div>
-            </nav>
+        </nav>
     </header>
 
     <main class="container">
-
         <div class="page-header-shell">
             <div class="page-heading centered">
                 <div>
-                    <p class="eyebrow">Biblioteca</p>
-                    <h2>Novo exemplar</h2>
-                    <p class="subtitle">Registre um exemplar físico de um livro.</p>
+                    <p class="eyebrow">Sistema</p>
+                    <h2>Editar bibliotecário</h2>
                 </div>
                 <div class="page-actions">
-                    <a class="button secondary" th:href="@{/listaExemplar}">Voltar</a>
+                    <a class="button secondary" th:href="@{/listaBibliotecarios}">Voltar</a>
                 </div>
             </div>
         </div>
 
         <section class="card form-card">
+            <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
 
-            <form th:action="@{/cadastraExemplar}" method="POST">
+            <form th:action="@{/atualizarBibliotecario}" method="POST">
+                <input type="hidden" name="id" th:value="${bibliotecario.id}">
 
-                <label for="tombo">Tombo:</label>
+                <label for="username">Nome de usuário:</label>
+                <input type="text" name="username" id="username" th:value="${username != null ? username : (bibliotecario.usuario != null ? bibliotecario.usuario.username : '')}" required>
 
-                <input type="text" name="tombo" id="tombo" required>
+                <label for="nome">Nome completo:</label>
+                <input type="text" name="nome" id="nome" th:value="${nome != null ? nome : bibliotecario.nome}" required>
 
-                <label for="status">Status do exemplar:</label>
+                <label for="cpf">CPF:</label>
+                <input type="text" name="cpf" id="cpf" th:value="${cpf != null ? cpf : bibliotecario.cpf}" required>
 
-                <select name="status" id="status" required>
+                <label for="email">E-mail:</label>
+                <input type="email" name="email" id="email" th:value="${email != null ? email : bibliotecario.email}" required>
 
-                    <option value="">Selecione o status</option>
+                <label for="telefone">Telefone:</label>
+                <input type="tel" name="telefone" id="telefone" th:value="${telefone != null ? telefone : bibliotecario.telefone}" required>
 
-                    <option th:each="status : ${T(com.example.OfertaMatricula.Model.StatusExemplar).values()}"
-                        th:value="${status}" th:text="${status}">
-                    </option>
-
-                </select>
-
-                <label for="idLivro">Livro:</label>
-
-                <select name="idLivro" id="idLivro" required>
-
-                    <option value="">Selecione um livro</option>
-
-                    <option th:each="livro : ${livros}" th:value="${livro.id}" th:text="${livro.titulo}">
-                    </option>
-
-                </select>
+                <label for="endereco">Endereço:</label>
+                <input type="text" name="endereco" id="endereco" th:value="${endereco != null ? endereco : bibliotecario.endereco}" required>
 
                 <div class="botoes">
-
-                    <button type="submit">
-                        Cadastrar
-                    </button>
-
-                    <a class="button secondary" th:href="@{/listaExemplar}">
-                        Voltar
-                    </a>
-
+                    <button type="submit">Salvar</button>
+                    <a class="button secondary" th:href="@{/listaBibliotecarios}">Cancelar</a>
                 </div>
-
             </form>
-
         </section>
-
     </main>
-
     <script th:src="@{/js/profile-menu.js}"></script>
 </body>
 
 </html>
-
-
-

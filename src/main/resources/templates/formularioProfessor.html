@@ -62,6 +62,9 @@
             <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
 
             <form th:action="@{/cadastrarProfessores}" method="POST">
+                <label for="username">Nome de usuário:</label>
+                <input type="text" name="username" id="username" th:value="${username}" placeholder="Digite o nome de usuário" required>
+
                 <label for="nome">Nome:</label>
                 <input type="text" name="nome" id="nome" th:value="${nome}" placeholder="Digite o nome do professor" required>
 

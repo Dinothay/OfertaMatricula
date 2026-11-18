@@ -1,5 +1,6 @@
 package com.example.OfertaMatricula.Controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.OfertaMatricula.Model.Disciplina;
 import com.example.OfertaMatricula.Model.OfertaDisciplina;
 import com.example.OfertaMatricula.Model.Professor;
+import com.example.OfertaMatricula.Model.Usuario;
 import com.example.OfertaMatricula.Repository.DisciplinaRepository;
 import com.example.OfertaMatricula.Repository.OfertaDisciplinaRepository;
 import com.example.OfertaMatricula.Repository.ProfessorRepository;
+import com.example.OfertaMatricula.Repository.UsuarioRepository;
 
 @Controller
 public class OfertaDisciplinaController {
@@ -30,6 +33,9 @@ public class OfertaDisciplinaController {
 
     @Autowired
     private DisciplinaRepository disciplinaRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @GetMapping("/ofertaDisciplina")
     public String cadastroDisciplinas(Model model) {
@@ -52,7 +58,14 @@ public class OfertaDisciplinaController {
     }
 
     @GetMapping("/listaOfertaDisciplinas")
-    public String listaOfertaDisciplinas(Model model) {
+    public String listaOfertaDisciplinas(Model model, Principal principal) {
+        Usuario usuario = principal != null ? usuarioRepository.findByUsername(principal.getName()).orElse(null) : null;
+        model.addAttribute("usuarioLogado", usuario);
+        if (usuario != null && usuario.getPessoa() instanceof com.example.OfertaMatricula.Model.Aluno aluno) {
+            model.addAttribute("ofertasMatriculadasIds", matriculaRepository.findByAlunoId(aluno.getId()).stream()
+                    .map(matricula -> matricula.getOfertaDisciplina().getId())
+                    .collect(java.util.stream.Collectors.toSet()));
+        }
         List<OfertaDisciplina> listaOfertaDisciplinas = ofertaDisciplinaRepository.findAll();
         model.addAttribute("listaOfertaDisciplinas", listaOfertaDisciplinas);
         return "listaOfertaDisciplinas.html";

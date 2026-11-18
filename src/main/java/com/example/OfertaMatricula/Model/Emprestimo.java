@@ -22,8 +22,8 @@ public class Emprestimo {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "aluno")
-    private Aluno aluno;
+    @JoinColumn(name = "pessoa_id")
+    private Pessoa pessoa;
 
     @ManyToOne
     @JoinColumn(name = "livro")
@@ -48,9 +48,9 @@ public class Emprestimo {
     public Emprestimo() {
     }
 
-    public Emprestimo(Aluno aluno, Livro livro, LocalDate dataRetirada, LocalDate dataPrevista, LocalDate dataDevolucao,
+    public Emprestimo(Pessoa pessoa, Livro livro, LocalDate dataRetirada, LocalDate dataPrevista, LocalDate dataDevolucao,
             StatusEmprestimo status, int renovacoes) {
-        this.aluno = aluno;
+        this.pessoa = pessoa;
         this.livro = livro;
         this.dataRetirada = dataRetirada;
         this.dataPrevista = dataPrevista;
@@ -67,12 +67,30 @@ public class Emprestimo {
         this.id = id;
     }
 
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
+
     public Aluno getAluno() {
-        return aluno;
+        return pessoa instanceof Aluno ? (Aluno) pessoa : null;
+    }
+
+    public com.example.OfertaMatricula.Model.Professor getProfessor() {
+        return pessoa instanceof com.example.OfertaMatricula.Model.Professor
+                ? (com.example.OfertaMatricula.Model.Professor) pessoa
+                : null;
     }
 
     public void setAluno(Aluno aluno) {
-        this.aluno = aluno;
+        this.pessoa = aluno;
+    }
+
+    public void setAluno(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
 
     public Livro getLivro() {

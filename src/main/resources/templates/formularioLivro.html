@@ -74,6 +74,13 @@
                 <label for="edicao">Informe a edição:</label>
                 <input type="text" name="edicao" id="edicao" placeholder="Digite a edição" required>
 
+                <label for="status">Status do livro:</label>
+                <select name="status" id="status" required>
+                    <option th:each="status : ${T(com.example.OfertaMatricula.Model.StatusLivro).values()}"
+                            th:value="${status}" th:text="${status}"
+                            th:selected="${status == T(com.example.OfertaMatricula.Model.StatusLivro).DISPONIVEL}"></option>
+                </select>
+
                 <label for="capalmagem">Selecione a capa:</label>
                 <input type="file" name="capalmagem" id="capalmagem" accept="image/*" required>
 

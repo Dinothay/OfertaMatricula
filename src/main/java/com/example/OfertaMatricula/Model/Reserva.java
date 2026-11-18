@@ -1,13 +1,14 @@
 package com.example.OfertaMatricula.Model;
 
-import jakarta.persistence.GeneratedValue;
-
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity 
@@ -17,6 +18,14 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id") 
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "livro_id")
+    private Livro livro;
+
+    @ManyToOne
+    @JoinColumn(name = "pessoa_id")
+    private Pessoa pessoa;
 
     @Column(name = "dataReserva")
     private LocalDateTime dataReserva;
@@ -36,12 +45,48 @@ public class Reserva {
         this.status = status;
     }
 
+    public Reserva(Livro livro, Pessoa pessoa, LocalDateTime dataReserva, int posicaoFila, String status) {
+        this.livro = livro;
+        this.pessoa = pessoa;
+        this.dataReserva = dataReserva;
+        this.posicaoFila = posicaoFila;
+        this.status = status;
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Livro getLivro() {
+        return livro;
+    }
+
+    public void setLivro(Livro livro) {
+        this.livro = livro;
+    }
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
+
+    public Aluno getAluno() {
+        return pessoa instanceof Aluno ? (Aluno) pessoa : null;
+    }
+
+    public void setAluno(Aluno aluno) {
+        this.pessoa = aluno;
+    }
+
+    public void setAluno(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
 
     public LocalDateTime getDataReserva() {

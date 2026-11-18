@@ -15,7 +15,6 @@
             <div class="nav-links">
                 <a th:href="@{/biblioteca}">Biblioteca</a>
                 <a th:href="@{/listaDisciplinaLivro}">Associações</a>
-                <a th:href="@{/listaExemplar}">Exemplares</a>
                 <a th:href="@{/listaEmprestimo}">Empréstimos</a>
                 <a th:href="@{/listaReserva}">Reservas</a>
                 <a th:href="@{/}">Início</a>
@@ -56,7 +55,7 @@
                 <h2>Livros</h2>
                 <p class="subtitle">Acervo cadastrado no sistema.</p>
             </div>
-            <a class="button" th:href="@{/livro}">+ Novo livro</a>
+            <a th:if="${usuarioLogado != null and usuarioLogado.papel != null and (usuarioLogado.papel.name() == 'ADMIN' or usuarioLogado.papel.name() == 'BIBLIOTECARIO')}" class="button" th:href="@{/livro}">+ Novo livro</a>
         </div>
 
         <div th:if="${mensagem}" th:class="${mensagemTipo == 'sucesso'} ? 'alert alert-success' : 'alert alert-error'" th:text="${mensagem}"></div>
@@ -75,6 +74,7 @@
                         <th>Autor</th>
                         <th>ISBN</th>
                         <th>Edição</th>
+                        <th>Status</th>
                         <th>Capa</th>
                         <th>Ações</th>
                     </tr>
@@ -86,13 +86,23 @@
                         <td th:text="${livro.autor}"></td>
                         <td th:text="${livro.isbn}"></td>
                         <td th:text="${livro.edicao}"></td>
+                        <td th:text="${livro.status != null ? livro.status : 'Sem status'}"></td>
                         <td>
                             <img th:src="@{${livro.capalmagem}}" alt="Capa do livro" style="width: 80px; height: 110px; object-fit: cover; border-radius: 8px;">
                         </td>
                         <td>
-                            <div class="actions">
+                            <div th:if="${usuarioLogado != null and usuarioLogado.papel != null and (usuarioLogado.papel.name() == 'ADMIN' or usuarioLogado.papel.name() == 'BIBLIOTECARIO')}" class="actions">
                                 <a class="button secondary" th:href="@{/editarLivro/{id}(id=${livro.id})}">Editar</a>
                                 <a class="button danger" th:href="@{/excluirLivro/{id}(id=${livro.id})}">Excluir</a>
+                            </div>
+
+                            <div th:if="${usuarioLogado != null and usuarioLogado.papel != null and (usuarioLogado.papel.name() == 'ALUNO' or usuarioLogado.papel.name() == 'PROFESSOR') and livro.status.name() != 'MANUTENCAO'}" class="actions">
+                                <form th:if="${livro.status.name() == 'DISPONIVEL'}" th:action="@{/pegarLivroEmprestimo/{id}(id=${livro.id})}" method="post">
+                                    <button type="submit" class="button">Pegar emprestado</button>
+                                </form>
+                                <form th:if="${livro.status.name() == 'EMPRESTADO' or livro.status.name() == 'RESERVADO'}" th:action="@{/reservarLivro/{id}(id=${livro.id})}" method="post">
+                                    <button type="submit" class="button secondary">Reservar</button>
+                                </form>
                             </div>
                         </td>
                     </tr>

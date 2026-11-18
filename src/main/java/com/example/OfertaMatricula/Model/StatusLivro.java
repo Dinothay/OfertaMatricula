@@ -1,6 +1,6 @@
 package com.example.OfertaMatricula.Model;
 
-public enum StatusExemplar {
+public enum StatusLivro {
     DISPONIVEL,
     EMPRESTADO,
     RESERVADO,

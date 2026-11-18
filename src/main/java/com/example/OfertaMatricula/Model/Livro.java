@@ -2,6 +2,8 @@ package com.example.OfertaMatricula.Model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,6 +29,10 @@ public class Livro {
     @Column(name = "edicao")
     private String edicao;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private StatusLivro status;
+
     @Column(name = "capalmagem")
     private String capalmagem;
 
@@ -34,11 +40,16 @@ public class Livro {
     }
 
     public Livro(String titulo, String autor, String isbn, String edicao, String capalmagem) {
+        this(titulo, autor, isbn, edicao, capalmagem, StatusLivro.DISPONIVEL);
+    }
+
+    public Livro(String titulo, String autor, String isbn, String edicao, String capalmagem, StatusLivro status) {
         this.titulo = titulo;
         this.autor = autor;
         this.isbn = isbn;
         this.edicao = edicao;
         this.capalmagem = capalmagem;
+        this.status = status;
     }
 
     public Long getId() {
@@ -79,6 +90,14 @@ public class Livro {
 
     public void setEdicao(String edicao) {
         this.edicao = edicao;
+    }
+
+    public StatusLivro getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusLivro status) {
+        this.status = status;
     }
 
     public String getCapalmagem() {

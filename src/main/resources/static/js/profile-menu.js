@@ -1,4 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const currentPath = window.location.pathname;
+    const shouldShowBackButton = !['/', '/index', '/indexAluno'].includes(currentPath);
+
+    if (shouldShowBackButton && !document.querySelector('.floating-back-btn')) {
+        const backButton = document.createElement('button');
+        backButton.type = 'button';
+        backButton.className = 'floating-back-btn';
+        backButton.textContent = '← Voltar';
+        backButton.setAttribute('aria-label', 'Voltar para a página anterior');
+        backButton.addEventListener('click', () => window.history.back());
+        document.body.appendChild(backButton);
+    }
+
     const userChips = document.querySelectorAll('.user-chip');
 
     userChips.forEach((chip) => {

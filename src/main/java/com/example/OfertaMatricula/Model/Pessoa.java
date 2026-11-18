@@ -1,18 +1,22 @@
 package com.example.OfertaMatricula.Model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToOne;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Pessoa {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String cpf;
@@ -21,6 +25,10 @@ public class Pessoa {
     private String endereco;
     private String email;
     private String telefone;
+    private LocalDate bloqueioEmprestimo;
+
+    @OneToOne(mappedBy = "pessoa", fetch = FetchType.LAZY)
+    private Usuario usuario;
 
     public Pessoa(String nome, String cpf, String nomePai, String nomeMae,
             String endereco, String email, String telefone) {
@@ -98,6 +106,25 @@ public class Pessoa {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+        if (usuario != null && usuario.getPessoa() != this) {
+            usuario.setPessoa(this);
+        }
+    }
+
+    public LocalDate getBloqueioEmprestimo() {
+        return bloqueioEmprestimo;
+    }
+
+    public void setBloqueioEmprestimo(LocalDate bloqueioEmprestimoAte) {
+        this.bloqueioEmprestimo = bloqueioEmprestimoAte;
     }
 
     // Ajuda do Chat para fazer a validação do telefone
