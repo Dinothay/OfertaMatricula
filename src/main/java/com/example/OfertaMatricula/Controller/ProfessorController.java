@@ -1,5 +1,6 @@
 package com.example.OfertaMatricula.Controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,11 @@ import com.example.OfertaMatricula.Model.Usuario;
 import com.example.OfertaMatricula.Repository.OfertaDisciplinaRepository;
 import com.example.OfertaMatricula.Repository.ProfessorRepository;
 import com.example.OfertaMatricula.Repository.UsuarioRepository;
+import com.example.OfertaMatricula.Repository.EmprestimoRepository;
+import com.example.OfertaMatricula.Repository.ReservaRepository;
+import com.example.OfertaMatricula.Repository.ProvarRepository;
+
+import jakarta.transaction.Transactional;
 
 @Controller
 public class ProfessorController {
@@ -30,6 +36,15 @@ public class ProfessorController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private EmprestimoRepository emprestimoRepository;
+
+    @Autowired
+    private ReservaRepository reservaRepository;
+
+    @Autowired
+    private ProvarRepository provarRepository;
 
     @GetMapping("/professor")
     public String cadastroProfessores() {
@@ -111,24 +126,41 @@ public class ProfessorController {
     }
 
     @GetMapping("/listaProfessores")
-    public String listaProfessores(Model model) {
+    public String listaProfessores(Model model, Principal principal) {
         List<Professor> listaProfessores = professorRepository.findAll();
         model.addAttribute("listaProfessores", listaProfessores);
+        if (principal != null) {
+            usuarioRepository.findByUsername(principal.getName())
+                    .ifPresent(usuario -> model.addAttribute("usuarioLogado", usuario));
+        }
         return "listaProfessores.html";
     }
 
     @GetMapping("/editarProfessor/{id}")
-    public String editarProfessor(@PathVariable long id, Model model) {
+    public String editarProfessor(@PathVariable long id, Model model, Principal principal) {
         Professor professor = professorRepository.findById(id).orElse(null);
         model.addAttribute("professor", professor);
+
+        boolean professorEditandoProprioPerfil = false;
+        if (principal != null) {
+            Usuario usuarioLogado = usuarioRepository.findByUsername(principal.getName()).orElse(null);
+            if (usuarioLogado != null && usuarioLogado.getPapel() == Papel.PROFESSOR
+                    && usuarioLogado.getPessoa() instanceof Professor professorLogado
+                    && professor != null
+                    && professorLogado.getId().equals(professor.getId())) {
+                professorEditandoProprioPerfil = true;
+            }
+        }
+        model.addAttribute("professorEditandoProprioPerfil", professorEditandoProprioPerfil);
         return "editarProfessor.html";
     }
 
     @PostMapping("/atualizarProfessor")
     public String atualizarProfessor(@RequestParam long id, @RequestParam String nome, @RequestParam String cpf,
-            @RequestParam String email, @RequestParam String telefone, @RequestParam Double salario,
+            @RequestParam String email, @RequestParam String telefone,
+            @RequestParam(required = false) Double salario,
             @RequestParam String endereco, @RequestParam String area, @RequestParam String formacao,
-            RedirectAttributes ra) {
+            RedirectAttributes ra, Principal principal) {
         String cpfFormatado = Pessoa.validarCPF(cpf);
         if (cpfFormatado == null) {
             ra.addFlashAttribute("mensagem", "CPF inválido!");
@@ -168,7 +200,20 @@ public class ProfessorController {
         professor.setCpf(cpf);
         professor.setEmail(email);
         professor.setTelefone(telefone);
-        professor.setSalario(salario);
+
+        boolean professorEditandoProprioPerfil = false;
+        if (principal != null) {
+            Usuario usuarioLogado = usuarioRepository.findByUsername(principal.getName()).orElse(null);
+            if (usuarioLogado != null && usuarioLogado.getPapel() == Papel.PROFESSOR
+                    && usuarioLogado.getPessoa() instanceof Professor professorLogado
+                    && professorLogado.getId().equals(professor.getId())) {
+                professorEditandoProprioPerfil = true;
+            }
+        }
+
+        if (!professorEditandoProprioPerfil && salario != null) {
+            professor.setSalario(salario);
+        }
         professor.setEndereco(endereco);
         professor.setArea(area);
         professor.setFormacao(formacao);
@@ -179,18 +224,62 @@ public class ProfessorController {
     }
 
     @GetMapping("/excluirProfessor/{id}")
+    @Transactional
     public String excluirProfessor(
             @PathVariable long id,
+            Principal principal,
             RedirectAttributes ra) {
+        Usuario usuarioLogado = principal != null
+                ? usuarioRepository.findByUsername(principal.getName()).orElse(null)
+                : null;
+        if (usuarioLogado != null && usuarioLogado.getPessoa() != null
+                && usuarioLogado.getPessoa().getId().equals(id)) {
+            ra.addFlashAttribute("mensagem", "Você não pode excluir seu próprio cadastro!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaProfessores";
+        }
+
+        Professor professor = professorRepository.findById(id).orElse(null);
+        if (professor == null) {
+            ra.addFlashAttribute("mensagem", "Professor não encontrado!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaProfessores";
+        }
+
         if (ofertaDisciplinaRepository.existsByProfessorId(id)) {
             ra.addFlashAttribute(
                     "mensagem",
                     "Não é possível excluir: professor está associado a uma oferta de disciplina.");
-
+            ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/listaProfessores";
         }
-        professorRepository.deleteById(id);
 
+        if (provarRepository.existsByProfessorId(id)) {
+            ra.addFlashAttribute("mensagem", "Não é possível excluir: professor está associado a uma prova.");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaProfessores";
+        }
+        if (emprestimoRepository.existsByPessoaId(id)) {
+            ra.addFlashAttribute("mensagem", "Não é possível excluir: professor está associado a um empréstimo.");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaProfessores";
+        }
+        if (!reservaRepository.findByPessoaId(id).isEmpty()) {
+            ra.addFlashAttribute("mensagem", "Não é possível excluir: professor está associado a uma reserva.");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaProfessores";
+        }
+
+        Usuario usuario = professor.getUsuario();
+        if (usuario != null) {
+            usuario.setPessoa(null);
+            professor.setUsuario(null);
+            usuarioRepository.delete(usuario);
+        }
+
+        professorRepository.delete(professor);
+        ra.addFlashAttribute("mensagem", "Professor excluído com sucesso!");
+        ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaProfessores";
     }
 }

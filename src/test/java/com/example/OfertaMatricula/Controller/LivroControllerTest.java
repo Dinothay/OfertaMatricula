@@ -16,8 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
-import com.example.OfertaMatricula.Controller.EmprestimoController;
-import com.example.OfertaMatricula.Controller.MatriculaController;
 import com.example.OfertaMatricula.Model.Aluno;
 import com.example.OfertaMatricula.Model.Curso;
 import com.example.OfertaMatricula.Model.Disciplina;
@@ -45,17 +43,17 @@ import com.example.OfertaMatricula.Repository.UsuarioRepository;
 class LivroControllerTest {
 
     @Test
-    void deveBloquearQuartoEmprestimoParaMesmoAluno() {
+    void deveBloquearQuartoEmprestimoParaMesmoAluno() throws Exception {
         LivroRepository livroRepository = mock(LivroRepository.class);
         EmprestimoRepository emprestimoRepository = mock(EmprestimoRepository.class);
         UsuarioRepository usuarioRepository = mock(UsuarioRepository.class);
         ReservaRepository reservaRepository = mock(ReservaRepository.class);
 
         LivroController controller = new LivroController();
-        controller.setLivroRepository(livroRepository);
-        controller.setUsuarioRepository(usuarioRepository);
-        controller.setEmprestimoRepository(emprestimoRepository);
-        controller.setReservaRepository(reservaRepository);
+        setField(controller, "livroRepository", livroRepository);
+        setField(controller, "usuarioRepository", usuarioRepository);
+        setField(controller, "emprestimoRepository", emprestimoRepository);
+        setField(controller, "reservaRepository", reservaRepository);
 
         var book = new Livro();
         book.setId(10L);
@@ -84,17 +82,17 @@ class LivroControllerTest {
     }
 
     @Test
-    void deveReservarLivroQuandoEleJaEstiverEmprestado() {
+    void deveReservarLivroQuandoEleJaEstiverEmprestado() throws Exception {
         LivroRepository livroRepository = mock(LivroRepository.class);
         EmprestimoRepository emprestimoRepository = mock(EmprestimoRepository.class);
         UsuarioRepository usuarioRepository = mock(UsuarioRepository.class);
         ReservaRepository reservaRepository = mock(ReservaRepository.class);
 
         LivroController controller = new LivroController();
-        controller.setLivroRepository(livroRepository);
-        controller.setUsuarioRepository(usuarioRepository);
-        controller.setEmprestimoRepository(emprestimoRepository);
-        controller.setReservaRepository(reservaRepository);
+        setField(controller, "livroRepository", livroRepository);
+        setField(controller, "usuarioRepository", usuarioRepository);
+        setField(controller, "emprestimoRepository", emprestimoRepository);
+        setField(controller, "reservaRepository", reservaRepository);
 
         Livro livro = new Livro();
         livro.setId(20L);
@@ -191,17 +189,17 @@ class LivroControllerTest {
     }
 
     @Test
-    void deveBloquearReservaQuandoAlunoJaPossuiLivro() {
+    void deveBloquearReservaQuandoAlunoJaPossuiLivro() throws Exception {
         LivroRepository livroRepository = mock(LivroRepository.class);
         EmprestimoRepository emprestimoRepository = mock(EmprestimoRepository.class);
         UsuarioRepository usuarioRepository = mock(UsuarioRepository.class);
         ReservaRepository reservaRepository = mock(ReservaRepository.class);
 
         LivroController controller = new LivroController();
-        controller.setLivroRepository(livroRepository);
-        controller.setUsuarioRepository(usuarioRepository);
-        controller.setEmprestimoRepository(emprestimoRepository);
-        controller.setReservaRepository(reservaRepository);
+        setField(controller, "livroRepository", livroRepository);
+        setField(controller, "usuarioRepository", usuarioRepository);
+        setField(controller, "emprestimoRepository", emprestimoRepository);
+        setField(controller, "reservaRepository", reservaRepository);
 
         Livro livro = new Livro();
         livro.setId(30L);
@@ -267,7 +265,7 @@ class LivroControllerTest {
 
         String view = controller.editarProva(15L, model, principal, new RedirectAttributesModelMap());
 
-        assertEquals("redirect:/listaProva", view);
+        assertEquals("redirect:/meuPainelProfessor", view);
     }
 
     private void setField(Object target, String fieldName, Object value) throws Exception {

@@ -7,4 +7,6 @@ import com.example.OfertaMatricula.Model.Prova;
 
 public interface ProvarRepository extends JpaRepository<Prova,Long>{
    List<Prova> findByProfessorId(Long professorId);
+   boolean existsByProfessorId(Long professorId);
+   boolean existsByDisciplinaId(Long disciplinaId);
 }

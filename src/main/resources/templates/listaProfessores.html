@@ -63,7 +63,9 @@
         </div>
 
         <section th:unless="${#lists.isEmpty(listaProfessores)}" class="card table-wrap">
-            <table>
+
+            <table id="tabela-professores" class="professor-table">
+                <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
@@ -76,8 +78,10 @@
                     <th>Salário</th>
                     <th>Ações</th>
                 </tr>
+                </thead>
 
-                <tr th:each="professor : ${listaProfessores}">
+                <tbody>
+                <tr class="professor-row" th:each="professor : ${listaProfessores}">
                     <td th:text="${professor.id}"></td>
                     <td th:text="${professor.nome}"></td>
                     <td th:text="${professor.cpf}"></td>
@@ -94,7 +98,13 @@
                         </div>
                     </td>
                 </tr>
+                </tbody>
             </table>
+
+            <div id="nenhum-professor-encontrado" class="empty-state table-search-empty" hidden>
+                <h2>Nenhum professor encontrado</h2>
+                <p>Tente pesquisar por outro termo.</p>
+            </div>
         </section>
     </main>
 

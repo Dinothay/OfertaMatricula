@@ -89,19 +89,19 @@
                     </div>
 
                     <div class="profile-actions">
-                        <form th:if="${usuarioLogado.papel.name() == 'ALUNO'}"
+                        <form th:if="${usuarioLogado.papel.name() == 'ALUNO' and pessoaLogada != null}"
                               th:action="@{/editarAluno/{id}(id=${pessoaLogada.id})}" method="get" style="display: inline;">
                             <button type="submit" class="button">Editar dados pessoais</button>
                         </form>
-                        <form th:if="${usuarioLogado.papel.name() == 'PROFESSOR'}"
+                        <form th:if="${usuarioLogado.papel.name() == 'PROFESSOR' and pessoaLogada != null}"
                               th:action="@{/editarProfessor/{id}(id=${pessoaLogada.id})}" method="get" style="display: inline;">
                             <button type="submit" class="button">Editar dados pessoais</button>
                         </form>
-                        <form th:if="${usuarioLogado.papel.name() == 'ADMIN'}"
+                        <form th:if="${usuarioLogado.papel.name() == 'ADMIN' and pessoaLogada != null}"
                               th:action="@{/editarAdmin/{id}(id=${pessoaLogada.id})}" method="get" style="display: inline;">
                             <button type="submit" class="button">Editar dados pessoais</button>
                         </form>
-                        <form th:if="${usuarioLogado.papel.name() == 'BIBLIOTECARIO'}"
+                        <form th:if="${usuarioLogado.papel.name() == 'BIBLIOTECARIO' and pessoaLogada != null}"
                               th:action="@{/editarBibliotecario/{id}(id=${pessoaLogada.id})}" method="get" style="display: inline;">
                             <button type="submit" class="button">Editar dados pessoais</button>
                         </form>

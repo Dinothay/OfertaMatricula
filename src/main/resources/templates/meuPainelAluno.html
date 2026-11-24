@@ -139,7 +139,7 @@
                     <td th:text="${reserva.status}"></td>
                     <td>
                         <form th:action="@{/excluirMinhaReserva/{id}(id=${reserva.id})}" method="get">
-                            <button type="submit">Remover item da lista</button>
+                            <button type="submit" class="remover-reserva">Remover item da lista</button>
                         </form>
                     </td>
                 </tr>

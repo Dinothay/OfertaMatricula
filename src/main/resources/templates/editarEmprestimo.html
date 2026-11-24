@@ -62,11 +62,19 @@
             <form th:action="@{/atualizarEmprestimo}" th:method="POST">
                 <input type="hidden" name="id" th:value="${emprestimo.id}">
 
-                <label for="idAluno">Aluno:</label>
-                <select name="idAluno" id="idAluno" required>
-                    <option value="">Selecione um aluno</option>
-                    <option th:each="aluno : ${alunos}" th:value="${aluno.id}" th:text="${aluno.nome}"
-                        th:selected="${aluno.id == emprestimo.aluno.id}"></option>
+                <label for="idPessoa">Pessoa:</label>
+                <select name="idPessoa" id="idPessoa" required>
+                    <option value="">Selecione uma pessoa</option>
+                    <optgroup label="Alunos">
+                        <option th:each="aluno : ${alunos}" th:value="${aluno.id}"
+                                th:selected="${emprestimo.pessoa != null and emprestimo.pessoa.id == aluno.id}"
+                                th:text="${aluno.nome + ' — ' + aluno.cpf}"></option>
+                    </optgroup>
+                    <optgroup label="Professores">
+                        <option th:each="professor : ${professores}" th:value="${professor.id}"
+                                th:selected="${emprestimo.pessoa != null and emprestimo.pessoa.id == professor.id}"
+                                th:text="${professor.nome + ' — ' + professor.cpf}"></option>
+                    </optgroup>
                 </select>
 
                 <label for="idLivro">Livro:</label>

@@ -22,6 +22,7 @@ import com.example.OfertaMatricula.Repository.MatriculaRepository;
 import com.example.OfertaMatricula.Repository.ProvarRepository;
 import com.example.OfertaMatricula.Repository.ReservaRepository;
 import com.example.OfertaMatricula.Repository.UsuarioRepository;
+import org.springframework.web.bind.annotation.CookieValue;
 
 @Controller
 public class HomeController {
@@ -44,15 +45,24 @@ public class HomeController {
     @Autowired
     private ReservaRepository reservaRepository;
 
-    @GetMapping({"/", "/index"})
-    public String index(Model model, Principal principal) {
+    @GetMapping({ "/", "/index" })
+    public String index(
+            Model model,
+            Principal principal,
+            @CookieValue(name = "tema", defaultValue = "claro") String tema) {
+
+        model.addAttribute("tema", tema);
+
         if (principal != null) {
             Usuario usuario = usuarioRepository.findByUsername(principal.getName()).orElse(null);
+
             if (usuario != null) {
                 model.addAttribute("usuarioLogado", usuario);
+
                 if (usuario.getPapel() == Papel.PROFESSOR) {
                     return "redirect:/indexProfessor";
                 }
+
                 if (usuario.getPapel() == Papel.BIBLIOTECARIO) {
                     return "redirect:/indexBibliotecario";
                 }
@@ -60,7 +70,10 @@ public class HomeController {
         }
 
         model.addAttribute("totalLivros", livroRepository.count());
-        model.addAttribute("totalDisponiveisEmprestimo", livroRepository.countByStatus(StatusLivro.DISPONIVEL));
+
+        model.addAttribute(
+                "totalDisponiveisEmprestimo",
+                livroRepository.countByStatus(StatusLivro.DISPONIVEL));
 
         return "index.html";
     }
@@ -125,9 +138,11 @@ public class HomeController {
             model.addAttribute("meusEmprestimos", meusEmprestimos);
             model.addAttribute("minhasReservas", minhasReservas);
             model.addAttribute("emprestimosRenovaveisIds", meusEmprestimos.stream()
-                    .filter(emprestimo -> emprestimo.getStatus() == com.example.OfertaMatricula.Model.StatusEmprestimo.ATIVO)
+                    .filter(emprestimo -> emprestimo
+                            .getStatus() == com.example.OfertaMatricula.Model.StatusEmprestimo.ATIVO)
                     .filter(emprestimo -> emprestimo.getRenovacoes() < 3)
-                    .filter(emprestimo -> reservaRepository.findByLivroIdOrderByDataReservaAsc(emprestimo.getLivro().getId()).isEmpty())
+                    .filter(emprestimo -> reservaRepository
+                            .findByLivroIdOrderByDataReservaAsc(emprestimo.getLivro().getId()).isEmpty())
                     .map(Emprestimo::getId)
                     .collect(java.util.stream.Collectors.toSet()));
         }
@@ -157,9 +172,11 @@ public class HomeController {
             model.addAttribute("meusEmprestimos", meusEmprestimos);
             model.addAttribute("minhasReservas", minhasReservas);
             model.addAttribute("emprestimosRenovaveisIds", meusEmprestimos.stream()
-                    .filter(emprestimo -> emprestimo.getStatus() == com.example.OfertaMatricula.Model.StatusEmprestimo.ATIVO)
+                    .filter(emprestimo -> emprestimo
+                            .getStatus() == com.example.OfertaMatricula.Model.StatusEmprestimo.ATIVO)
                     .filter(emprestimo -> emprestimo.getRenovacoes() < 3)
-                    .filter(emprestimo -> reservaRepository.findByLivroIdOrderByDataReservaAsc(emprestimo.getLivro().getId()).isEmpty())
+                    .filter(emprestimo -> reservaRepository
+                            .findByLivroIdOrderByDataReservaAsc(emprestimo.getLivro().getId()).isEmpty())
                     .map(Emprestimo::getId)
                     .collect(java.util.stream.Collectors.toSet()));
         }

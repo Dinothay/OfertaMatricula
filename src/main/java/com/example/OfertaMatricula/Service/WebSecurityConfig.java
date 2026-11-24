@@ -26,8 +26,9 @@ public class WebSecurityConfig {
 
                 .authorizeHttpRequests(authorize -> authorize
 
-                        // Acesso público
+                       
                         .requestMatchers(
+                                "/set",
                                 "/login",
                                 "/css/**",
                                 "/images/**",
@@ -35,7 +36,7 @@ public class WebSecurityConfig {
                                 "/webjars/**"
                         ).permitAll()
 
-                        // Funcionalidades compartilhadas
+                        
                         .requestMatchers(
                                 "/listaLivro",
                                 "/listaLivrosAluno",
@@ -50,7 +51,7 @@ public class WebSecurityConfig {
                                 "ADMIN"
                         )
 
-                        // Empréstimos e reservas
+                       
                         .requestMatchers(
                                 "/pegarLivroEmprestimo/**",
                                 "/reservarLivro/**",
@@ -62,7 +63,7 @@ public class WebSecurityConfig {
                                 "ADMIN"
                         )
 
-                        // Funcionalidades do bibliotecário
+                 
                         .requestMatchers(
                                 "/indexBibliotecario",
                                 "/livro",
@@ -88,7 +89,7 @@ public class WebSecurityConfig {
                                 "/atualizarBibliotecario"
                         ).hasAnyRole("BIBLIOTECARIO", "ADMIN")
 
-                        // Funcionalidades do aluno
+                   
                         .requestMatchers(
                                 "/indexAluno",
                                 "/meuPainelAluno",
@@ -98,7 +99,7 @@ public class WebSecurityConfig {
                                 "/atualizarAluno"
                         ).hasAnyRole("ALUNO", "ADMIN")
 
-                        // Funcionalidades do professor
+                        
                         .requestMatchers(
                                 "/indexProfessor",
                                 "/meuPainelProfessor",
@@ -113,7 +114,6 @@ public class WebSecurityConfig {
                                 "/prova"
                         ).hasAnyRole("PROFESSOR", "ADMIN")
 
-                        // Qualquer outra rota: somente administrador
                         .requestMatchers("/**").hasRole("ADMIN")
                 )
 

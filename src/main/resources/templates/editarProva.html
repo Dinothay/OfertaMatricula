@@ -90,6 +90,18 @@
                 </div>
                 <p th:if="${#lists.isEmpty(livros)}">Nenhum livro cadastrado no sistema.</p>
 
+                <div th:if="${usuarioLogado != null and usuarioLogado.papel.name() == 'ADMIN'}">
+                    <label for="professorId">Professor:</label>
+                    <select name="professorId" id="professorId" required>
+                        <option value="">Selecione o professor</option>
+                        <option th:each="professor : ${professores}"
+                                th:value="${professor.id}"
+                                th:text="${professor.nome}"
+                                th:selected="${prova.professor != null and prova.professor.id == professor.id}">
+                        </option>
+                    </select>
+                </div>
+
                 <div class="botoes">
                     <button type="submit">Atualizar</button>
                     <a class="button secondary" th:href="@{/listaProva}">Voltar</a>

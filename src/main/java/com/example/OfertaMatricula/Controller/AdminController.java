@@ -1,5 +1,6 @@
 package com.example.OfertaMatricula.Controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import com.example.OfertaMatricula.Model.Pessoa;
 import com.example.OfertaMatricula.Model.Usuario;
 import com.example.OfertaMatricula.Repository.AdminRepository;
 import com.example.OfertaMatricula.Repository.UsuarioRepository;
+
+import jakarta.transaction.Transactional;
 
 @Controller
 public class AdminController {
@@ -104,9 +107,13 @@ public class AdminController {
     }
 
     @GetMapping("/listaAdmins")
-    public String listaAdmins(Model model) {
+    public String listaAdmins(Model model, Principal principal) {
         List<Admin> listaAdmins = adminRepository.findAll();
         model.addAttribute("listaAdmins", listaAdmins);
+        if (principal != null) {
+            usuarioRepository.findByUsername(principal.getName())
+                    .ifPresent(usuario -> model.addAttribute("usuarioLogado", usuario));
+        }
         return "listaAdmins.html";
     }
 
@@ -183,7 +190,18 @@ public class AdminController {
     }
 
     @GetMapping("/excluirAdmin/{id}")
-    public String excluirAdmin(@PathVariable long id, RedirectAttributes ra) {
+    @Transactional
+    public String excluirAdmin(@PathVariable long id, Principal principal, RedirectAttributes ra) {
+        Usuario usuarioLogado = principal != null
+                ? usuarioRepository.findByUsername(principal.getName()).orElse(null)
+                : null;
+        if (usuarioLogado != null && usuarioLogado.getPessoa() != null
+                && usuarioLogado.getPessoa().getId().equals(id)) {
+            ra.addFlashAttribute("mensagem", "Você não pode excluir seu próprio cadastro!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaAdmins";
+        }
+
         Admin admin = adminRepository.findById(id).orElse(null);
         if (admin == null) {
             ra.addFlashAttribute("mensagem", "Administrador não encontrado!");
@@ -191,11 +209,24 @@ public class AdminController {
             return "redirect:/listaAdmins";
         }
 
-        if (admin.getUsuario() != null) {
-            usuarioRepository.delete(admin.getUsuario());
+        // Impedir que o administrador exclua sua própria conta
+        String usernameLogado = principal.getName();
+        Usuario usuarioLogado2 = usuarioRepository.findByUsername(usernameLogado).orElse(null);
+        if (usuarioLogado2 != null && usuarioLogado2.getPessoa() != null
+                && usuarioLogado2.getPessoa().getId().equals(admin.getId())) {
+            ra.addFlashAttribute("mensagem", "Você não pode excluir sua própria conta!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaAdmins";
         }
 
-        adminRepository.deleteById(id);
+        Usuario usuario = admin.getUsuario();
+        if (usuario != null) {
+            usuario.setPessoa(null);
+            admin.setUsuario(null);
+            usuarioRepository.delete(usuario);
+        }
+
+        adminRepository.delete(admin);
         ra.addFlashAttribute("mensagem", "Administrador excluído com sucesso!");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaAdmins";

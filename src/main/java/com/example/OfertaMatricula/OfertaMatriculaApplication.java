@@ -1,21 +1,12 @@
 package com.example.OfertaMatricula;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.OfertaMatricula.Model.Aluno;
-import com.example.OfertaMatricula.Model.Curso;
-import com.example.OfertaMatricula.Model.Disciplina;
-import com.example.OfertaMatricula.Model.OfertaDisciplina;
 import com.example.OfertaMatricula.Model.Papel;
-import com.example.OfertaMatricula.Model.Professor;
 import com.example.OfertaMatricula.Model.Usuario;
 import com.example.OfertaMatricula.Repository.AlunoRepository;
 import com.example.OfertaMatricula.Repository.CursoRepository;
@@ -37,7 +28,7 @@ public class OfertaMatriculaApplication {
 			OfertaDisciplinaRepository ofertaDisciplinaRepository,
 			PasswordEncoder passwordEncoder) {
 		return args -> {
-			if (usuarioRepository.count() == 0) {
+			if (usuarioRepository.countByPapel(Papel.ADMIN) == 0) {
 				Usuario admin = new Usuario();
 				admin.setUsername("admin");
 				admin.setPassword(passwordEncoder.encode("admin"));

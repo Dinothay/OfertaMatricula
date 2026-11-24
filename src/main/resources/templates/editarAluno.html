@@ -77,8 +77,6 @@
                     <label for="endereco">Informe o endereço:</label>
                     <input type="text" th:name="endereco" id="endereco" th:value="${endereco != null ? endereco : aluno.endereco}" required>
 
-                    <label for="prontuario">Informe o prontuário:</label>
-                    <input type="number" th:name="prontuario" id="prontuario" th:value="${prontuario != null ? prontuario : aluno.prontuario}" min="1" required>
 
                     <label for="dataInicio">Informe a data de início:</label>
                     <input type="date" th:name="dataInicio" id="dataInicio" th:value="${aluno.dataInicio}" readonly>

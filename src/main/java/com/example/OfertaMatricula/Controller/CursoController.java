@@ -75,6 +75,8 @@ public class CursoController {
             return "redirect:/listaCursos";
         }
         cursoRepository.deleteById(id);
+        ra.addFlashAttribute("mensagem", "Curso excluído com sucesso!");
+        ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaCursos";
     }
 }

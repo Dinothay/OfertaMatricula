@@ -291,7 +291,11 @@
                         <td>
                             <div class="actions">
                                 <a class="button secondary" th:href="@{/editarUsuario/{id}(id=${usuario.id})}">Editar</a>
-                                <a class="button danger" th:href="@{/excluirUsuario/{id}(id=${usuario.id})}">Excluir</a>
+                                <a class="button danger"
+                                   th:if="${usuario.pessoa == null}"
+                                   th:href="@{/excluirUsuario/{id}(id=${usuario.id})}">Excluir</a>
+                                <span class="status-badge"
+                                      th:if="${usuario.pessoa != null}">Conta vinculada</span>
                             </div>
                         </td>
                     </tr>

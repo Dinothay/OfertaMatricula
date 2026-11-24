@@ -60,14 +60,26 @@
 
         <section class="card form-card">
             <form th:action="@{/cadastraReserva}" method="POST">
-                <label for="dataReserva">Data da reserva:</label>
-                <input type="datetime-local" name="dataReserva" id="dataReserva" required>
+                <label for="livroId">Livro reservado:</label>
+                <select name="livroId" id="livroId" required>
+                    <option value="">Selecione um livro</option>
+                    <option th:each="livro : ${livros}" th:value="${livro.id}" th:text="${livro.titulo}"></option>
+                </select>
 
-                <label for="posicaoFila">Posição na fila:</label>
-                <input type="number" name="posicaoFila" id="posicaoFila" placeholder="Digite a posição" required>
+                <label for="pessoaId">Aluno ou professor que reservou:</label>
+                <select name="pessoaId" id="pessoaId" required>
+                    <option value="">Selecione uma pessoa</option>
+                    <optgroup label="Alunos">
+                        <option th:each="aluno : ${alunos}" th:value="${aluno.id}"
+                                th:text="${aluno.nome + ' — ' + aluno.cpf}"></option>
+                    </optgroup>
+                    <optgroup label="Professores">
+                        <option th:each="professor : ${professores}" th:value="${professor.id}"
+                                th:text="${professor.nome + ' — ' + professor.cpf}"></option>
+                    </optgroup>
+                </select>
 
-                <label for="status">Status:</label>
-                <input type="text" name="status" id="status" placeholder="Digite o status" required>
+                <p class="subtitle">A data e a posição na fila serão definidas automaticamente.</p>
 
                 <div class="botoes">
                     <button type="submit">Cadastrar</button>

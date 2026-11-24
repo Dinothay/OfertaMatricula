@@ -19,12 +19,14 @@ import com.example.OfertaMatricula.Model.Livro;
 import com.example.OfertaMatricula.Model.Reserva;
 import com.example.OfertaMatricula.Model.StatusEmprestimo;
 import com.example.OfertaMatricula.Model.Usuario;
+import com.example.OfertaMatricula.Model.Pessoa;
 import com.example.OfertaMatricula.Repository.AlunoRepository;
 import com.example.OfertaMatricula.Repository.EmprestimoRepository;
 import com.example.OfertaMatricula.Repository.LivroRepository;
 import com.example.OfertaMatricula.Repository.ReservaRepository;
 import com.example.OfertaMatricula.Repository.UsuarioRepository;
 import com.example.OfertaMatricula.Repository.PessoaRepository;
+import com.example.OfertaMatricula.Repository.ProfessorRepository;
 
 @Controller
 public class EmprestimoController {
@@ -46,29 +48,54 @@ public class EmprestimoController {
     @Autowired
     private PessoaRepository pessoaRepository;
 
+    @Autowired
+    private ProfessorRepository professorRepository;
+
     @GetMapping("/emprestimo")
     public String cadastroEmprestimo(Model model) {
         model.addAttribute("alunos", alunoRepository.findAll());
+        model.addAttribute("professores", professorRepository.findAll());
         model.addAttribute("livros", livroRepository.findAll());
         return "formularioEmprestimo.html";
     }
 
     @PostMapping("/cadastraEmprestimo")
-    public String saveEmprestimo(@RequestParam Long idAluno, @RequestParam Long idLivro,
+    public String saveEmprestimo(@RequestParam Long idPessoa, @RequestParam Long idLivro,
             @RequestParam LocalDate dataRetirada, @RequestParam(required = false) LocalDate dataPrevista,
             @RequestParam(required = false) LocalDate dataDevolucao, @RequestParam StatusEmprestimo status,
             @RequestParam int renovacoes, RedirectAttributes ra) {
-        Aluno aluno = alunoRepository.findById(idAluno).orElseThrow();
+        Pessoa pessoa = null;
+        if (pessoaRepository != null) {
+            pessoa = pessoaRepository.findById(idPessoa).orElse(null);
+        }
+        if (pessoa == null && alunoRepository != null) {
+            pessoa = alunoRepository.findById(idPessoa).orElse(null);
+        }
+        if (pessoa == null) {
+            ra.addFlashAttribute("mensagem", "Pessoa não encontrada!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaEmprestimo";
+        }
         Livro livro = livroRepository.findById(idLivro).orElseThrow();
 
-        if (status == StatusEmprestimo.ATIVO && emprestimoRepository.existsByAlunoIdAndLivroIdAndStatus(aluno.getId(), livro.getId(), StatusEmprestimo.ATIVO)) {
-            ra.addFlashAttribute("mensagem", "Este aluno já está com este livro em empréstimo.");
+        boolean duplicado = status == StatusEmprestimo.ATIVO
+                && emprestimoRepository.existsByPessoaIdAndLivroIdAndStatus(pessoa.getId(), livro.getId(), StatusEmprestimo.ATIVO);
+        if (pessoa instanceof Aluno && status == StatusEmprestimo.ATIVO) {
+            duplicado = duplicado || emprestimoRepository.existsByAlunoIdAndLivroIdAndStatus(
+                    pessoa.getId(), livro.getId(), StatusEmprestimo.ATIVO);
+        }
+        if (duplicado) {
+            ra.addFlashAttribute("mensagem", "Esta pessoa já está com este livro em empréstimo.");
             ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/listaEmprestimo";
         }
 
         LocalDate devolucaoPrevista = calcularDataPrevista(dataRetirada, dataPrevista);
-        emprestimoRepository.save(new Emprestimo(aluno, livro, dataRetirada, devolucaoPrevista, dataDevolucao, status, renovacoes));
+        emprestimoRepository.save(new Emprestimo(pessoa, livro, dataRetirada, devolucaoPrevista, dataDevolucao, status, renovacoes));
+        if (status == StatusEmprestimo.ATIVO) {
+            livro.setStatus(com.example.OfertaMatricula.Model.StatusLivro.EMPRESTADO);
+            livroRepository.save(livro);
+        }
         ra.addFlashAttribute("mensagem", "Empréstimo cadastrado com sucesso!");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaEmprestimo";
@@ -86,12 +113,13 @@ public class EmprestimoController {
         Emprestimo emprestimo = emprestimoRepository.findById(id).orElse(null);
         model.addAttribute("emprestimo", emprestimo);
         model.addAttribute("alunos", alunoRepository.findAll());
+        model.addAttribute("professores", professorRepository.findAll());
         model.addAttribute("livros", livroRepository.findAll());
         return "editarEmprestimo.html";
     }
 
     @PostMapping("/atualizarEmprestimo")
-    public String atualizarEmprestimo(@RequestParam long id, @RequestParam Long idAluno, @RequestParam Long idLivro,
+    public String atualizarEmprestimo(@RequestParam long id, @RequestParam Long idPessoa, @RequestParam Long idLivro,
             @RequestParam LocalDate dataRetirada, @RequestParam(required = false) LocalDate dataPrevista,
             @RequestParam(required = false) LocalDate dataDevolucao, @RequestParam StatusEmprestimo status,
             @RequestParam int renovacoes, RedirectAttributes ra) {
@@ -100,19 +128,21 @@ public class EmprestimoController {
             return "redirect:/listaEmprestimo";
         }
 
-        Aluno aluno = alunoRepository.findById(idAluno).orElseThrow();
+        Pessoa pessoa = pessoaRepository.findById(idPessoa).orElseThrow();
         Livro livro = livroRepository.findById(idLivro).orElseThrow();
 
-        boolean existeDuplicado = status == StatusEmprestimo.ATIVO && emprestimoRepository.existsByAlunoIdAndLivroIdAndStatusAndIdNot(aluno.getId(), livro.getId(), StatusEmprestimo.ATIVO, id);
+        boolean existeDuplicado = status == StatusEmprestimo.ATIVO
+                && emprestimoRepository.existsByPessoaIdAndLivroIdAndStatusAndIdNot(
+                        pessoa.getId(), livro.getId(), StatusEmprestimo.ATIVO, id);
         if (existeDuplicado) {
-            ra.addFlashAttribute("mensagem", "Este aluno já está com este livro em empréstimo.");
+            ra.addFlashAttribute("mensagem", "Esta pessoa já está com este livro em empréstimo.");
             ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/listaEmprestimo";
         }
 
         LocalDate devolucaoPrevista = calcularDataPrevista(dataRetirada, dataPrevista);
 
-        emprestimo.setAluno(aluno);
+        emprestimo.setPessoa(pessoa);
         emprestimo.setLivro(livro);
         emprestimo.setDataRetirada(dataRetirada);
         emprestimo.setDataPrevista(devolucaoPrevista);

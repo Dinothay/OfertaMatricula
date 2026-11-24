@@ -60,10 +60,17 @@
 
         <section class="card form-card">
             <form th:action="@{/cadastraEmprestimo}" method="POST">
-                <label for="idAluno">Aluno:</label>
-                <select name="idAluno" id="idAluno" required>
-                    <option value="">Selecione um aluno</option>
-                    <option th:each="aluno : ${alunos}" th:value="${aluno.id}" th:text="${aluno.nome}"></option>
+                <label for="idPessoa">Pessoa:</label>
+                <select name="idPessoa" id="idPessoa" required>
+                    <option value="">Selecione uma pessoa</option>
+                    <optgroup label="Alunos">
+                        <option th:each="aluno : ${alunos}" th:value="${aluno.id}"
+                                th:text="${aluno.nome + ' — ' + aluno.cpf}"></option>
+                    </optgroup>
+                    <optgroup label="Professores">
+                        <option th:each="professor : ${professores}" th:value="${professor.id}"
+                                th:text="${professor.nome + ' — ' + professor.cpf}"></option>
+                    </optgroup>
                 </select>
 
                 <label for="idLivro">Livro:</label>
@@ -82,8 +89,6 @@
                        th:value="${#temporals.format(#temporals.createNow().plusDays(14), 'yyyy-MM-dd')}"
                        required readonly>
 
-                <label for="dataDevolucao">Data de devolução:</label>
-                <input type="date" name="dataDevolucao" id="dataDevolucao">
 
                 <label for="status">Status:</label>
                 <select name="status" id="status" required>

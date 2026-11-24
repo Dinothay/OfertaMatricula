@@ -1,5 +1,6 @@
 package com.example.OfertaMatricula.Controller;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,7 +20,10 @@ import com.example.OfertaMatricula.Model.Usuario;
 import com.example.OfertaMatricula.Repository.AlunoRepository;
 import com.example.OfertaMatricula.Repository.EmprestimoRepository;
 import com.example.OfertaMatricula.Repository.MatriculaRepository;
+import com.example.OfertaMatricula.Repository.ReservaRepository;
 import com.example.OfertaMatricula.Repository.UsuarioRepository;
+
+import jakarta.transaction.Transactional;
 
 @Controller
 public class AlunoController {
@@ -35,6 +39,9 @@ public class AlunoController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private ReservaRepository reservaRepository;
 
     @GetMapping("/aluno")
     public String cadastroAlunos() {
@@ -115,16 +122,34 @@ public class AlunoController {
     }
 
     @GetMapping("/listaAlunos")
-    public String listaAlunos(Model model) {
+    public String listaAlunos(Model model, Principal principal) {
         List<Aluno> listaAlunos = alunoRepository.findAll();
         model.addAttribute("listaAlunos", listaAlunos);
+        if (principal != null) {
+            usuarioRepository.findByUsername(principal.getName())
+                    .ifPresent(usuario -> model.addAttribute("usuarioLogado", usuario));
+        }
         return "listaAlunos.html";
     }
 
     @GetMapping("/editarAluno/{id}")
-    public String editarAluno(@PathVariable long id, Model model) {
+    public String editarAluno(@PathVariable long id, Model model, Principal principal, RedirectAttributes ra) {
+        Usuario usuario = principal != null
+                ? usuarioRepository.findByUsername(principal.getName()).orElse(null)
+                : null;
+
+        if (usuario != null && usuario.getPapel() == Papel.ALUNO
+                && (usuario.getPessoa() == null || !usuario.getPessoa().getId().equals(id))) {
+            ra.addFlashAttribute("mensagem", "Você só pode editar seu próprio cadastro.");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/meuPainelAluno";
+        }
+
         Aluno aluno = alunoRepository.findById(id).orElse(null);
         model.addAttribute("aluno", aluno);
+        model.addAttribute("usuarioLogado", usuario);
+        model.addAttribute("prontuarioSomenteLeitura",
+                usuario != null && usuario.getPapel() == Papel.ALUNO);
         return "editarAluno.html";
     }
 
@@ -133,11 +158,23 @@ public class AlunoController {
             @RequestParam long id,
             @RequestParam String nome, @RequestParam String cpf, @RequestParam String email,
             @RequestParam String telefone, @RequestParam int prontuario, @RequestParam String endereco,
-            RedirectAttributes ra) {
+            RedirectAttributes ra, Principal principal) {
         Aluno aluno = alunoRepository.findById(id).orElse(null);
         if (aluno == null) {
             ra.addFlashAttribute("mensagem", "Aluno não encontrado!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/listaAlunos";
+        }
+
+        Usuario usuario = principal != null
+                ? usuarioRepository.findByUsername(principal.getName()).orElse(null)
+                : null;
+
+        if (usuario != null && usuario.getPapel() == Papel.ALUNO
+                && (usuario.getPessoa() == null || !usuario.getPessoa().getId().equals(id))) {
+            ra.addFlashAttribute("mensagem", "Você só pode editar seu próprio cadastro.");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/meuPainelAluno";
         }
 
         LocalDate dataCadastro = aluno.getDataInicio();
@@ -173,17 +210,42 @@ public class AlunoController {
         aluno.setCpf(cpf);
         aluno.setEmail(email);
         aluno.setTelefone(telefone);
-        aluno.setProntuario(prontuario);
+        if (usuario == null || usuario.getPapel() == Papel.ADMIN) {
+            aluno.setProntuario(prontuario);
+        }
         aluno.setEndereco(endereco);
         aluno.setDataInicio(dataCadastro);
         alunoRepository.save(aluno);
-        return "redirect:/listaAlunos";
+        ra.addFlashAttribute("mensagem", "Aluno atualizado com sucesso!");
+        ra.addFlashAttribute("mensagemTipo", "sucesso");
+        return usuario != null && usuario.getPapel() == Papel.ALUNO
+                ? "redirect:/meuPainelAluno"
+                : "redirect:/listaAlunos";
     }
 
     @GetMapping("/excluirAluno/{id}")
+    @Transactional
     public String excluirAluno(
             @PathVariable long id,
+            Principal principal,
             RedirectAttributes ra) {
+        Usuario usuarioLogado = principal != null
+                ? usuarioRepository.findByUsername(principal.getName()).orElse(null)
+                : null;
+        if (usuarioLogado != null && usuarioLogado.getPessoa() != null
+                && usuarioLogado.getPessoa().getId().equals(id)) {
+            ra.addFlashAttribute("mensagem", "Você não pode excluir seu próprio cadastro!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaAlunos";
+        }
+
+        Aluno aluno = alunoRepository.findById(id).orElse(null);
+        if (aluno == null) {
+            ra.addFlashAttribute("mensagem", "Aluno não encontrado!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaAlunos";
+        }
+
         if (matriculaRepository.existsByAlunoId(id)) {
             ra.addFlashAttribute("mensagem", "Não é possível excluir: aluno está associado a uma matrícula.");
             ra.addFlashAttribute("mensagemTipo", "erro");
@@ -194,7 +256,20 @@ public class AlunoController {
             ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/listaAlunos";
         }
-        alunoRepository.deleteById(id);
+        if (!reservaRepository.findByPessoaId(id).isEmpty()) {
+            ra.addFlashAttribute("mensagem", "Não é possível excluir: aluno está associado a uma reserva.");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaAlunos";
+        }
+
+        Usuario usuario = aluno.getUsuario();
+        if (usuario != null) {
+            usuario.setPessoa(null);
+            aluno.setUsuario(null);
+            usuarioRepository.delete(usuario);
+        }
+
+        alunoRepository.delete(aluno);
         ra.addFlashAttribute("mensagem", "Aluno excluído com sucesso!");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaAlunos";

@@ -71,9 +71,13 @@ public class UsuarioController {
     }
 
     @GetMapping("/listaUsuarios")
-    public String listaUsuarios(Model model) {
+    public String listaUsuarios(Model model, Principal principal) {
         List<Usuario> listaUsuarios = usuarioRepository.findAll();
         model.addAttribute("listaUsuarios", listaUsuarios);
+        if (principal != null) {
+            usuarioRepository.findByUsername(principal.getName())
+                    .ifPresent(usuario -> model.addAttribute("usuarioLogado", usuario));
+        }
         return "listaUsuarios.html";
     }
 
@@ -172,15 +176,32 @@ public class UsuarioController {
     }
 
     @GetMapping("/excluirUsuario/{id}")
-    public String excluirUsuario(@PathVariable Long id, RedirectAttributes ra) {
+    public String excluirUsuario(@PathVariable Long id, Principal principal, RedirectAttributes ra) {
         Usuario usuario = usuarioRepository.findById(id).orElse(null);
         if (usuario == null) {
             ra.addFlashAttribute("mensagem", "Usuário não encontrado!");
             ra.addFlashAttribute("mensagemTipo", "erro");
             return "redirect:/listaUsuarios";
         }
+
+        Usuario usuarioLogado = principal != null
+                ? usuarioRepository.findByUsername(principal.getName()).orElse(null)
+                : null;
+        if (usuarioLogado != null && usuarioLogado.getId().equals(usuario.getId())) {
+            ra.addFlashAttribute("mensagem", "Você não pode excluir sua própria conta!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaUsuarios";
+        }
+
+        if (usuario.getPessoa() != null) {
+            ra.addFlashAttribute("mensagem",
+                    "Não é possível excluir: esta conta está conectada a uma pessoa. Exclua o cadastro da pessoa correspondente.");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaUsuarios";
+        }
+
         usuarioRepository.delete(usuario);
-        ra.addFlashAttribute("mensagem","Usuário excluído com sucesso!");
+        ra.addFlashAttribute("mensagem", "Usuário excluído com sucesso!");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaUsuarios";
     }

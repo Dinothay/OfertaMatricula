@@ -1,5 +1,6 @@
 package com.example.OfertaMatricula.Controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import com.example.OfertaMatricula.Model.Pessoa;
 import com.example.OfertaMatricula.Model.Usuario;
 import com.example.OfertaMatricula.Repository.BibliotecarioRepository;
 import com.example.OfertaMatricula.Repository.UsuarioRepository;
+
+import jakarta.transaction.Transactional;
 
 @Controller
 public class BibliotecarioController {
@@ -104,9 +107,13 @@ public class BibliotecarioController {
     }
 
     @GetMapping("/listaBibliotecarios")
-    public String listaBibliotecarios(Model model) {
+    public String listaBibliotecarios(Model model, Principal principal) {
         List<Bibliotecario> listaBibliotecarios = bibliotecarioRepository.findAll();
         model.addAttribute("listaBibliotecarios", listaBibliotecarios);
+        if (principal != null) {
+            usuarioRepository.findByUsername(principal.getName())
+                    .ifPresent(usuario -> model.addAttribute("usuarioLogado", usuario));
+        }
         return "listaBibliotecarios.html";
     }
 
@@ -184,7 +191,18 @@ public class BibliotecarioController {
     }
 
     @GetMapping("/excluirBibliotecario/{id}")
-    public String excluirBibliotecario(@PathVariable long id, RedirectAttributes ra) {
+    @Transactional
+    public String excluirBibliotecario(@PathVariable long id, Principal principal, RedirectAttributes ra) {
+        Usuario usuarioLogado = principal != null
+                ? usuarioRepository.findByUsername(principal.getName()).orElse(null)
+                : null;
+        if (usuarioLogado != null && usuarioLogado.getPessoa() != null
+                && usuarioLogado.getPessoa().getId().equals(id)) {
+            ra.addFlashAttribute("mensagem", "Você não pode excluir seu próprio cadastro!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaBibliotecarios";
+        }
+
         Bibliotecario bibliotecario = bibliotecarioRepository.findById(id).orElse(null);
         if (bibliotecario == null) {
             ra.addFlashAttribute("mensagem", "Bibliotecário não encontrado!");
@@ -192,11 +210,14 @@ public class BibliotecarioController {
             return "redirect:/listaBibliotecarios";
         }
 
-        if (bibliotecario.getUsuario() != null) {
-            usuarioRepository.delete(bibliotecario.getUsuario());
+        Usuario usuario = bibliotecario.getUsuario();
+        if (usuario != null) {
+            usuario.setPessoa(null);
+            bibliotecario.setUsuario(null);
+            usuarioRepository.delete(usuario);
         }
 
-        bibliotecarioRepository.deleteById(id);
+        bibliotecarioRepository.delete(bibliotecario);
         ra.addFlashAttribute("mensagem", "Bibliotecário excluído com sucesso!");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaBibliotecarios";

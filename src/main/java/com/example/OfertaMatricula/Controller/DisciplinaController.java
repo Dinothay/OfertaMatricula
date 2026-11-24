@@ -12,6 +12,7 @@ import com.example.OfertaMatricula.Model.Disciplina;
 import com.example.OfertaMatricula.Repository.DisciplinaRepository;
 import com.example.OfertaMatricula.Model.Curso;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.example.OfertaMatricula.Repository.ProvarRepository;
 
 @Controller
 public class DisciplinaController {
@@ -23,6 +24,8 @@ public class DisciplinaController {
     private com.example.OfertaMatricula.Repository.OfertaDisciplinaRepository ofertaDisciplinaRepository;
     @Autowired
     private com.example.OfertaMatricula.Repository.DisciplinaLivroRepository disciplinaLivroRepository;
+    @Autowired
+    private ProvarRepository provarRepository;
 
     @GetMapping("/disciplina")
     public String cadastroDisciplinas(Model model){
@@ -112,6 +115,11 @@ public class DisciplinaController {
 
     @GetMapping("excluirDisciplina/{id}")
     public String excluirDisciplina(@PathVariable long id, RedirectAttributes ra){
+        if (provarRepository.existsByDisciplinaId(id)) {
+            ra.addFlashAttribute("mensagem", "Não é possível excluir: disciplina está associada a uma prova.");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/listaDisciplinas";
+        }
         if(ofertaDisciplinaRepository.existsByDisciplinaId(id)){
             ra.addFlashAttribute("mensagem", "Não é possível excluir: disciplina está associada a uma oferta de disciplina.");
             ra.addFlashAttribute("mensagemTipo", "erro");

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.OfertaMatricula.Model.Aluno;
 import com.example.OfertaMatricula.Model.Emprestimo;
 import com.example.OfertaMatricula.Model.Livro;
 import com.example.OfertaMatricula.Model.Papel;
@@ -92,11 +91,6 @@ public class LivroController {
         return "listaLivro.html";
     }
 
-    @GetMapping("/listaLivrosAluno")
-    public String listaLivrosAluno(Model model, Principal principal) {
-        return "redirect:/listaLivro";
-    }
-
     @PostMapping("/reservarLivro/{id}")
     public String reservarLivro(@PathVariable Long id, Principal principal, RedirectAttributes ra) {
         Usuario usuario = principal != null
@@ -143,8 +137,10 @@ public class LivroController {
         List<Reserva> reservas = reservaRepository.findByLivroIdOrderByDataReservaAsc(id);
         int posicao = reservas.size() + 1;
         reservaRepository.save(new Reserva(livro, pessoa, java.time.LocalDateTime.now(), posicao, "PENDENTE"));
-        livro.setStatus(StatusLivro.RESERVADO);
-        livroRepository.save(livro);
+        if (livro.getStatus() == StatusLivro.EMPRESTADO) {
+            livro.setStatus(StatusLivro.RESERVADO);
+            livroRepository.save(livro);
+        }
 
         ra.addFlashAttribute("mensagem", "Livro reservado com sucesso! Você ficou em posição " + posicao + " da fila.");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
@@ -247,30 +243,6 @@ public class LivroController {
         ra.addFlashAttribute("mensagem", "Livro emprestado com sucesso!");
         ra.addFlashAttribute("mensagemTipo", "sucesso");
         return "redirect:/listaLivro";
-    }
-
-    public void setLivroRepository(LivroRepository livroRepository) {
-        this.livroRepository = livroRepository;
-    }
-
-    public void setLivroService(LivroService livroService) {
-        this.livroService = livroService;
-    }
-
-    public void setEmprestimoRepository(EmprestimoRepository emprestimoRepository) {
-        this.emprestimoRepository = emprestimoRepository;
-    }
-
-    public void setDisciplinaLivroRepository(DisciplinaLivroRepository disciplinaLivroRepository) {
-        this.disciplinaLivroRepository = disciplinaLivroRepository;
-    }
-
-    public void setUsuarioRepository(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
-    }
-
-    public void setReservaRepository(ReservaRepository reservaRepository) {
-        this.reservaRepository = reservaRepository;
     }
 
     @GetMapping("/editarLivro/{id}")

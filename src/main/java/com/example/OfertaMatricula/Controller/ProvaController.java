@@ -24,6 +24,7 @@ import com.example.OfertaMatricula.Repository.DisciplinaRepository;
 import com.example.OfertaMatricula.Repository.LivroRepository;
 import com.example.OfertaMatricula.Repository.ProvarRepository;
 import com.example.OfertaMatricula.Repository.UsuarioRepository;
+import com.example.OfertaMatricula.Repository.ProfessorRepository;
 
 @Controller
 public class ProvaController {
@@ -39,22 +40,47 @@ public class ProvaController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private ProfessorRepository professorRepository;
+
     @GetMapping("/prova")
-    public String cadastroProva(Model model) {
+    public String cadastroProva(Model model, Principal principal) {
         model.addAttribute("disciplinas", disciplinaRepository.findAll());
         model.addAttribute("livros", livroRepository.findAll());
+
+        Usuario usuarioLogado = principal != null
+                ? usuarioRepository.findByUsername(principal.getName()).orElse(null)
+                : null;
+        model.addAttribute("usuarioLogado", usuarioLogado);
+        if (usuarioLogado != null && usuarioLogado.getPapel() == Papel.ADMIN) {
+            model.addAttribute("professores", professorRepository.findAll());
+        }
         return "formularioProva.html";
     }
 
     @PostMapping("/cadastraProva")
     public String saveProva(@RequestParam LocalDate data, @RequestParam String conteudo,
             @RequestParam double peso, @RequestParam Long disciplinaId,
-            @RequestParam(required = false) List<Long> livroIds, Principal principal, RedirectAttributes ra) {
+            @RequestParam(required = false) List<Long> livroIds,
+            @RequestParam(required = false) Long professorId,
+            Principal principal, RedirectAttributes ra) {
         Disciplina disciplina = disciplinaRepository.findById(disciplinaId).orElse(null);
         List<Livro> livros = livroIds == null ? List.of() : livroRepository.findAllById(livroIds);
 
         Usuario usuario = principal != null ? usuarioRepository.findByUsername(principal.getName()).orElse(null) : null;
-        Professor professor = usuario != null && usuario.getPessoa() instanceof Professor ? (Professor) usuario.getPessoa() : null;
+        Professor professor = usuario != null && usuario.getPessoa() instanceof Professor
+                ? (Professor) usuario.getPessoa()
+                : null;
+
+        if (usuario != null && usuario.getPapel() == Papel.ADMIN && professorId != null) {
+            professor = professorRepository.findById(professorId).orElse(null);
+        }
+
+        if (professor == null) {
+            ra.addFlashAttribute("mensagem", "Selecione um professor válido!");
+            ra.addFlashAttribute("mensagemTipo", "erro");
+            return "redirect:/prova";
+        }
 
         Prova prova = new Prova(data, conteudo, peso, disciplina, livros);
         prova.setProfessor(professor);
@@ -103,6 +129,9 @@ public class ProvaController {
         model.addAttribute("prova", prova);
         model.addAttribute("disciplinas", disciplinaRepository.findAll());
         model.addAttribute("livros", livroRepository.findAll());
+        if (usuario != null && usuario.getPapel() == Papel.ADMIN) {
+            model.addAttribute("professores", professorRepository.findAll());
+        }
         return "editarProva.html";
     }
 
@@ -110,7 +139,9 @@ public class ProvaController {
     public String atualizarProva(@RequestParam long id, @RequestParam LocalDate data,
             @RequestParam String conteudo, @RequestParam double peso,
             @RequestParam Long disciplinaId,
-            @RequestParam(required = false) List<Long> livroIds, Principal principal, RedirectAttributes ra) {
+            @RequestParam(required = false) List<Long> livroIds,
+            @RequestParam(required = false) Long professorId,
+            Principal principal, RedirectAttributes ra) {
         Prova prova = provarRepository.findById(id).orElse(null);
         if (prova == null) {
             ra.addFlashAttribute("mensagem", "Prova não encontrada!");
@@ -127,6 +158,9 @@ public class ProvaController {
                 return "redirect:/listaProva";
             }
             prova.setProfessor(professorLogado);
+        } else if (usuario != null && usuario.getPapel() == Papel.ADMIN && professorId != null) {
+            Professor professor = professorRepository.findById(professorId).orElse(null);
+            prova.setProfessor(professor);
         }
 
         Disciplina disciplina = disciplinaRepository.findById(disciplinaId).orElse(null);

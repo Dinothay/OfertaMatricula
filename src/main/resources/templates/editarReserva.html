@@ -65,11 +65,29 @@
                 <label for="dataReserva">Data da reserva:</label>
                 <input type="datetime-local" name="dataReserva" id="dataReserva" th:value="${reserva.dataReserva}" required>
 
-                <label for="posicaoFila">Posição na fila:</label>
-                <input type="number" name="posicaoFila" id="posicaoFila" th:value="${reserva.posicaoFila}" required>
+                <label for="livroId">Livro reservado:</label>
+                <select name="livroId" id="livroId" required>
+                    <option th:each="livro : ${livros}" th:value="${livro.id}"
+                            th:selected="${reserva.livro != null and reserva.livro.id == livro.id}"
+                            th:text="${livro.titulo}"></option>
+                </select>
 
-                <label for="status">Status:</label>
-                <input type="text" name="status" id="status" th:value="${reserva.status}" required>
+                <label for="pessoaId">Aluno ou professor que reservou:</label>
+                <select name="pessoaId" id="pessoaId" required>
+                    <optgroup label="Alunos">
+                        <option th:each="aluno : ${alunos}" th:value="${aluno.id}"
+                                th:selected="${reserva.pessoa != null and reserva.pessoa.id == aluno.id}"
+                                th:text="${aluno.nome + ' — ' + aluno.cpf}"></option>
+                    </optgroup>
+                    <optgroup label="Professores">
+                        <option th:each="professor : ${professores}" th:value="${professor.id}"
+                                th:selected="${reserva.pessoa != null and reserva.pessoa.id == professor.id}"
+                                th:text="${professor.nome + ' — ' + professor.cpf}"></option>
+                    </optgroup>
+                </select>
+
+                <label>Posição na fila:</label>
+                <input type="text" th:value="${reserva.posicaoFila}" disabled>
 
                 <div class="botoes">
                     <button type="submit">Atualizar</button>
