@@ -97,10 +97,7 @@ public class LivroController {
                 ? usuarioRepository.findByUsername(principal.getName()).orElse(null)
                 : null;
 
-        if (usuario == null
-                || usuario.getPessoa() == null
-                || (usuario.getPapel() != Papel.ALUNO
-                        && usuario.getPapel() != Papel.PROFESSOR)) {
+        if (usuario == null|| usuario.getPessoa() == null|| (usuario.getPapel() != Papel.ALUNO && usuario.getPapel() != Papel.PROFESSOR)) {
             ra.addFlashAttribute("mensagem", "Acesso inválido para reserva.");
             ra.addFlashAttribute("mensagemTipo", "erro");
             return usuario != null && usuario.getPapel() == Papel.PROFESSOR ? "redirect:/indexProfessor"
@@ -153,14 +150,10 @@ public class LivroController {
                 ? usuarioRepository.findByUsername(principal.getName()).orElse(null)
                 : null;
 
-        if (usuario == null
-                || usuario.getPessoa() == null
-                || (usuario.getPapel() != Papel.ALUNO
-                        && usuario.getPapel() != Papel.PROFESSOR)) {
+        if (usuario == null || usuario.getPessoa() == null|| (usuario.getPapel() != Papel.ALUNO && usuario.getPapel() != Papel.PROFESSOR)) {
             ra.addFlashAttribute("mensagem", "Acesso inválido para empréstimo.");
             ra.addFlashAttribute("mensagemTipo", "erro");
-            return usuario != null && usuario.getPapel() == Papel.PROFESSOR ? "redirect:/indexProfessor"
-                    : "redirect:/indexAluno";
+            return usuario != null && usuario.getPapel() == Papel.PROFESSOR ? "redirect:/indexProfessor" : "redirect:/indexAluno";
         }
 
         Livro livro = livroRepository.findById(id).orElse(null);
@@ -172,8 +165,7 @@ public class LivroController {
 
         var pessoa = usuario.getPessoa();
 
-        if (pessoa.getBloqueioEmprestimo() != null
-                && pessoa.getBloqueioEmprestimo().isAfter(LocalDate.now())) {
+        if (pessoa.getBloqueioEmprestimo() != null && pessoa.getBloqueioEmprestimo().isAfter(LocalDate.now())) {
             ra.addFlashAttribute("mensagem", "Você está temporariamente bloqueado para empréstimos e reservas até "
                     + pessoa.getBloqueioEmprestimo() + ".");
             ra.addFlashAttribute("mensagemTipo", "erro");
@@ -221,8 +213,7 @@ public class LivroController {
             livro.setStatus(StatusLivro.RESERVADO);
             livroRepository.save(livro);
 
-            ra.addFlashAttribute("mensagem",
-                    "Livro indisponível. Você foi colocado na fila de reserva e receberá a prioridade quando estiver disponível.");
+            ra.addFlashAttribute("mensagem", "Livro indisponível. Você foi colocado na fila de reserva e receberá a prioridade quando estiver disponível.");
             ra.addFlashAttribute("mensagemTipo", "sucesso");
             return "redirect:/listaLivro";
         }
@@ -235,8 +226,7 @@ public class LivroController {
         }
 
         LocalDate hoje = LocalDate.now();
-        emprestimoRepository
-                .save(new Emprestimo(pessoa, livro, hoje, hoje.plusDays(14), null, StatusEmprestimo.ATIVO, 0));
+        emprestimoRepository.save(new Emprestimo(pessoa, livro, hoje, hoje.plusDays(14), null, StatusEmprestimo.ATIVO, 0));
         livro.setStatus(StatusLivro.EMPRESTADO);
         livroRepository.save(livro);
 

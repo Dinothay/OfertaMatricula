@@ -209,7 +209,6 @@ public class AdminController {
             return "redirect:/listaAdmins";
         }
 
-        // Impedir que o administrador exclua sua própria conta
         String usernameLogado = principal.getName();
         Usuario usuarioLogado2 = usuarioRepository.findByUsername(usernameLogado).orElse(null);
         if (usuarioLogado2 != null && usuarioLogado2.getPessoa() != null
